@@ -1079,7 +1079,7 @@ function Shop() {
           {Object.entries(gemCategories).map(([key, category]) => (
             <button
               key={key}
-              onClick={() => setSelectedCategory(key)}
+              onClick={() => setSelectedCategory(key as 'precious' | 'crystal' | 'metal')}
               className={`flex flex-col items-center p-6 glass-card rounded-xl transition-all card-hover text-center ${
                 selectedCategory === key ? 'glow-border' : ''
               }`}
