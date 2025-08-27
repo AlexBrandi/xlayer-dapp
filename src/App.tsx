@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './index.css';
 
@@ -87,7 +87,7 @@ function StarField() {
 
 // 增强仪表盘
 function Dashboard() {
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalShips: 42,
     totalRewards: 15847.23,
     activeVoyages: 28,
@@ -351,11 +351,24 @@ function Dashboard() {
   );
 }
 
+// 定义飞船类型
+interface Ship {
+  name: string;
+  image: string;
+  rarity: string;
+  description: string;
+  probability: number;
+}
+
+interface PreviewShip extends Ship {
+  id: number;
+}
+
 // 增强造舰页面
 function Mint() {
   const [isLoading, setIsLoading] = useState(false);
-  const [mintedShip, setMintedShip] = useState(null);
-  const [previewShips, setPreviewShips] = useState([]);
+  const [mintedShip, setMintedShip] = useState<Ship | null>(null);
+  const [previewShips, setPreviewShips] = useState<PreviewShip[]>([]);
 
   // 所有可能的飞船类型
   const allShips = [
@@ -693,9 +706,19 @@ function Mint() {
   );
 }
 
+// 定义维修飞船类型
+interface RepairShip {
+  id: number;
+  name: string;
+  level: number;
+  durability: number;
+  image: string;
+  rarity: string;
+}
+
 // 增强升级与维修
 function UpgradeRepair() {
-  const [selectedShip, setSelectedShip] = useState(null);
+  const [selectedShip, setSelectedShip] = useState<RepairShip | null>(null);
   
   const mockShips = [
     { id: 1, name: "珍珠号", level: 15, durability: 85, image: "/gem/ship/珍珠号.png", rarity: "传奇" },
@@ -957,13 +980,29 @@ function Market() {
   );
 }
 
+// 定义商品类型
+interface ShopItem {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  rarity: string;
+  description: string;
+}
+
+interface ShopCategory {
+  name: string;
+  icon: string;
+  items: ShopItem[];
+}
+
 // 宝石商店
 function Shop() {
-  const [selectedCategory, setSelectedCategory] = useState('precious'); // precious, metal, rare
-  const [purchaseLoading, setPurchaseLoading] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState<'precious' | 'crystal' | 'metal'>('precious');
+  const [purchaseLoading, setPurchaseLoading] = useState<Record<string, boolean>>({});
 
   // 宝石商品数据
-  const gemCategories = {
+  const gemCategories: Record<'precious' | 'crystal' | 'metal', ShopCategory> = {
     precious: {
       name: '珍贵宝石',
       icon: '💎',
@@ -1002,7 +1041,7 @@ function Shop() {
     }
   };
 
-  const handlePurchase = async (item) => {
+  const handlePurchase = async (item: ShopItem) => {
     setPurchaseLoading(prev => ({ ...prev, [item.id]: true }));
     
     // 模拟购买过程
@@ -1012,7 +1051,7 @@ function Shop() {
     }, 1500);
   };
 
-  const getRarityColor = (rarity) => {
+  const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case '传奇': return 'text-rarity-legend';
       case '史诗': return 'text-rarity-epic';

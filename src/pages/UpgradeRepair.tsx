@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
-import { ShipInfo } from '../types'
+import type { ShipInfo } from '../types'
 import { formatTokenAmount, RARITY_NAMES, RARITY_COLORS, getShipImage, getGemImage } from '../lib/format'
 import { useShips } from '../hooks/useShips'
 import { useContracts } from '../hooks/useContracts'

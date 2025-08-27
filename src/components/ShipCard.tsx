@@ -1,4 +1,4 @@
-import { ShipInfo } from '../types'
+import type { ShipInfo } from '../types'
 import { formatTokenAmount, formatPercentage, RARITY_NAMES, RARITY_COLORS, getShipImage } from '../lib/format'
 import { useContracts } from '../hooks/useContracts'
 import { Stat } from './Stat'

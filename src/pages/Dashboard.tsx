@@ -9,7 +9,7 @@ import { useContracts } from '../hooks/useContracts'
 export function Dashboard() {
   const { isConnected } = useAccount()
   const [currentPage, setCurrentPage] = useState(0)
-  const [refreshKey, setRefreshKey] = useState(0)
+  const [, setRefreshKey] = useState(0)
   
   const { ships, isLoading, totalPages, totalShips } = useShipsPaginated(currentPage, 8)
   const { totalClaimable, estimatedRewards, claimableTokenIds, hasClaimableRewards } = useRewards()

@@ -1,7 +1,7 @@
 import { useAccount, useReadContract, useBlockNumber } from 'wagmi'
 import { CONTRACT_ADDRESSES } from '../lib/config'
-import { SHIP_ABI, CONTROLLER_ABI } from '../lib/abis'
-import { ShipInfo } from '../types'
+import { SHIP_ABI } from '../lib/abis'
+import type { ShipInfo } from '../types'
 import { useEffect, useState } from 'react'
 
 const BLOCKS_PER_HOUR = 3600 / 3 // Assuming 3 second blocks
@@ -41,7 +41,7 @@ export function useShips() {
     const fetchShipDetails = async () => {
       if (!address || !shipBalance) return
 
-      const shipPromises = tokenIdResults.map(async (result, index) => {
+      const shipPromises = tokenIdResults.map(async (result) => {
         if (!result.data) return null
 
         const tokenId = result.data as bigint
@@ -63,7 +63,7 @@ export function useShips() {
 
         // Calculate estimated rewards if voyaging
         if (shipInfo.isVoyaging && blockNumber) {
-          const blocksPassed = blockNumber - shipInfo.lastClaimBlock
+          const blocksPassed = blockNumber - shipInfo.lastClaimBlock!
           const hoursPassed = Number(blocksPassed) / BLOCKS_PER_HOUR
           const multiplier = BigInt(shipInfo.level) * BigInt(shipInfo.rarity + 1)
           shipInfo.estimatedReward = REWARD_PER_HOUR_BASE * multiplier * BigInt(Math.floor(hoursPassed))

@@ -17,9 +17,9 @@ export interface UpgradeCost {
   gemCost: bigint
 }
 
-export enum Rarity {
-  Common = 0,
-  Rare = 1,
-  Epic = 2,
-  Legendary = 3
-}
+export const Rarity = {
+  Common: 0,
+  Rare: 1,
+  Epic: 2,
+  Legendary: 3
+} as const
