@@ -68,12 +68,22 @@ export function useContracts() {
   }
 
   const useTokensOfOwner = () => {
-    return useReadContract({
+    const result = useReadContract({
       address: CONTRACT_ADDRESSES.SHIP_NFT,
       abi: SHIP_ABI,
       functionName: 'tokensOfOwner',
       args: address ? [address] : undefined,
     })
+    
+    console.log('useTokensOfOwner:', {
+      address,
+      contractAddress: CONTRACT_ADDRESSES.SHIP_NFT,
+      data: result.data,
+      error: result.error,
+      isLoading: result.isLoading
+    })
+    
+    return result
   }
 
   const useShipApproval = (tokenId: bigint) => {

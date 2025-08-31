@@ -14,6 +14,14 @@ export function useShips() {
   const { data: userTokens } = useTokensOfOwner()
   const { data: userStatus } = useUserShipStatus()
 
+  // 调试信息
+  console.log('useShips Debug:', {
+    userTokens,
+    userStatus,
+    hasTokens: !!userTokens,
+    hasStatus: !!userStatus
+  })
+
   // Get all ships owned by the user
   const allShips = useMemo(() => {
     if (!userTokens) return []

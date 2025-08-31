@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { ShipCard } from '../components/ShipCard'
+import { RealOpenBoxModal } from '../components/RealOpenBoxModal'
 import { formatEther } from 'viem'
 import { useShips } from '../hooks/useShips'
 import { useRewards } from '../hooks/useRewards'
@@ -7,13 +9,23 @@ import { useGems } from '../hooks/useGems'
 import { useContracts } from '../hooks/useContracts'
 
 export function Dashboard() {
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
+  const [showOpenBoxModal, setShowOpenBoxModal] = useState(false)
   
   const { allShips, stakedShips, unstakedShips } = useShips()
   const { totalPending, totalPendingFormatted, claimAllRewards, isClaimPending } = useRewards()
   const { balances } = useGems()
   const { useFuelBalance } = useContracts()
   const { data: fuelBalance } = useFuelBalance()
+
+  // 调试信息
+  console.log('Dashboard Debug:', {
+    address,
+    allShips: allShips.map(id => id.toString()),
+    stakedShips: stakedShips.map(id => id.toString()),
+    unstakedShips: unstakedShips.map(id => id.toString()),
+    totalShips: allShips.length
+  })
 
   const handleRefresh = () => {
     // Trigger re-fetch by forcing component remount
@@ -23,6 +35,18 @@ export function Dashboard() {
   const handleClaimAll = async () => {
     await claimAllRewards()
     handleRefresh()
+  }
+
+  const handleOpenBoxModal = () => {
+    setShowOpenBoxModal(true)
+  }
+
+  const handleOpenBoxModalClose = () => {
+    setShowOpenBoxModal(false)
+  }
+
+  const handleOpenBoxComplete = () => {
+    handleRefresh() // 刷新以显示新的NFT
   }
 
   if (!isConnected) {
@@ -97,12 +121,23 @@ export function Dashboard() {
 
       {/* Action Bar */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold">我的舰队</h2>
+        <h2 className="text-lg font-bold text-white">我的舰队</h2>
         <div className="flex gap-2">
+          <button
+            onClick={handleOpenBoxModal}
+            className="text-sm font-medium px-4 py-2 rounded-xl transition-all duration-300 hover:scale-105"
+            style={{
+              background: 'linear-gradient(to right, #ff6b35, #e55527)',
+              boxShadow: '0 4px 14px 0 rgba(255, 107, 53, 0.25)',
+              color: 'white'
+            }}
+          >
+            📦 开盒体验
+          </button>
           <button
             onClick={handleClaimAll}
             disabled={!totalPending || totalPending === 0n || isClaimPending}
-            className="btn-primary bg-green-600 hover:bg-green-700 disabled:bg-gray-700"
+            className="btn-primary bg-green-600 hover:bg-green-700 disabled:bg-gray-700 text-sm"
           >
             {isClaimPending ? '领取中...' : '领取所有奖励'}
           </button>
@@ -158,6 +193,15 @@ export function Dashboard() {
             </div>
           )}
         </>
+      )}
+
+      {/* 真实开盒模态框 */}
+      {showOpenBoxModal && (
+        <RealOpenBoxModal
+          availableTokenIds={allShips}
+          onClose={handleOpenBoxModalClose}
+          onComplete={handleOpenBoxComplete}
+        />
       )}
     </div>
   )

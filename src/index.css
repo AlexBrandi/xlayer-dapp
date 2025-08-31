@@ -313,6 +313,54 @@ body {
 }
 
 /* ============================================
+   📦 OPEN BOX ANIMATIONS
+   ============================================ */
+@keyframes box-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px) rotate(-1deg); }
+  75% { transform: translateX(5px) rotate(1deg); }
+}
+
+@keyframes rarity-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(255, 107, 53, 0.8);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes legendary-sparkle {
+  0%, 100% { 
+    opacity: 0;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+.box-opening {
+  animation: box-shake 0.5s ease-in-out infinite;
+}
+
+.rarity-legendary {
+  animation: rarity-glow 2s ease-in-out infinite;
+  position: relative;
+}
+
+.rarity-legendary::after {
+  content: '✨';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  animation: legendary-sparkle 1.5s ease-in-out infinite;
+}
+
+/* ============================================
    🔮 GLASS MORPHISM COMPONENTS
    ============================================ */
 .glass-card {

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContracts } from '../hooks/useContracts'
 import { formatEther } from 'viem'
 import toast from 'react-hot-toast'
+import { OpenBox } from '../components/OpenBox'
 
 const MAX_MINT = 10
 
@@ -30,6 +31,8 @@ export function Mint() {
   const { isConnected } = useAccount()
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState(1)
+  const [showOpenBox, setShowOpenBox] = useState(false)
+  const [mintedQuantity, setMintedQuantity] = useState(0)
   const { useMintShip, useMintPrice, useFuelBalance } = useContracts()
   const { mint, isPending, isSuccess } = useMintShip()
   const { data: mintPrice } = useMintPrice()
@@ -41,9 +44,10 @@ export function Mint() {
   useEffect(() => {
     if (isSuccess) {
       toast.success(`成功铸造了 ${quantity} 艘战舰！`)
-      navigate('/')
+      setMintedQuantity(quantity)
+      setShowOpenBox(true)
     }
-  }, [isSuccess, quantity, navigate])
+  }, [isSuccess, quantity])
 
   const handleMint = async () => {
     try {
@@ -64,6 +68,11 @@ export function Mint() {
   const handleQuantityChange = (value: number) => {
     const newQuantity = Math.max(1, Math.min(MAX_MINT, value))
     setQuantity(newQuantity)
+  }
+
+  const handleOpenBoxComplete = () => {
+    setShowOpenBox(false)
+    navigate('/')
   }
 
   if (!isConnected) {
@@ -110,7 +119,7 @@ export function Mint() {
             
             {/* 固定高度可滚动飞船列表 - 最多显示8个的高度 */}
             <div className="overflow-y-auto space-y-1 pr-2 min-h-0" style={{
-              height: '320px', // 8 * (36px图片 + 8px内边距 + 4px间距) ≈ 40px per item * 8 = 320px
+             
               scrollbarWidth: 'thin', 
               scrollbarColor: '#FF6B35 #1F2937'
             }}>
@@ -124,9 +133,6 @@ export function Mint() {
                         className="object-cover rounded shadow-lg border border-gray-600/50"
                         style={{ width: '36px', height: '36px', minWidth: '36px', minHeight: '36px', maxWidth: '36px', maxHeight: '36px' }}
                       />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
-                        <span className="text-[8px] font-bold text-white leading-none">{ship.id + 1}</span>
-                      </div>
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
@@ -308,6 +314,14 @@ export function Mint() {
         </div>
       </div>
     </div>
+
+    {/* 开盒界面 */}
+    {showOpenBox && (
+      <OpenBox
+        quantity={mintedQuantity}
+        onComplete={handleOpenBoxComplete}
+      />
+    )}
     </>
   )
 }
