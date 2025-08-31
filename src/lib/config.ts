@@ -40,11 +40,12 @@ export const wagmiConfig = createConfig({
   },
 })
 
-// Contract addresses from environment
+// Contract addresses from deployment
 export const CONTRACT_ADDRESSES = {
-  FUEL_TOKEN: import.meta.env.VITE_FUEL as `0x${string}`,
-  SHIP_NFT: import.meta.env.VITE_SHIP as `0x${string}`,
-  REWARD_CONTROLLER: import.meta.env.VITE_CTRL as `0x${string}`,
+  FUEL_TOKEN: '0xe80312d9F235ac2f816D5f63C4f06941F2c0d687' as `0x${string}`,
+  SHIP_NFT: '0x41aA73453681fa67D42F35162C20998C60e4459F' as `0x${string}`,
+  GEM_NFT: '0xB2971910A111412043318D1C31C66c5610eFf441' as `0x${string}`,
+  GAME_CONTROLLER: '0x958253CbAc08F33Fcb672eA8400f384a10fd737C' as `0x${string}`,
 } as const
 
 export const CHAIN_ID = Number(import.meta.env.VITE_CHAIN_ID) || 196

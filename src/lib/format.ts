@@ -31,49 +31,21 @@ export const RARITY_COLORS = {
 } as const
 
 export function getShipImage(tokenId: number): string {
-  const ships = [
-    '亚伯号.png',
-    '冒险者号.png',
-    '切诺亚号.png',
-    '卡佩奇号.png',
-    '卡文迪号.png',
-    '哈布斯号.png',
-    '嘉百列号.png',
-    '坎贝尔号.png',
-    '惊恐号.png',
-    '摩尔号.png',
-    '敦刻尔克号.png',
-    '玛丽亚号.png',
-    '珍珠号.png',
-    '莱特号.png',
-    '雷德尔号.png',
-  ]
-  // Use tokenId to deterministically select a ship image
-  const index = tokenId % ships.length
-  return `/gem/ship/${ships[index]}`
+  // Use images from public/images directory (1.png to 15.png)
+  const imageNumber = (tokenId % 15) + 1 // Map to 1-15 range
+  return `/images/${imageNumber}.png`
 }
 
 export function getGemImage(gemType: number): string {
-  const gems = [
-    '太阳石.png',
-    '海蓝石.png',
-    '猫眼石.png',
-    '白银.png',
-    '石榴石.png',
-    '紫水晶.png',
-    '红水晶.png',
-    '绿水晶.png',
-    '翡翠石.png',
-    '蓝宝石.png',
-    '蓝水晶.png',
-    '金刚石.png',
-    '钢铁.png',
-    '锂矿石.png',
-    '青铜.png',
-    '黄金.png',
-    '黑暗水晶.png',
-    '黑曜石.png',
-  ]
-  const index = gemType % gems.length
-  return `/gem/gem/${gems[index]}`
+  // Map gem types to available images in public/images
+  switch (gemType) {
+    case 1: // Sapphire
+      return '/images/sapphire.png'
+    case 2: // Sunstone  
+      return '/images/sunstone.png'
+    case 3: // Lithium
+      return '/images/lithium.png'
+    default:
+      return '/images/sapphire.png'
+  }
 }

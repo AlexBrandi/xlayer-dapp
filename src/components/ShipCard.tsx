@@ -1,168 +1,205 @@
-import type { ShipInfo } from '../types'
-import { formatTokenAmount, formatPercentage, RARITY_NAMES, RARITY_COLORS, getShipImage } from '../lib/format'
+import { useShips } from '../hooks/useShips'
+import { useRewards } from '../hooks/useRewards'
 import { useContracts } from '../hooks/useContracts'
-import { Stat } from './Stat'
+import { ShipLevel } from '../types'
 
 interface ShipCardProps {
-  ship: ShipInfo
+  tokenId: bigint
   onRefresh?: () => void
 }
 
-export function ShipCard({ ship, onRefresh }: ShipCardProps) {
-  const { useStartVoyage, useStopVoyage, useClaimReward, useUpgradeShip, useRepairShip } = useContracts()
+// Map image IDs to ship names (for display purposes)
+const SHIP_NAMES: Record<number, string> = {
+  0: '亚伯号',
+  1: '冒险者号',
+  2: '切诺亚号',
+  3: '卡佩奇号',
+  4: '卡文迪号',
+  5: '哈布斯号',
+  6: '嘉百列号',
+  7: '坎贝尔号',
+  8: '惊恐号',
+  9: '摩尔号',
+  10: '敦刻尔克号',
+  11: '玛丽亚号',
+  12: '珍珠号',
+  13: '莱特号',
+  14: '雷德尔号'
+}
+
+function getShipImage(imageId: number): string {
+  // Use images from public/images directory (1.png to 15.png)
+  const imageNumber = (imageId % 15) + 1 // Map 0-14 to 1-15
+  return `/images/${imageNumber}.png`
+}
+
+export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
+  const { useShipDetails } = useShips()
+  const { useShipPendingReward } = useRewards()
+  const { 
+    useStakeShips, 
+    useUnstakeShips, 
+    useClaimRewards, 
+    useUpgradeShip,
+    useUpgradeCost,
+    useIsApprovedForAll,
+    useApproveShips 
+  } = useContracts()
   
-  const { startVoyage, isPending: isStarting } = useStartVoyage()
-  const { stopVoyage, isPending: isStopping } = useStopVoyage()
-  const { claim, isPending: isClaiming } = useClaimReward()
+  const shipInfo = useShipDetails(tokenId)
+  const { pending, pendingFormatted } = useShipPendingReward(tokenId)
+  const { data: upgradeCost } = useUpgradeCost(shipInfo?.level || 1)
+  const { data: isApproved } = useIsApprovedForAll()
+  
+  const { stake, isPending: isStaking } = useStakeShips()
+  const { unstake, isPending: isUnstaking } = useUnstakeShips()
+  const { claim, isPending: isClaiming } = useClaimRewards()
   const { upgrade, isPending: isUpgrading } = useUpgradeShip()
-  const { repair, isPending: isRepairing } = useRepairShip()
+  const { approveAll, isPending: isApproving } = useApproveShips()
 
-  const durabilityPercent = formatPercentage(Number(ship.durability), Number(ship.maxDurability))
-  const hasLowDurability = durabilityPercent < 30
-  const canClaim = (ship.claimableReward || BigInt(0)) > BigInt(0)
+  if (!shipInfo) {
+    return (
+      <div className="glass-card p-6 animate-pulse">
+        <div className="h-4 bg-gray-700 rounded mb-4" />
+        <div className="h-48 bg-gray-700 rounded mb-4" />
+        <div className="h-4 bg-gray-700 rounded" />
+      </div>
+    )
+  }
 
-  const handleStartVoyage = async () => {
-    await startVoyage(ship.tokenId)
+  const canUpgrade = shipInfo.level < ShipLevel.MAX
+  const hasRewards = pending && pending > 0n
+
+  const handleStake = async () => {
+    if (!isApproved) {
+      await approveAll()
+    }
+    await stake(tokenId)
     onRefresh?.()
   }
 
-  const handleStopVoyage = async () => {
-    await stopVoyage(ship.tokenId)
+  const handleUnstake = async () => {
+    await unstake(tokenId)
     onRefresh?.()
   }
 
   const handleClaim = async () => {
-    await claim(ship.tokenId)
+    await claim(tokenId)
     onRefresh?.()
   }
 
   const handleUpgrade = async () => {
-    await upgrade(ship.tokenId)
-    onRefresh?.()
-  }
-
-  const handleRepair = async () => {
-    await repair(ship.tokenId)
+    await upgrade(tokenId)
     onRefresh?.()
   }
 
   return (
-    <div className="glass-card p-6 hover:shadow-lg hover:animate-glow transition-all duration-300">
+    <div className="glass-card p-4 hover:shadow-lg transition-all duration-300">
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="text-lg font-bold">Ship #{ship.tokenId.toString()}</h3>
-          <span className={`text-sm font-medium ${RARITY_COLORS[ship.rarity as keyof typeof RARITY_COLORS]}`}>
-            {RARITY_NAMES[ship.rarity]} • Level {ship.level}
+          <h3 className="text-base font-bold">Ship #{tokenId.toString()}</h3>
+          <span className="text-xs font-medium text-gray-400">
+            Level {shipInfo.level}
           </span>
         </div>
-        {ship.isVoyaging && (
+        {shipInfo.isStaked && (
           <span className="flex items-center gap-1 text-green-400 text-sm">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            Voyaging
+            质押中
           </span>
         )}
       </div>
 
       {/* Ship Image */}
-      <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-800">
+      <div className="relative mb-3 rounded-lg overflow-hidden bg-gray-800">
         <img 
-          src={getShipImage(Number(ship.tokenId))} 
-          alt={`Ship #${ship.tokenId}`}
-          className="w-full h-48 object-cover"
+          src={getShipImage(shipInfo.imageId)} 
+          alt={`Ship #${tokenId}`}
+          className="w-full h-32 object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <Stat label="HP" value={ship.hp.toString()} />
-        <Stat label="Effective HP" value={ship.effectiveHp.toString()} />
-      </div>
-
-      {/* Durability Bar */}
-      <div className="mb-4">
-        <div className="flex justify-between text-sm mb-1">
-          <span className="text-gray-400">Durability</span>
-          <span className={hasLowDurability ? 'text-orange-400' : 'text-gray-300'}>
-            {durabilityPercent}%
-          </span>
-        </div>
-        <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-          <div 
-            className={`h-full transition-all duration-300 ${
-              hasLowDurability ? 'bg-orange-400' : 'bg-blue-400'
-            }`}
-            style={{ width: `${durabilityPercent}%` }}
-          />
-        </div>
-        {hasLowDurability && (
-          <p className="text-xs text-orange-400 mt-1">⚠️ Low durability - repair needed</p>
-        )}
+      {/* Ship Name */}
+      <div className="mb-3 text-center">
+        <p className="text-xs text-gray-400">{SHIP_NAMES[shipInfo.imageId] || 'Unknown Ship'}</p>
       </div>
 
       {/* Rewards */}
-      {(canClaim || ship.isVoyaging) && (
-        <div className="mb-4 p-3 bg-gray-800/50 rounded-xl">
-          <p className="text-sm text-gray-400 mb-1">Rewards</p>
-          {canClaim && (
-            <p className="text-green-400 font-bold">
-              {formatTokenAmount(ship.claimableReward || BigInt(0))} $FUEL
-            </p>
-          )}
-          {ship.isVoyaging && ship.estimatedReward && ship.estimatedReward > BigInt(0) && (
-            <p className="text-yellow-400 text-sm">
-              ~{formatTokenAmount(ship.estimatedReward)} $FUEL (estimated)
-            </p>
-          )}
+      {hasRewards && (
+        <div className="mb-3 p-2 bg-gray-800/50 rounded-lg">
+          <p className="text-xs text-gray-400 mb-1">待领取奖励</p>
+          <p className="text-sm text-green-400 font-bold">
+            {pendingFormatted} FUEL
+          </p>
+        </div>
+      )}
+
+      {/* Upgrade Info */}
+      {canUpgrade && upgradeCost && (
+        <div className="mb-3 p-2 bg-gray-800/50 rounded-lg text-xs">
+          <p className="text-gray-400 mb-1">升级成本（等级 {shipInfo.level + 1}）</p>
+          <div className="flex gap-1 flex-wrap">
+            {upgradeCost[0] > 0n && (
+              <span className="text-blue-400">蓝宝石 x{upgradeCost[0].toString()}</span>
+            )}
+            {upgradeCost[1] > 0n && (
+              <span className="text-orange-400">太阳石 x{upgradeCost[1].toString()}</span>
+            )}
+            {upgradeCost[2] > 0n && (
+              <span className="text-purple-400">锂矿石 x{upgradeCost[2].toString()}</span>
+            )}
+          </div>
         </div>
       )}
 
       {/* Action Buttons */}
       <div className="grid grid-cols-2 gap-2">
-        {!ship.isVoyaging ? (
-          <button
-            onClick={handleStartVoyage}
-            disabled={isStarting || hasLowDurability}
-            className="btn-primary text-sm"
-          >
-            {isStarting ? 'Starting...' : 'Start Voyage'}
-          </button>
+        {!shipInfo.isStaked ? (
+          <>
+            <button
+              onClick={handleStake}
+              disabled={isStaking || isApproving}
+              className="btn-primary text-xs py-2"
+            >
+              {isApproving ? '正在授权...' : isStaking ? '正在质押...' : '质押战舰'}
+            </button>
+            <button
+              disabled
+              className="btn-secondary text-xs py-2 opacity-50 cursor-not-allowed"
+            >
+              未质押
+            </button>
+          </>
         ) : (
-          <button
-            onClick={handleStopVoyage}
-            disabled={isStopping}
-            className="btn-secondary text-sm"
-          >
-            {isStopping ? 'Stopping...' : 'Stop Voyage'}
-          </button>
+          <>
+            <button
+              onClick={handleUnstake}
+              disabled={isUnstaking}
+              className="btn-secondary text-xs py-2"
+            >
+              {isUnstaking ? '正在取消质押...' : '取消质押'}
+            </button>
+            {hasRewards && (
+              <button
+                onClick={handleClaim}
+                disabled={isClaiming}
+                className="btn-primary text-xs py-2 bg-green-600 hover:bg-green-700"
+              >
+                {isClaiming ? '正在领取...' : '领取'}
+              </button>
+            )}
+          </>
         )}
 
-        {canClaim && (
+        {canUpgrade && (
           <button
-            onClick={handleClaim}
-            disabled={isClaiming}
-            className="btn-primary text-sm bg-green-600 hover:bg-green-700"
+            onClick={handleUpgrade}
+            disabled={isUpgrading || shipInfo.isStaked}
+            className="btn-secondary text-xs py-2 col-span-2"
           >
-            {isClaiming ? 'Claiming...' : 'Claim'}
-          </button>
-        )}
-
-        <button
-          onClick={handleUpgrade}
-          disabled={isUpgrading || ship.isVoyaging}
-          className="btn-secondary text-sm"
-        >
-          {isUpgrading ? 'Upgrading...' : 'Upgrade'}
-        </button>
-
-        {hasLowDurability && (
-          <button
-            onClick={handleRepair}
-            disabled={isRepairing || ship.isVoyaging}
-            className="btn-secondary text-sm bg-orange-600 hover:bg-orange-700"
-          >
-            {isRepairing ? 'Repairing...' : 'Repair'}
+            {isUpgrading ? '正在升级...' : `升级到等级 ${shipInfo.level + 1}`}
           </button>
         )}
       </div>

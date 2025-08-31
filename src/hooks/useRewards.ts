@@ -1,34 +1,72 @@
-import { useAccount, useReadContract } from 'wagmi'
-import { CONTRACT_ADDRESSES } from '../lib/config'
-import { CONTROLLER_ABI } from '../lib/abis'
-import { useShips } from './useShips'
+import { useMemo } from 'react'
+import { useContracts } from './useContracts'
+import { formatEther } from 'viem'
 
 export function useRewards() {
-  const { address } = useAccount()
-  const { ships } = useShips()
+  const { 
+    useTotalPendingReward,
+    usePendingReward,
+    useClaimRewards,
+    useUserShipStatus
+  } = useContracts()
 
-  // Get total claimable rewards from contract
-  const { data: totalClaimable } = useReadContract({
-    address: CONTRACT_ADDRESSES.REWARD_CONTROLLER,
-    abi: CONTROLLER_ABI,
-    functionName: 'getTotalClaimableRewards',
-    args: address ? [address] : undefined,
-  })
+  const { data: totalPending } = useTotalPendingReward()
+  const { data: userStatus } = useUserShipStatus()
+  const { claim, claimBatch, claimAll, isPending: isClaimPending } = useClaimRewards()
 
-  // Calculate estimated rewards from ships
-  const estimatedRewards = ships.reduce((acc, ship) => {
-    return acc + (ship.estimatedReward || BigInt(0))
-  }, BigInt(0))
+  // Get total pending rewards formatted
+  const totalPendingFormatted = useMemo(() => {
+    if (!totalPending) return '0'
+    return formatEther(totalPending as bigint)
+  }, [totalPending])
 
-  // Get claimable token IDs
-  const claimableTokenIds = ships
-    .filter(ship => (ship.claimableReward || BigInt(0)) > BigInt(0))
-    .map(ship => ship.tokenId)
+  // Get pending rewards for a specific ship
+  const useShipPendingReward = (tokenId: bigint | undefined) => {
+    const { data: pending } = usePendingReward(tokenId)
+    
+    const pendingFormatted = useMemo(() => {
+      if (!pending) return '0'
+      return formatEther(pending as bigint)
+    }, [pending])
+
+    return {
+      pending: pending as bigint | undefined,
+      pendingFormatted
+    }
+  }
+
+  // Get all staked ships with pending rewards
+  const stakedShipsWithRewards = useMemo(() => {
+    if (!userStatus?.stakedNFTs) return []
+    return userStatus.stakedNFTs
+  }, [userStatus])
+
+  // Claim rewards for all staked ships
+  const claimAllRewards = async () => {
+    if (stakedShipsWithRewards.length === 0) {
+      return
+    }
+    await claimAll()
+  }
+
+  // Claim rewards for specific ships
+  const claimRewardsForShips = async (tokenIds: bigint[]) => {
+    if (tokenIds.length === 0) return
+    
+    if (tokenIds.length === 1) {
+      await claim(tokenIds[0])
+    } else {
+      await claimBatch(tokenIds)
+    }
+  }
 
   return {
-    totalClaimable: totalClaimable || BigInt(0),
-    estimatedRewards,
-    claimableTokenIds,
-    hasClaimableRewards: claimableTokenIds.length > 0,
+    totalPending: totalPending as bigint | undefined,
+    totalPendingFormatted,
+    stakedShipsWithRewards,
+    useShipPendingReward,
+    claimAllRewards,
+    claimRewardsForShips,
+    isClaimPending
   }
 }

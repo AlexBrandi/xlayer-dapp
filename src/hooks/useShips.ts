@@ -1,97 +1,78 @@
-import { useAccount, useReadContract, useBlockNumber } from 'wagmi'
-import { CONTRACT_ADDRESSES } from '../lib/config'
-import { SHIP_ABI } from '../lib/abis'
+import { useMemo } from 'react'
+import { useContracts } from './useContracts'
 import type { ShipInfo } from '../types'
-import { useEffect, useState } from 'react'
-
-const BLOCKS_PER_HOUR = 3600 / 3 // Assuming 3 second blocks
-const REWARD_PER_HOUR_BASE = BigInt(100) * BigInt(10 ** 18) // 100 tokens per hour base
 
 export function useShips() {
-  const { address } = useAccount()
-  const { data: blockNumber } = useBlockNumber({ watch: true })
-  const [ships, setShips] = useState<ShipInfo[]>([])
+  const { 
+    useTokensOfOwner, 
+    useUserShipStatus, 
+    useShipLevel, 
+    useShipImageId, 
+    usePendingReward 
+  } = useContracts()
 
-  // Get ship balance
-  const { data: shipBalance } = useReadContract({
-    address: CONTRACT_ADDRESSES.SHIP_NFT,
-    abi: SHIP_ABI,
-    functionName: 'balanceOf',
-    args: address ? [address] : undefined,
-  })
+  const { data: userTokens } = useTokensOfOwner()
+  const { data: userStatus } = useUserShipStatus()
 
-  // Get token IDs
-  const tokenIds = Array.from({ length: Number(shipBalance || 0) }, (_, i) => BigInt(i))
+  // Get all ships owned by the user
+  const allShips = useMemo(() => {
+    if (!userTokens) return []
+    return userTokens as bigint[]
+  }, [userTokens])
 
-  // Get ship infos for each token
-  const shipInfoQueries = tokenIds.map((index) => ({
-    address: CONTRACT_ADDRESSES.SHIP_NFT,
-    abi: SHIP_ABI,
-    functionName: 'tokenOfOwnerByIndex',
-    args: address ? [address, index] : undefined,
-  }))
+  // Get staked ships
+  const stakedShips = useMemo(() => {
+    if (!userStatus?.stakedNFTs) return []
+    return userStatus.stakedNFTs
+  }, [userStatus])
 
-  // Fetch all token IDs
-  const tokenIdResults = shipInfoQueries.map((query) =>
-    useReadContract(query as any)
-  )
+  // Get unstaked ships
+  const unstakedShips = useMemo(() => {
+    if (!userStatus?.unstakedNFTs) return []
+    return userStatus.unstakedNFTs
+  }, [userStatus])
 
-  // Get ship details for each token ID
-  useEffect(() => {
-    const fetchShipDetails = async () => {
-      if (!address || !shipBalance) return
+  // Hook to get detailed info for a specific ship
+  const useShipDetails = (tokenId: bigint | undefined) => {
+    const { data: level } = useShipLevel(tokenId)
+    const { data: imageId } = useShipImageId(tokenId)
+    const { data: pendingReward } = usePendingReward(tokenId)
 
-      const shipPromises = tokenIdResults.map(async (result) => {
-        if (!result.data) return null
+    const isStaked = tokenId ? stakedShips.includes(tokenId) : false
 
-        const tokenId = result.data as bigint
-        
-        // Mock ship info - replace with actual contract calls
-        const shipInfo: ShipInfo = {
+    const shipInfo: ShipInfo | undefined = tokenId ? {
+      tokenId,
+      level: Number(level || 1),
+      imageId: Number(imageId || 0),
+      isStaked,
+      pendingReward: pendingReward as bigint | undefined,
+    } : undefined
+
+    return shipInfo
+  }
+
+  // Get all ships with their details
+  const useAllShipsDetails = () => {
+    const shipsDetails = useMemo(() => {
+      return allShips.map(tokenId => {
+        const isStaked = stakedShips.includes(tokenId)
+        return {
           tokenId,
-          level: Math.floor(Math.random() * 10) + 1,
-          rarity: Math.floor(Math.random() * 4),
-          hp: BigInt(1000),
-          effectiveHp: BigInt(800),
-          durability: BigInt(Math.floor(Math.random() * 100)),
-          maxDurability: BigInt(100),
-          isVoyaging: Math.random() > 0.5,
-          claimableReward: BigInt(Math.floor(Math.random() * 1000)) * BigInt(10 ** 18),
-          estimatedReward: BigInt(0),
-          lastClaimBlock: blockNumber || BigInt(0),
+          isStaked,
+          // Note: For performance, we don't fetch all details here
+          // Use useShipDetails for individual ship details
         }
-
-        // Calculate estimated rewards if voyaging
-        if (shipInfo.isVoyaging && blockNumber) {
-          const blocksPassed = blockNumber - shipInfo.lastClaimBlock!
-          const hoursPassed = Number(blocksPassed) / BLOCKS_PER_HOUR
-          const multiplier = BigInt(shipInfo.level) * BigInt(shipInfo.rarity + 1)
-          shipInfo.estimatedReward = REWARD_PER_HOUR_BASE * multiplier * BigInt(Math.floor(hoursPassed))
-        }
-
-        return shipInfo
       })
+    }, [allShips, stakedShips])
 
-      const results = await Promise.all(shipPromises)
-      setShips(results.filter(Boolean) as ShipInfo[])
-    }
+    return shipsDetails
+  }
 
-    fetchShipDetails()
-  }, [address, shipBalance, blockNumber, tokenIdResults.map(r => r.data).join(',')])
-
-  return { ships, isLoading: shipBalance === undefined }
-}
-
-export function useShipsPaginated(page: number = 0, pageSize: number = 8) {
-  const { ships, isLoading } = useShips()
-  
-  const totalPages = Math.ceil(ships.length / pageSize)
-  const paginatedShips = ships.slice(page * pageSize, (page + 1) * pageSize)
-  
   return {
-    ships: paginatedShips,
-    isLoading,
-    totalPages,
-    totalShips: ships.length,
+    allShips,
+    stakedShips,
+    unstakedShips,
+    useShipDetails,
+    useAllShipsDetails,
   }
 }

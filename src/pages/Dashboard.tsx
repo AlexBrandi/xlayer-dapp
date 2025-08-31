@@ -1,146 +1,160 @@
-import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { ShipCard } from '../components/ShipCard'
-import { formatTokenAmount } from '../lib/format'
-import { useShipsPaginated } from '../hooks/useShips'
+import { formatEther } from 'viem'
+import { useShips } from '../hooks/useShips'
 import { useRewards } from '../hooks/useRewards'
+import { useGems } from '../hooks/useGems'
 import { useContracts } from '../hooks/useContracts'
 
 export function Dashboard() {
   const { isConnected } = useAccount()
-  const [currentPage, setCurrentPage] = useState(0)
-  const [, setRefreshKey] = useState(0)
   
-  const { ships, isLoading, totalPages, totalShips } = useShipsPaginated(currentPage, 8)
-  const { totalClaimable, estimatedRewards, claimableTokenIds, hasClaimableRewards } = useRewards()
-  const { useClaimBatch } = useContracts()
-  const { claimBatch, isPending: isClaimingAll } = useClaimBatch()
+  const { allShips, stakedShips, unstakedShips } = useShips()
+  const { totalPending, totalPendingFormatted, claimAllRewards, isClaimPending } = useRewards()
+  const { balances } = useGems()
+  const { useFuelBalance } = useContracts()
+  const { data: fuelBalance } = useFuelBalance()
 
   const handleRefresh = () => {
-    setRefreshKey(prev => prev + 1)
+    // Trigger re-fetch by forcing component remount
+    window.location.reload()
   }
 
   const handleClaimAll = async () => {
-    if (claimableTokenIds.length > 0) {
-      await claimBatch(claimableTokenIds)
-      handleRefresh()
-    }
+    await claimAllRewards()
+    handleRefresh()
   }
 
   if (!isConnected) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Welcome to Ship Fleet DApp</h2>
-          <p className="text-gray-400 mb-6">Connect your wallet to view your fleet</p>
+          <h2 className="text-2xl font-bold mb-4">欢迎来到舰队 DApp</h2>
+          <p className="text-gray-400 mb-6">连接您的钱包以查看您的舰队</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Rewards Section */}
-      <div className="glass-card p-6 mb-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-bold mb-2">Claimable Rewards</h2>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
-              <div>
-                <p className="text-sm text-gray-400">Ready to Claim</p>
-                <p className="text-2xl font-bold text-green-400">
-                  {formatTokenAmount(totalClaimable)} $FUEL
-                </p>
-              </div>
-              {estimatedRewards > BigInt(0) && (
-                <div>
-                  <p className="text-sm text-gray-400">Estimated (Voyaging)</p>
-                  <p className="text-2xl font-bold text-yellow-400">
-                    ~{formatTokenAmount(estimatedRewards)} $FUEL
-                  </p>
-                </div>
-              )}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        {/* FUEL Balance */}
+        <div className="glass-card p-4">
+          <h3 className="text-xs text-gray-400 mb-1">FUEL 余额</h3>
+          <p className="text-lg font-bold text-green-400">
+            {fuelBalance ? formatEther(fuelBalance as bigint) : '0'} FUEL
+          </p>
+        </div>
+
+        {/* Pending Rewards */}
+        <div className="glass-card p-4">
+          <h3 className="text-xs text-gray-400 mb-1">待领取奖励</h3>
+          <p className="text-lg font-bold text-yellow-400">
+            {totalPendingFormatted} FUEL
+          </p>
+        </div>
+
+        {/* Ships Status */}
+        <div className="glass-card p-4">
+          <h3 className="text-xs text-gray-400 mb-1">战舰状态</h3>
+          <div className="flex gap-3">
+            <div>
+              <p className="text-xs text-gray-500">质押中</p>
+              <p className="text-base font-bold text-blue-400">{stakedShips.length}</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">闲置</p>
+              <p className="text-base font-bold text-gray-400">{unstakedShips.length}</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">总计</p>
+              <p className="text-base font-bold">{allShips.length}</p>
             </div>
           </div>
-          
+        </div>
+
+        {/* Gem Balance */}
+        <div className="glass-card p-4">
+          <h3 className="text-xs text-gray-400 mb-1">宝石余额</h3>
+          <div className="flex gap-2">
+            <div className="text-center">
+              <p className="text-xs text-gray-500">蓝宝石</p>
+              <p className="text-sm font-bold text-blue-400">{balances.sapphire.toString()}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs text-gray-500">太阳石</p>
+              <p className="text-sm font-bold text-orange-400">{balances.sunstone.toString()}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs text-gray-500">锂矿石</p>
+              <p className="text-sm font-bold text-purple-400">{balances.lithium.toString()}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Bar */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold">我的舰队</h2>
+        <div className="flex gap-2">
           <button
             onClick={handleClaimAll}
-            disabled={!hasClaimableRewards || isClaimingAll}
+            disabled={!totalPending || totalPending === 0n || isClaimPending}
             className="btn-primary bg-green-600 hover:bg-green-700 disabled:bg-gray-700"
           >
-            {isClaimingAll ? 'Claiming All...' : 'Batch Claim All'}
+            {isClaimPending ? '领取中...' : '领取所有奖励'}
+          </button>
+          <button onClick={handleRefresh} className="btn-secondary text-sm">
+            刷新
           </button>
         </div>
       </div>
 
-      {/* Fleet Section */}
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold">My Fleet ({totalShips} Ships)</h2>
-        <button onClick={handleRefresh} className="btn-secondary text-sm">
-          Refresh
-        </button>
-      </div>
-
-      {/* Ships Grid */}
-      {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="glass-card p-6 animate-pulse">
-              <div className="h-4 bg-gray-700 rounded mb-4" />
-              <div className="h-48 bg-gray-700 rounded mb-4" />
-              <div className="h-4 bg-gray-700 rounded" />
-            </div>
-          ))}
-        </div>
-      ) : ships.length === 0 ? (
+      {/* Ships Display */}
+      {allShips.length === 0 ? (
         <div className="glass-card p-12 text-center">
-          <p className="text-gray-400 mb-4">You don't have any ships yet</p>
+          <p className="text-gray-400 mb-4">您还没有任何战舰</p>
           <a href="/mint" className="btn-primary">
-            Mint Your First Ship
+            铸造您的第一艘战舰
           </a>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {ships.map((ship) => (
-              <ShipCard key={ship.tokenId.toString()} ship={ship} onRefresh={handleRefresh} />
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center gap-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                disabled={currentPage === 0}
-                className="btn-secondary"
-              >
-                Previous
-              </button>
-              
-              <div className="flex items-center gap-2">
-                {[...Array(totalPages)].map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrentPage(i)}
-                    className={`w-10 h-10 rounded-lg font-medium transition-colors ${
-                      currentPage === i
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
+          {/* Staked Ships */}
+          {stakedShips.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-base font-semibold mb-3 text-blue-400">
+                质押中的战舰 ({stakedShips.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {stakedShips.map((tokenId) => (
+                  <ShipCard 
+                    key={tokenId.toString()} 
+                    tokenId={tokenId} 
+                    onRefresh={handleRefresh}
+                  />
                 ))}
               </div>
-              
-              <button
-                onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
-                disabled={currentPage === totalPages - 1}
-                className="btn-secondary"
-              >
-                Next
-              </button>
+            </div>
+          )}
+
+          {/* Unstaked Ships */}
+          {unstakedShips.length > 0 && (
+            <div>
+              <h3 className="text-base font-semibold mb-3 text-gray-400">
+                闲置的战舰 ({unstakedShips.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {unstakedShips.map((tokenId) => (
+                  <ShipCard 
+                    key={tokenId.toString()} 
+                    tokenId={tokenId} 
+                    onRefresh={handleRefresh}
+                  />
+                ))}
+              </div>
             </div>
           )}
         </>
