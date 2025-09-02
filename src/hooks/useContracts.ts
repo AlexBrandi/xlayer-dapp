@@ -16,6 +16,10 @@ export function useContracts() {
       abi: FUEL_ABI,
       functionName: 'balanceOf',
       args: address ? [address] : undefined,
+      query: {
+        refetchInterval: 10000, // Refetch every 10 seconds for FUEL balance
+        staleTime: 5000, // Data becomes stale after 5 seconds
+      }
     })
   }
 
@@ -73,15 +77,19 @@ export function useContracts() {
       abi: SHIP_ABI,
       functionName: 'tokensOfOwner',
       args: address ? [address] : undefined,
+      query: {
+        refetchInterval: 5000, // Refetch every 5 seconds
+        staleTime: 2000, // Data becomes stale after 2 seconds
+      }
     })
     
-    console.log('useTokensOfOwner:', {
-      address,
-      contractAddress: CONTRACT_ADDRESSES.SHIP_NFT,
-      data: result.data,
-      error: result.error,
-      isLoading: result.isLoading
-    })
+    // console.log('useTokensOfOwner:', {
+    //   address,
+    //   contractAddress: CONTRACT_ADDRESSES.SHIP_NFT,
+    //   data: result.data,
+    //   error: result.error,
+    //   isLoading: result.isLoading
+    // })
     
     return result
   }
@@ -92,15 +100,19 @@ export function useContracts() {
       abi: SHIP_ABI,
       functionName: 'tokensOfOwnerImageIds',
       args: address ? [address] : undefined,
+      query: {
+        refetchInterval: 5000, // Refetch every 5 seconds
+        staleTime: 2000, // Data becomes stale after 2 seconds
+      }
     })
     
-    console.log('useTokensOfOwnerImageIds:', {
-      address,
-      contractAddress: CONTRACT_ADDRESSES.SHIP_NFT,
-      data: result.data,
-      error: result.error,
-      isLoading: result.isLoading
-    })
+    // console.log('useTokensOfOwnerImageIds:', {
+    //   address,
+    //   contractAddress: CONTRACT_ADDRESSES.SHIP_NFT,
+    //   data: result.data,
+    //   error: result.error,
+    //   isLoading: result.isLoading
+    // })
     
     return result
   }
@@ -183,6 +195,10 @@ export function useContracts() {
       abi: GEM_ABI,
       functionName: 'balanceOf',
       args: address ? [address, BigInt(GemType.SAPPHIRE)] : undefined,
+      query: {
+        refetchInterval: 8000, // Refetch every 8 seconds for gem balances
+        staleTime: 4000, // Data becomes stale after 4 seconds
+      }
     })
 
     const sunstone = useReadContract({
@@ -190,6 +206,10 @@ export function useContracts() {
       abi: GEM_ABI,
       functionName: 'balanceOf',
       args: address ? [address, BigInt(GemType.SUNSTONE)] : undefined,
+      query: {
+        refetchInterval: 8000,
+        staleTime: 4000,
+      }
     })
 
     const lithium = useReadContract({
@@ -197,6 +217,10 @@ export function useContracts() {
       abi: GEM_ABI,
       functionName: 'balanceOf',
       args: address ? [address, BigInt(GemType.LITHIUM)] : undefined,
+      query: {
+        refetchInterval: 8000,
+        staleTime: 4000,
+      }
     })
 
     return { sapphire, sunstone, lithium }
@@ -239,6 +263,10 @@ export function useContracts() {
       abi: GAME_ABI,
       functionName: 'getAllNFTsStatus',
       args: address ? [address] : undefined,
+      query: {
+        refetchInterval: 3000, // Refetch every 3 seconds for staking status
+        staleTime: 1000, // Data becomes stale after 1 second
+      }
     })
     
     // Transform the raw data to match UserStatus type
@@ -247,6 +275,15 @@ export function useContracts() {
       stakedNFTs: (result.data as any)[1] || [],
       unstakedNFTs: (result.data as any)[2] || []
     } : undefined
+
+    // 调试信息已隐藏
+    // console.log('useUserShipStatus:', {
+    //   address,
+    //   rawData: result.data,
+    //   transformedData,
+    //   error: result.error,
+    //   isLoading: result.isLoading
+    // })
     
     return {
       ...result,
@@ -278,6 +315,10 @@ export function useContracts() {
       abi: GAME_ABI,
       functionName: 'pendingReward',
       args: tokenId ? [tokenId] : undefined,
+      query: {
+        refetchInterval: 10000, // Refetch every 10 seconds for rewards
+        staleTime: 5000, // Data becomes stale after 5 seconds
+      }
     })
   }
 
@@ -287,6 +328,10 @@ export function useContracts() {
       abi: GAME_ABI,
       functionName: 'getTotalPendingReward',
       args: address ? [address] : undefined,
+      query: {
+        refetchInterval: 8000, // Refetch every 8 seconds for total rewards
+        staleTime: 4000, // Data becomes stale after 4 seconds
+      }
     })
   }
 

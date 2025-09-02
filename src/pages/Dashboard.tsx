@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi'
 import { ShipCard } from '../components/ShipCard'
 import { RealOpenBoxModal } from '../components/RealOpenBoxModal'
 import { BatchStakeModal } from '../components/BatchStakeModal'
-import { DebugPanel } from '../components/DebugPanel'
+// import { DebugPanel } from '../components/DebugPanel'
 import { formatEther } from 'viem'
 import { useShips } from '../hooks/useShips'
 import { useRewards } from '../hooks/useRewards'
@@ -11,36 +11,36 @@ import { useGems } from '../hooks/useGems'
 import { useContracts } from '../hooks/useContracts'
 
 export function Dashboard() {
-  const { isConnected, address } = useAccount()
+  const { isConnected } = useAccount()
   const [showOpenBoxModal, setShowOpenBoxModal] = useState(false)
   const [showBatchStakeModal, setShowBatchStakeModal] = useState(false)
   
-  const { allShips, stakedShips, unstakedShips, userImageIds, useAllShipsDetails } = useShips()
+  const { allShips, stakedShips, unstakedShips, useAllShipsDetails } = useShips()
   const allShipsDetails = useAllShipsDetails()
   const { totalPending, totalPendingFormatted, claimAllRewards, isClaimPending } = useRewards()
   const { balances } = useGems()
   const { useFuelBalance } = useContracts()
   const { data: fuelBalance } = useFuelBalance()
 
-  // 调试信息
-  console.log('Dashboard Debug:', {
-    address,
-    allShips: allShips.map(id => id.toString()),
-    userImageIds,
-    allShipsDetails,
-    stakedShips: stakedShips.map(id => id.toString()),
-    unstakedShips: unstakedShips.map(id => id.toString()),
-    totalShips: allShips.length
-  })
+  // 调试信息已隐藏
+  // console.log('Dashboard Debug:', {
+  //   allShips: allShips.map(id => id.toString()),
+  //   allShipsDetails,
+  //   stakedShips: stakedShips.map(id => id.toString()),
+  //   unstakedShips: unstakedShips.map(id => id.toString()),
+  //   totalShips: allShips.length,
+  //   stakedShipsDetails: allShipsDetails.filter(ship => ship.isStaked),
+  //   unstakedShipsDetails: allShipsDetails.filter(ship => !ship.isStaked)
+  // })
 
   const handleRefresh = () => {
-    // Trigger re-fetch by forcing component remount
-    window.location.reload()
+    // Force refresh of data without page reload
+    // The hooks will automatically refetch the data
   }
 
   const handleClaimAll = async () => {
     await claimAllRewards()
-    handleRefresh()
+    // Data will be automatically refreshed by hooks
   }
 
   const handleOpenBoxModal = () => {
@@ -52,7 +52,7 @@ export function Dashboard() {
   }
 
   const handleOpenBoxComplete = () => {
-    handleRefresh() // 刷新以显示新的NFT
+    // NFT data will be automatically refreshed by hooks
   }
 
   if (!isConnected) {
@@ -68,8 +68,8 @@ export function Dashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      {/* Debug Panel - 临时添加用于调试 */}
-      <DebugPanel />
+      {/* Debug Panel - 隐藏调试信息 */}
+      {/* <DebugPanel /> */}
       
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
@@ -173,16 +173,16 @@ export function Dashboard() {
                 质押中的战舰 ({stakedShips.length})
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {allShipsDetails
-                  .filter(ship => ship.isStaked)
-                  .map(({ tokenId, imageId }) => (
+                {stakedShips.map((tokenId) => {
+                  const shipDetail = allShipsDetails.find(ship => ship.tokenId === tokenId)
+                  return (
                     <ShipCard 
                       key={tokenId.toString()} 
                       tokenId={tokenId} 
-                      imageId={imageId}
-                      onRefresh={handleRefresh}
+                      imageId={shipDetail?.imageId}
                     />
-                  ))}
+                  )
+                })}
               </div>
             </div>
           )}
@@ -204,16 +204,16 @@ export function Dashboard() {
                 )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {allShipsDetails
-                  .filter(ship => !ship.isStaked)
-                  .map(({ tokenId, imageId }) => (
+                {unstakedShips.map((tokenId) => {
+                  const shipDetail = allShipsDetails.find(ship => ship.tokenId === tokenId)
+                  return (
                     <ShipCard 
                       key={tokenId.toString()} 
                       tokenId={tokenId} 
-                      imageId={imageId}
-                      onRefresh={handleRefresh}
+                      imageId={shipDetail?.imageId}
                     />
-                  ))}
+                  )
+                })}
               </div>
             </div>
           )}
@@ -234,7 +234,7 @@ export function Dashboard() {
         <BatchStakeModal
           tokenIds={unstakedShips}
           onClose={() => setShowBatchStakeModal(false)}
-          onSuccess={handleRefresh}
+          onSuccess={() => {}}
         />
       )}
     </div>

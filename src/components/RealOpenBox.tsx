@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useShips } from '../hooks/useShips'
 
 interface RealOpenBoxProps {
@@ -52,6 +53,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
   const [revealedShip, setRevealedShip] = useState<RevealedShip | null>(null)
   const [allRevealedShips, setAllRevealedShips] = useState<RevealedShip[]>([])
   const [showResults, setShowResults] = useState(false)
+  const navigate = useNavigate()
   
   const { useShipDetails } = useShips()
   const currentTokenId = tokenIds[currentBox]
@@ -89,7 +91,10 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
   }
 
   const handleViewFleet = () => {
+    // 关闭当前模态框
     onComplete()
+    // 跳转到首页查看舰队
+    navigate('/')
   }
 
   // 自动开始第一个盒子

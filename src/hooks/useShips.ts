@@ -16,15 +16,17 @@ export function useShips() {
   const { data: userImageIds } = useTokensOfOwnerImageIds()
   const { data: userStatus } = useUserShipStatus()
 
-  // 调试信息
-  console.log('useShips Debug:', {
-    userTokens,
-    userImageIds,
-    userStatus,
-    hasTokens: !!userTokens,
-    hasImageIds: !!userImageIds,
-    hasStatus: !!userStatus
-  })
+  // 调试信息已隐藏
+  // console.log('useShips Debug:', {
+  //   userTokens,
+  //   userImageIds,
+  //   userStatus,
+  //   stakedShips: userStatus?.stakedNFTs,
+  //   unstakedShips: userStatus?.unstakedNFTs,
+  //   hasTokens: !!userTokens,
+  //   hasImageIds: !!userImageIds,
+  //   hasStatus: !!userStatus
+  // })
 
   // Get all ships owned by the user
   const allShips = useMemo(() => {
@@ -71,8 +73,15 @@ export function useShips() {
       const tokens = userTokens as bigint[]
       const imageIds = userImageIds as number[]
       
+      // console.log('Computing ship details:', {
+      //   tokens: tokens.map(t => t.toString()),
+      //   stakedShips: stakedShips.map(t => t.toString()),
+      //   imageIds
+      // })
+      
       return tokens.map((tokenId, index) => {
         const isStaked = stakedShips.includes(tokenId)
+        // console.log(`Ship ${tokenId.toString()}: isStaked=${isStaked}`)
         return {
           tokenId,
           imageId: imageIds[index] || 0,

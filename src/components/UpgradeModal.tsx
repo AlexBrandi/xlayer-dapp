@@ -105,7 +105,7 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
   }
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999] p-4">
       <div className="glass-card p-6 max-w-md w-full">
         <h2 className="text-xl font-bold text-white mb-4 text-center">
           升级战舰

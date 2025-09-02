@@ -1,14 +1,12 @@
-import { useState } from 'react'
 import { useShips } from '../hooks/useShips'
 import { useRewards } from '../hooks/useRewards'
 import { useContracts } from '../hooks/useContracts'
+import { useUpgrade } from '../contexts/UpgradeContext'
 import { ShipLevel } from '../types'
-import { UpgradeModal } from './UpgradeModal'
 
 interface ShipCardProps {
   tokenId: bigint
   imageId?: number
-  onRefresh?: () => void
 }
 
 // Map image IDs to ship names (for display purposes)
@@ -36,10 +34,10 @@ function getShipImage(imageId: number): string {
   return `/images/${imageNumber}.png`
 }
 
-export function ShipCard({ tokenId, imageId: providedImageId, onRefresh }: ShipCardProps) {
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
   const { useShipDetails } = useShips()
   const { useShipPendingReward } = useRewards()
+  const { openUpgradeModal } = useUpgrade()
   const { 
     useStakeShips, 
     useUnstakeShips, 
@@ -74,30 +72,39 @@ export function ShipCard({ tokenId, imageId: providedImageId, onRefresh }: ShipC
   const hasRewards = pending && pending > 0n
 
   const handleStake = async () => {
-    if (!isApproved) {
-      await approveAll()
+    try {
+      if (!isApproved) {
+        await approveAll()
+      }
+      await stake(tokenId)
+      // Data will be automatically refreshed by hooks
+    } catch (error) {
+      console.error('Stake error:', error)
     }
-    await stake(tokenId)
-    onRefresh?.()
   }
 
   const handleUnstake = async () => {
-    await unstake(tokenId)
-    onRefresh?.()
+    try {
+      await unstake(tokenId)
+      // Data will be automatically refreshed by hooks
+    } catch (error) {
+      console.error('Unstake error:', error)
+    }
   }
 
   const handleClaim = async () => {
-    await claim(tokenId)
-    onRefresh?.()
+    try {
+      await claim(tokenId)
+      // Data will be automatically refreshed by hooks
+    } catch (error) {
+      console.error('Claim error:', error)
+    }
   }
 
   const handleUpgradeClick = () => {
-    setShowUpgradeModal(true)
-  }
-  
-  const handleUpgradeSuccess = () => {
-    setShowUpgradeModal(false)
-    onRefresh?.()
+    if (shipInfo?.level) {
+      openUpgradeModal(tokenId, shipInfo.level)
+    }
   }
 
   return (
@@ -192,16 +199,6 @@ export function ShipCard({ tokenId, imageId: providedImageId, onRefresh }: ShipC
           </button>
         )}
       </div>
-
-      {/* 升级模态框 */}
-      {showUpgradeModal && shipInfo && (
-        <UpgradeModal
-          tokenId={tokenId}
-          currentLevel={shipInfo.level}
-          onClose={() => setShowUpgradeModal(false)}
-          onSuccess={handleUpgradeSuccess}
-        />
-      )}
     </div>
   )
 }

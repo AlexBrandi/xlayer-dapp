@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface OpenBoxProps {
   quantity: number
@@ -45,6 +46,7 @@ export function OpenBox({ quantity, onComplete }: OpenBoxProps) {
   const [revealedShip, setRevealedShip] = useState<typeof SHIP_LIST[0] | null>(null)
   const [allRevealedShips, setAllRevealedShips] = useState<typeof SHIP_LIST[0][]>([])
   const [showResults, setShowResults] = useState(false)
+  const navigate = useNavigate()
 
   // 模拟获得随机飞船
   const getRandomShip = () => {
@@ -83,7 +85,10 @@ export function OpenBox({ quantity, onComplete }: OpenBoxProps) {
   }
 
   const handleViewFleet = () => {
+    // 关闭当前模态框
     onComplete()
+    // 跳转到首页查看舰队
+    navigate('/')
   }
 
   // 自动开始第一个盒子

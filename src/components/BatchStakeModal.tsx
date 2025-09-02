@@ -9,7 +9,7 @@ interface BatchStakeModalProps {
 }
 
 
-export function BatchStakeModal({ tokenIds, onClose, onSuccess }: BatchStakeModalProps) {
+export function BatchStakeModal({ tokenIds, onClose }: BatchStakeModalProps) {
   const [selectedTokens, setSelectedTokens] = useState<bigint[]>([...tokenIds])
   const [isStaking, setIsStaking] = useState(false)
   
@@ -64,8 +64,8 @@ export function BatchStakeModal({ tokenIds, onClose, onSuccess }: BatchStakeModa
       toast.dismiss()
       toast.success(`成功质押 ${selectedTokens.length} 艘战舰！`)
       
-      onSuccess()
       onClose()
+      // Data will be automatically refreshed by hooks
     } catch (error: any) {
       console.error('Batch stake error:', error)
       toast.dismiss()

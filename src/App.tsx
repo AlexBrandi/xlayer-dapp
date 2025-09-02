@@ -7,37 +7,62 @@ import { Navigation } from './components/Navigation'
 import { Dashboard } from './pages/Dashboard'
 import { Mint } from './pages/Mint'
 import { Market } from './pages/Market'
+import { UpgradeProvider, useUpgrade } from './contexts/UpgradeContext'
+import { UpgradeModal } from './components/UpgradeModal'
 import './index.css'
 
 const queryClient = new QueryClient()
+
+function AppContent() {
+  const { upgradeState, closeUpgradeModal } = useUpgrade()
+  
+  return (
+    <>
+      <div className="min-h-screen bg-gray-900">
+        <Navigation />
+        <main className="pt-20">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/mint" element={<Mint />} />
+            <Route path="/market" element={<Market />} />
+          </Routes>
+        </main>
+      </div>
+      
+      {/* Global Upgrade Modal */}
+      {upgradeState.isOpen && upgradeState.tokenId && upgradeState.currentLevel && (
+        <UpgradeModal
+          tokenId={upgradeState.tokenId}
+          currentLevel={upgradeState.currentLevel}
+          onClose={closeUpgradeModal}
+          onSuccess={closeUpgradeModal}
+        />
+      )}
+      
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#1f2937',
+            color: '#fff',
+            border: '1px solid #374151',
+          },
+        }}
+      />
+    </>
+  )
+}
 
 function App() {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <Router>
-          <div className="min-h-screen bg-gray-900">
-            <Navigation />
-            <main className="pt-20">
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/mint" element={<Mint />} />
-                <Route path="/market" element={<Market />} />
-              </Routes>
-            </main>
-          </div>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#1f2937',
-                color: '#fff',
-                border: '1px solid #374151',
-              },
-            }}
-          />
-        </Router>
+        <UpgradeProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </UpgradeProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )
