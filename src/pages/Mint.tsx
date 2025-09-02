@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { useContracts } from '../hooks/useContracts'
 import { formatEther } from 'viem'
 import toast from 'react-hot-toast'
-import { RealOpenBox } from '../components/RealOpenBox'
 
 const MAX_MINT = 10
 
@@ -31,8 +30,6 @@ export function Mint() {
   const { isConnected } = useAccount()
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState(1)
-  const [showOpenBox, setShowOpenBox] = useState(false)
-  const [newTokenIds, setNewTokenIds] = useState<bigint[]>([])
   const [preMintTokenIds, setPreMintTokenIds] = useState<bigint[]>([])
   const { useMintShip, useMintPrice, useFuelBalance, useTokensOfOwner } = useContracts()
   const { mint, isPending, isSuccess } = useMintShip()
@@ -70,9 +67,11 @@ export function Mint() {
       
       if (newTokens.length > 0) {
         console.log('New tokens minted:', newTokens)
-        setNewTokenIds(newTokens)
-        setShowOpenBox(true)
         toast.success(`成功铸造了 ${newTokens.length} 艘战舰！`)
+        // 直接跳转到首页查看新铸造的战舰
+        setTimeout(() => {
+          navigate('/')
+        }, 1500)
       }
     }
   }, [isSuccess, currentTokens, preMintTokenIds])
@@ -98,11 +97,6 @@ export function Mint() {
     setQuantity(newQuantity)
   }
 
-  const handleOpenBoxComplete = () => {
-    setShowOpenBox(false)
-    setNewTokenIds([])
-    navigate('/')
-  }
 
   if (!isConnected) {
     return (
@@ -344,13 +338,6 @@ export function Mint() {
       </div>
     </div>
 
-    {/* 开盒界面 */}
-    {showOpenBox && newTokenIds.length > 0 && (
-      <RealOpenBox
-        tokenIds={newTokenIds}
-        onComplete={handleOpenBoxComplete}
-      />
-    )}
     </>
   )
 }

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { ShipCard } from '../components/ShipCard'
-import { RealOpenBoxModal } from '../components/RealOpenBoxModal'
 import { BatchStakeModal } from '../components/BatchStakeModal'
 // import { DebugPanel } from '../components/DebugPanel'
 import { formatEther } from 'viem'
@@ -12,7 +11,6 @@ import { useContracts } from '../hooks/useContracts'
 
 export function Dashboard() {
   const { isConnected } = useAccount()
-  const [showOpenBoxModal, setShowOpenBoxModal] = useState(false)
   const [showBatchStakeModal, setShowBatchStakeModal] = useState(false)
   
   const { allShips, stakedShips, unstakedShips, useAllShipsDetails } = useShips()
@@ -43,17 +41,6 @@ export function Dashboard() {
     // Data will be automatically refreshed by hooks
   }
 
-  const handleOpenBoxModal = () => {
-    setShowOpenBoxModal(true)
-  }
-
-  const handleOpenBoxModalClose = () => {
-    setShowOpenBoxModal(false)
-  }
-
-  const handleOpenBoxComplete = () => {
-    // NFT data will be automatically refreshed by hooks
-  }
 
   if (!isConnected) {
     return (
@@ -133,17 +120,6 @@ export function Dashboard() {
         <h2 className="text-lg font-bold text-white">我的舰队</h2>
         <div className="flex gap-2">
           <button
-            onClick={handleOpenBoxModal}
-            className="text-sm font-medium px-4 py-2 rounded-xl transition-all duration-300 hover:scale-105"
-            style={{
-              background: 'linear-gradient(to right, #ff6b35, #e55527)',
-              boxShadow: '0 4px 14px 0 rgba(255, 107, 53, 0.25)',
-              color: 'white'
-            }}
-          >
-            📦 开盒体验
-          </button>
-          <button
             onClick={handleClaimAll}
             disabled={!totalPending || totalPending === 0n || isClaimPending}
             className="btn-primary bg-green-600 hover:bg-green-700 disabled:bg-gray-700 text-sm"
@@ -220,14 +196,6 @@ export function Dashboard() {
         </>
       )}
 
-      {/* 真实开盒模态框 */}
-      {showOpenBoxModal && (
-        <RealOpenBoxModal
-          availableTokenIds={allShips}
-          onClose={handleOpenBoxModalClose}
-          onComplete={handleOpenBoxComplete}
-        />
-      )}
 
       {/* 批量质押模态框 */}
       {showBatchStakeModal && (
