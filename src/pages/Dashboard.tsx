@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { ShipCard } from '../components/ShipCard'
 import { RealOpenBoxModal } from '../components/RealOpenBoxModal'
+import { BatchStakeModal } from '../components/BatchStakeModal'
+import { DebugPanel } from '../components/DebugPanel'
 import { formatEther } from 'viem'
 import { useShips } from '../hooks/useShips'
 import { useRewards } from '../hooks/useRewards'
@@ -11,8 +13,10 @@ import { useContracts } from '../hooks/useContracts'
 export function Dashboard() {
   const { isConnected, address } = useAccount()
   const [showOpenBoxModal, setShowOpenBoxModal] = useState(false)
+  const [showBatchStakeModal, setShowBatchStakeModal] = useState(false)
   
-  const { allShips, stakedShips, unstakedShips } = useShips()
+  const { allShips, stakedShips, unstakedShips, userImageIds, useAllShipsDetails } = useShips()
+  const allShipsDetails = useAllShipsDetails()
   const { totalPending, totalPendingFormatted, claimAllRewards, isClaimPending } = useRewards()
   const { balances } = useGems()
   const { useFuelBalance } = useContracts()
@@ -22,6 +26,8 @@ export function Dashboard() {
   console.log('Dashboard Debug:', {
     address,
     allShips: allShips.map(id => id.toString()),
+    userImageIds,
+    allShipsDetails,
     stakedShips: stakedShips.map(id => id.toString()),
     unstakedShips: unstakedShips.map(id => id.toString()),
     totalShips: allShips.length
@@ -62,6 +68,9 @@ export function Dashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Debug Panel - 临时添加用于调试 */}
+      <DebugPanel />
+      
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {/* FUEL Balance */}
@@ -164,13 +173,16 @@ export function Dashboard() {
                 质押中的战舰 ({stakedShips.length})
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {stakedShips.map((tokenId) => (
-                  <ShipCard 
-                    key={tokenId.toString()} 
-                    tokenId={tokenId} 
-                    onRefresh={handleRefresh}
-                  />
-                ))}
+                {allShipsDetails
+                  .filter(ship => ship.isStaked)
+                  .map(({ tokenId, imageId }) => (
+                    <ShipCard 
+                      key={tokenId.toString()} 
+                      tokenId={tokenId} 
+                      imageId={imageId}
+                      onRefresh={handleRefresh}
+                    />
+                  ))}
               </div>
             </div>
           )}
@@ -178,17 +190,30 @@ export function Dashboard() {
           {/* Unstaked Ships */}
           {unstakedShips.length > 0 && (
             <div>
-              <h3 className="text-base font-semibold mb-3 text-gray-400">
-                闲置的战舰 ({unstakedShips.length})
-              </h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-base font-semibold text-gray-400">
+                  闲置的战舰 ({unstakedShips.length})
+                </h3>
+                {unstakedShips.length > 1 && (
+                  <button
+                    onClick={() => setShowBatchStakeModal(true)}
+                    className="text-sm px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 transition-colors"
+                  >
+                    批量质押
+                  </button>
+                )}
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {unstakedShips.map((tokenId) => (
-                  <ShipCard 
-                    key={tokenId.toString()} 
-                    tokenId={tokenId} 
-                    onRefresh={handleRefresh}
-                  />
-                ))}
+                {allShipsDetails
+                  .filter(ship => !ship.isStaked)
+                  .map(({ tokenId, imageId }) => (
+                    <ShipCard 
+                      key={tokenId.toString()} 
+                      tokenId={tokenId} 
+                      imageId={imageId}
+                      onRefresh={handleRefresh}
+                    />
+                  ))}
               </div>
             </div>
           )}
@@ -201,6 +226,15 @@ export function Dashboard() {
           availableTokenIds={allShips}
           onClose={handleOpenBoxModalClose}
           onComplete={handleOpenBoxComplete}
+        />
+      )}
+
+      {/* 批量质押模态框 */}
+      {showBatchStakeModal && (
+        <BatchStakeModal
+          tokenIds={unstakedShips}
+          onClose={() => setShowBatchStakeModal(false)}
+          onSuccess={handleRefresh}
         />
       )}
     </div>

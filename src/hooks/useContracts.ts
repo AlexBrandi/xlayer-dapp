@@ -86,6 +86,25 @@ export function useContracts() {
     return result
   }
 
+  const useTokensOfOwnerImageIds = () => {
+    const result = useReadContract({
+      address: CONTRACT_ADDRESSES.SHIP_NFT,
+      abi: SHIP_ABI,
+      functionName: 'tokensOfOwnerImageIds',
+      args: address ? [address] : undefined,
+    })
+    
+    console.log('useTokensOfOwnerImageIds:', {
+      address,
+      contractAddress: CONTRACT_ADDRESSES.SHIP_NFT,
+      data: result.data,
+      error: result.error,
+      isLoading: result.isLoading
+    })
+    
+    return result
+  }
+
   const useShipApproval = (tokenId: bigint) => {
     return useReadContract({
       address: CONTRACT_ADDRESSES.SHIP_NFT,
@@ -215,12 +234,24 @@ export function useContracts() {
 
   // ========== GAME CONTROLLER HOOKS ==========
   const useUserShipStatus = () => {
-    return useReadContract({
+    const result = useReadContract({
       address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
       abi: GAME_ABI,
       functionName: 'getAllNFTsStatus',
       args: address ? [address] : undefined,
-    }) as { data: UserStatus | undefined }
+    })
+    
+    // Transform the raw data to match UserStatus type
+    const transformedData = result.data ? {
+      allNFTs: (result.data as any)[0] || [],
+      stakedNFTs: (result.data as any)[1] || [],
+      unstakedNFTs: (result.data as any)[2] || []
+    } : undefined
+    
+    return {
+      ...result,
+      data: transformedData as UserStatus | undefined
+    }
   }
 
   const useShipLevel = (tokenId: bigint | undefined) => {
@@ -260,12 +291,19 @@ export function useContracts() {
   }
 
   const useUpgradeCost = (currentLevel: number) => {
-    return useReadContract({
+    const result = useReadContract({
       address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
       abi: GAME_ABI,
       functionName: 'upgradeCostForNext',
       args: [currentLevel],
     })
+    
+    // The function returns a tuple [tokenCost, gem1, gem2, gem3]
+    // We need to ensure it's properly typed as an array
+    return {
+      ...result,
+      data: result.data as readonly [bigint, bigint, bigint, bigint] | undefined
+    }
   }
 
   const useGemPrices = () => {
@@ -462,6 +500,7 @@ export function useContracts() {
     useShipBalance,
     useMintPrice,
     useTokensOfOwner,
+    useTokensOfOwnerImageIds,
     useShipApproval,
     useIsApprovedForAll,
     useMintShip,

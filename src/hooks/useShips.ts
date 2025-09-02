@@ -5,6 +5,7 @@ import type { ShipInfo } from '../types'
 export function useShips() {
   const { 
     useTokensOfOwner, 
+    useTokensOfOwnerImageIds,
     useUserShipStatus, 
     useShipLevel, 
     useShipImageId, 
@@ -12,13 +13,16 @@ export function useShips() {
   } = useContracts()
 
   const { data: userTokens } = useTokensOfOwner()
+  const { data: userImageIds } = useTokensOfOwnerImageIds()
   const { data: userStatus } = useUserShipStatus()
 
   // 调试信息
   console.log('useShips Debug:', {
     userTokens,
+    userImageIds,
     userStatus,
     hasTokens: !!userTokens,
+    hasImageIds: !!userImageIds,
     hasStatus: !!userStatus
   })
 
@@ -62,16 +66,20 @@ export function useShips() {
   // Get all ships with their details
   const useAllShipsDetails = () => {
     const shipsDetails = useMemo(() => {
-      return allShips.map(tokenId => {
+      if (!userTokens || !userImageIds) return []
+      
+      const tokens = userTokens as bigint[]
+      const imageIds = userImageIds as number[]
+      
+      return tokens.map((tokenId, index) => {
         const isStaked = stakedShips.includes(tokenId)
         return {
           tokenId,
+          imageId: imageIds[index] || 0,
           isStaked,
-          // Note: For performance, we don't fetch all details here
-          // Use useShipDetails for individual ship details
         }
       })
-    }, [allShips, stakedShips])
+    }, [userTokens, userImageIds, stakedShips])
 
     return shipsDetails
   }
@@ -80,6 +88,7 @@ export function useShips() {
     allShips,
     stakedShips,
     unstakedShips,
+    userImageIds: userImageIds as number[] | undefined,
     useShipDetails,
     useAllShipsDetails,
   }

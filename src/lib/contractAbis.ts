@@ -48,6 +48,13 @@ export const SHIP_ABI = [
     "type": "function"
   },
   {
+    "inputs": [{"name": "owner", "type": "address"}],
+    "name": "tokensOfOwnerImageIds",
+    "outputs": [{"name": "", "type": "uint8[]"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [{"name": "tokenId", "type": "uint256"}],
     "name": "getApproved",
     "outputs": [{"name": "", "type": "address"}],
@@ -125,7 +132,7 @@ export const GAME_ABI = [
   {
     "inputs": [{"name": "tokenId", "type": "uint256"}],
     "name": "getTokenImageId",
-    "outputs": [{"name": "", "type": "uint256"}],
+    "outputs": [{"name": "", "type": "uint8"}],
     "stateMutability": "view",
     "type": "function"
   },
@@ -146,7 +153,12 @@ export const GAME_ABI = [
   {
     "inputs": [{"name": "currentLevel", "type": "uint8"}],
     "name": "upgradeCostForNext",
-    "outputs": [{"name": "", "type": "uint256[]"}],
+    "outputs": [
+      {"name": "tokenCost", "type": "uint256"},
+      {"name": "gem1", "type": "uint256"},
+      {"name": "gem2", "type": "uint256"},
+      {"name": "gem3", "type": "uint256"}
+    ],
     "stateMutability": "view",
     "type": "function"
   },

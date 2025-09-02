@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useShips } from '../hooks/useShips'
-import { useContracts } from '../hooks/useContracts'
 
 interface RealOpenBoxProps {
   tokenIds: bigint[]
@@ -27,14 +26,14 @@ const SHIP_LIST = [
 ]
 
 // 稀有度对应的背景效果
-const RARITY_EFFECTS = {
+const RARITY_EFFECTS: Record<string, string> = {
   '普通': 'from-gray-500/20 to-gray-600/20',
   '稀有': 'from-blue-500/20 to-blue-600/20',
   '史诗': 'from-purple-500/20 to-purple-600/20',
   '传奇': 'from-orange-500/20 to-orange-600/20'
 }
 
-const RARITY_GLOW = {
+const RARITY_GLOW: Record<string, string> = {
   '普通': 'shadow-gray-500/50',
   '稀有': 'shadow-blue-500/50',
   '史诗': 'shadow-purple-500/50',
@@ -103,40 +102,46 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
   if (showResults) {
     return (
       <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-        <div className="glass-card p-8 max-w-4xl w-full mx-4">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">🎉 开盒完成！</h2>
-            <p className="text-gray-400">您总共开启了 {tokenIds.length} 艘战舰</p>
+        <div className="glass-card p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2">🎉 开盒完成！</h2>
+            <p className="text-gray-400 text-sm">您总共开启了 {tokenIds.length} 艘战舰</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 max-h-96 overflow-y-auto">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mb-6 max-h-60 overflow-y-auto pr-2">
             {allRevealedShips.map((revealed, index) => (
-              <div key={index} className="glass-card p-4 text-center">
+              <div key={index} className="glass-card p-3 text-center">
                 <img 
                   src={`/images/${revealed.ship.id + 1}.png`}
                   alt={revealed.ship.name}
-                  className="w-12 h-12 mx-auto mb-2 object-contain"
+                  className="w-10 h-10 mx-auto mb-2 object-contain"
                 />
-                <h3 className="font-bold text-white text-sm">{revealed.ship.name}</h3>
+                <h3 className="font-bold text-white text-xs">{revealed.ship.name}</h3>
                 <p className={`text-xs ${revealed.ship.rarityColor}`}>{revealed.ship.rarity}</p>
-                <p className="text-xs text-cyan-400">等级 {revealed.level}</p>
-                <p className="text-xs text-gray-500">#{revealed.tokenId.toString()}</p>
+                <p className="text-xs text-cyan-400">Lv.{revealed.level}</p>
+                <p className="text-xs text-gray-500">#{revealed.tokenId.toString().slice(-3)}</p>
               </div>
             ))}
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-3">
+            <button
+              onClick={() => window.location.href = '/mint'}
+              className="flex-1 h-12 rounded-xl text-white font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl bg-gray-600 hover:bg-gray-500"
+            >
+              <span className="text-lg">🔄</span>
+              <span>继续铸造</span>
+            </button>
             <button
               onClick={handleViewFleet}
-              className="flex-1 h-14 rounded-xl text-white font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-2xl"
+              className="flex-1 h-12 rounded-xl text-white font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl"
               style={{
                 background: 'linear-gradient(to right, #ff6b35, #e55527)',
-                boxShadow: '0 25px 50px -12px rgba(255, 107, 53, 0.25)'
+                boxShadow: '0 15px 30px -8px rgba(255, 107, 53, 0.25)'
               }}
             >
-              <span className="text-2xl">🚀</span>
-              <span>查看我的舰队</span>
-              <span className="text-2xl">⚡</span>
+              <span className="text-lg">🚀</span>
+              <span>查看舰队</span>
             </button>
           </div>
         </div>
@@ -208,11 +213,11 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
                 <img 
                   src={`/images/${revealedShip.ship.id + 1}.png`}
                   alt={revealedShip.ship.name}
-                  className="w-24 h-24 object-contain mb-2"
+                  className="w-16 h-16 object-contain mb-3"
                 />
-                <h3 className="font-bold text-white text-lg">{revealedShip.ship.name}</h3>
-                <p className={`text-sm font-medium ${revealedShip.ship.rarityColor}`}>{revealedShip.ship.rarity}</p>
-                <p className="text-sm text-cyan-400">等级 {revealedShip.level}</p>
+                <h3 className="font-bold text-white text-base">{revealedShip.ship.name}</h3>
+                <p className={`text-xs font-medium ${revealedShip.ship.rarityColor}`}>{revealedShip.ship.rarity}</p>
+                <p className="text-xs text-cyan-400">等级 {revealedShip.level}</p>
                 
                 {/* 稀有度光效 */}
                 <div className="absolute inset-0 rounded-xl opacity-20 bg-gradient-to-br from-transparent via-white to-transparent animate-ping"></div>

@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { useShips } from '../hooks/useShips'
 import { useRewards } from '../hooks/useRewards'
 import { useContracts } from '../hooks/useContracts'
 import { ShipLevel } from '../types'
+import { UpgradeModal } from './UpgradeModal'
 
 interface ShipCardProps {
   tokenId: bigint
+  imageId?: number
   onRefresh?: () => void
 }
 
@@ -33,31 +36,31 @@ function getShipImage(imageId: number): string {
   return `/images/${imageNumber}.png`
 }
 
-export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
+export function ShipCard({ tokenId, imageId: providedImageId, onRefresh }: ShipCardProps) {
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const { useShipDetails } = useShips()
   const { useShipPendingReward } = useRewards()
   const { 
     useStakeShips, 
     useUnstakeShips, 
     useClaimRewards, 
-    useUpgradeShip,
-    useUpgradeCost,
     useIsApprovedForAll,
     useApproveShips 
   } = useContracts()
   
   const shipInfo = useShipDetails(tokenId)
   const { pending, pendingFormatted } = useShipPendingReward(tokenId)
-  const { data: upgradeCost } = useUpgradeCost(shipInfo?.level || 1)
   const { data: isApproved } = useIsApprovedForAll()
   
   const { stake, isPending: isStaking } = useStakeShips()
   const { unstake, isPending: isUnstaking } = useUnstakeShips()
   const { claim, isPending: isClaiming } = useClaimRewards()
-  const { upgrade, isPending: isUpgrading } = useUpgradeShip()
   const { approveAll, isPending: isApproving } = useApproveShips()
 
-  if (!shipInfo) {
+  // Use provided imageId if available, otherwise fall back to shipInfo
+  const displayImageId = providedImageId !== undefined ? providedImageId : shipInfo?.imageId
+
+  if (!shipInfo && providedImageId === undefined) {
     return (
       <div className="glass-card p-6 animate-pulse">
         <div className="h-4 bg-gray-700 rounded mb-4" />
@@ -67,7 +70,7 @@ export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
     )
   }
 
-  const canUpgrade = shipInfo.level < ShipLevel.MAX
+  const canUpgrade = shipInfo?.level && shipInfo.level < ShipLevel.MAX
   const hasRewards = pending && pending > 0n
 
   const handleStake = async () => {
@@ -88,8 +91,12 @@ export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
     onRefresh?.()
   }
 
-  const handleUpgrade = async () => {
-    await upgrade(tokenId)
+  const handleUpgradeClick = () => {
+    setShowUpgradeModal(true)
+  }
+  
+  const handleUpgradeSuccess = () => {
+    setShowUpgradeModal(false)
     onRefresh?.()
   }
 
@@ -100,10 +107,10 @@ export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
         <div>
           <h3 className="text-base font-bold">Ship #{tokenId.toString()}</h3>
           <span className="text-xs font-medium text-gray-400">
-            Level {shipInfo.level}
+            Level {shipInfo?.level || 1}
           </span>
         </div>
-        {shipInfo.isStaked && (
+        {shipInfo?.isStaked && (
           <span className="flex items-center gap-1 text-green-400 text-sm">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
             质押中
@@ -114,7 +121,7 @@ export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
       {/* Ship Image */}
       <div className="relative mb-3 rounded-lg overflow-hidden bg-gray-800">
         <img 
-          src={getShipImage(shipInfo.imageId)} 
+          src={getShipImage(displayImageId || 0)} 
           alt={`Ship #${tokenId}`}
           className="w-full h-32 object-cover"
         />
@@ -123,7 +130,7 @@ export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
 
       {/* Ship Name */}
       <div className="mb-3 text-center">
-        <p className="text-xs text-gray-400">{SHIP_NAMES[shipInfo.imageId] || 'Unknown Ship'}</p>
+        <p className="text-xs text-gray-400">{SHIP_NAMES[displayImageId || 0] || 'Unknown Ship'}</p>
       </div>
 
       {/* Rewards */}
@@ -136,27 +143,10 @@ export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
         </div>
       )}
 
-      {/* Upgrade Info */}
-      {canUpgrade && upgradeCost && (
-        <div className="mb-3 p-2 bg-gray-800/50 rounded-lg text-xs">
-          <p className="text-gray-400 mb-1">升级成本（等级 {shipInfo.level + 1}）</p>
-          <div className="flex gap-1 flex-wrap">
-            {upgradeCost[0] > 0n && (
-              <span className="text-blue-400">蓝宝石 x{upgradeCost[0].toString()}</span>
-            )}
-            {upgradeCost[1] > 0n && (
-              <span className="text-orange-400">太阳石 x{upgradeCost[1].toString()}</span>
-            )}
-            {upgradeCost[2] > 0n && (
-              <span className="text-purple-400">锂矿石 x{upgradeCost[2].toString()}</span>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Action Buttons */}
       <div className="grid grid-cols-2 gap-2">
-        {!shipInfo.isStaked ? (
+        {!shipInfo?.isStaked ? (
           <>
             <button
               onClick={handleStake}
@@ -195,14 +185,23 @@ export function ShipCard({ tokenId, onRefresh }: ShipCardProps) {
 
         {canUpgrade && (
           <button
-            onClick={handleUpgrade}
-            disabled={isUpgrading || shipInfo.isStaked}
-            className="btn-secondary text-xs py-2 col-span-2"
+            onClick={handleUpgradeClick}
+            className="btn-secondary text-xs py-2 col-span-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500"
           >
-            {isUpgrading ? '正在升级...' : `升级到等级 ${shipInfo.level + 1}`}
+            升级到等级 {(shipInfo?.level || 1) + 1}
           </button>
         )}
       </div>
+
+      {/* 升级模态框 */}
+      {showUpgradeModal && shipInfo && (
+        <UpgradeModal
+          tokenId={tokenId}
+          currentLevel={shipInfo.level}
+          onClose={() => setShowUpgradeModal(false)}
+          onSuccess={handleUpgradeSuccess}
+        />
+      )}
     </div>
   )
 }

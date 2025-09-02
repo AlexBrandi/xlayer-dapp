@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useContracts } from '../hooks/useContracts'
 import { formatEther } from 'viem'
 import toast from 'react-hot-toast'
-import { OpenBox } from '../components/OpenBox'
+import { RealOpenBox } from '../components/RealOpenBox'
 
 const MAX_MINT = 10
 
@@ -32,22 +32,50 @@ export function Mint() {
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState(1)
   const [showOpenBox, setShowOpenBox] = useState(false)
-  const [mintedQuantity, setMintedQuantity] = useState(0)
-  const { useMintShip, useMintPrice, useFuelBalance } = useContracts()
+  const [newTokenIds, setNewTokenIds] = useState<bigint[]>([])
+  const [preMintTokenIds, setPreMintTokenIds] = useState<bigint[]>([])
+  const { useMintShip, useMintPrice, useFuelBalance, useTokensOfOwner } = useContracts()
   const { mint, isPending, isSuccess } = useMintShip()
   const { data: mintPrice } = useMintPrice()
   const { data: fuelBalance } = useFuelBalance()
+  const { data: currentTokens, refetch: refetchTokens } = useTokensOfOwner()
 
   const pricePerShip = mintPrice || 0n
   const totalCost = pricePerShip * BigInt(quantity)
 
+  // Track tokens before minting
+  useEffect(() => {
+    if (currentTokens && !isPending) {
+      setPreMintTokenIds(currentTokens as bigint[])
+    }
+  }, [currentTokens, isPending])
+
+  // Handle successful mint
   useEffect(() => {
     if (isSuccess) {
-      toast.success(`成功铸造了 ${quantity} 艘战舰！`)
-      setMintedQuantity(quantity)
-      setShowOpenBox(true)
+      // Refetch tokens to get the new ones
+      refetchTokens().then(() => {
+        setTimeout(() => {
+          refetchTokens()
+        }, 1000) // Give some time for chain to update
+      })
     }
-  }, [isSuccess, quantity])
+  }, [isSuccess, refetchTokens])
+
+  // Check for new tokens after successful mint
+  useEffect(() => {
+    if (isSuccess && currentTokens && preMintTokenIds.length > 0) {
+      const currentTokensArray = currentTokens as bigint[]
+      const newTokens = currentTokensArray.filter(tokenId => !preMintTokenIds.includes(tokenId))
+      
+      if (newTokens.length > 0) {
+        console.log('New tokens minted:', newTokens)
+        setNewTokenIds(newTokens)
+        setShowOpenBox(true)
+        toast.success(`成功铸造了 ${newTokens.length} 艘战舰！`)
+      }
+    }
+  }, [isSuccess, currentTokens, preMintTokenIds])
 
   const handleMint = async () => {
     try {
@@ -72,6 +100,7 @@ export function Mint() {
 
   const handleOpenBoxComplete = () => {
     setShowOpenBox(false)
+    setNewTokenIds([])
     navigate('/')
   }
 
@@ -124,7 +153,7 @@ export function Mint() {
               scrollbarColor: '#FF6B35 #1F2937'
             }}>
               {SHIP_LIST.map((ship) => (
-                <div key={ship.id} className="glass-card p-2 hover:scale-102 transition-all duration-300 border border-gray-700/30 hover:border-gray-500/50">
+                <div key={ship.id} style={{margin:10}} className="glass-card p-2 hover:scale-102 transition-all duration-300 border border-gray-700/30 hover:border-gray-500/50">
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <img 
@@ -316,9 +345,9 @@ export function Mint() {
     </div>
 
     {/* 开盒界面 */}
-    {showOpenBox && (
-      <OpenBox
-        quantity={mintedQuantity}
+    {showOpenBox && newTokenIds.length > 0 && (
+      <RealOpenBox
+        tokenIds={newTokenIds}
         onComplete={handleOpenBoxComplete}
       />
     )}

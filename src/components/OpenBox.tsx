@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { formatEther } from 'viem'
 
 interface OpenBoxProps {
   quantity: number
@@ -26,14 +25,14 @@ const SHIP_LIST = [
 ]
 
 // 稀有度对应的背景效果
-const RARITY_EFFECTS = {
+const RARITY_EFFECTS: Record<string, string> = {
   '普通': 'from-gray-500/20 to-gray-600/20',
   '稀有': 'from-blue-500/20 to-blue-600/20',
   '史诗': 'from-purple-500/20 to-purple-600/20',
   '传奇': 'from-orange-500/20 to-orange-600/20'
 }
 
-const RARITY_GLOW = {
+const RARITY_GLOW: Record<string, string> = {
   '普通': 'shadow-gray-500/50',
   '稀有': 'shadow-blue-500/50',
   '史诗': 'shadow-purple-500/50',
@@ -193,10 +192,10 @@ export function OpenBox({ quantity, onComplete }: OpenBoxProps) {
                 <img 
                   src={`/images/${revealedShip.id + 1}.png`}
                   alt={revealedShip.name}
-                  className="w-24 h-24 object-contain mb-2"
+                  className="w-16 h-16 object-contain mb-3"
                 />
-                <h3 className="font-bold text-white text-lg">{revealedShip.name}</h3>
-                <p className={`text-sm font-medium ${revealedShip.rarityColor}`}>{revealedShip.rarity}</p>
+                <h3 className="font-bold text-white text-base">{revealedShip.name}</h3>
+                <p className={`text-xs font-medium ${revealedShip.rarityColor}`}>{revealedShip.rarity}</p>
                 
                 {/* 稀有度光效 */}
                 <div className="absolute inset-0 rounded-xl opacity-20 bg-gradient-to-br from-transparent via-white to-transparent animate-ping"></div>
