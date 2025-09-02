@@ -131,7 +131,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
 
           <div className="flex gap-3">
             <button
-              onClick={() => window.location.href = '/mint'}
+              onClick={() => navigate('/mint')}
               className="flex-1 h-12 rounded-xl text-white font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl bg-gray-600 hover:bg-gray-500"
             >
               <span className="text-lg">🔄</span>

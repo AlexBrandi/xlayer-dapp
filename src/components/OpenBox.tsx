@@ -123,7 +123,7 @@ export function OpenBox({ quantity, onComplete }: OpenBoxProps) {
 
           <div className="flex gap-3">
             <button
-              onClick={() => window.location.href = '/mint'}
+              onClick={() => navigate('/mint')}
               className="flex-1 h-14 rounded-xl text-white font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-2xl bg-gray-600 hover:bg-gray-500"
             >
               <span className="text-xl">🔄</span>

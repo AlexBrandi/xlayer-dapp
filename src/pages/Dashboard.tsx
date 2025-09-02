@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
+import { Link } from 'react-router-dom'
 import { ShipCard } from '../components/ShipCard'
 import { BatchStakeModal } from '../components/BatchStakeModal'
 // import { DebugPanel } from '../components/DebugPanel'
@@ -90,7 +91,7 @@ export function Dashboard() {
             </div>
             <div>
               <p className="text-xs text-gray-500">总计</p>
-              <p className="text-base font-bold">{allShips.length}</p>
+              <p className="text-base font-bold">{stakedShips.length + unstakedShips.length}</p>
             </div>
           </div>
         </div>
@@ -133,12 +134,12 @@ export function Dashboard() {
       </div>
 
       {/* Ships Display */}
-      {allShips.length === 0 ? (
+      {(allShips.length === 0 && stakedShips.length === 0 && unstakedShips.length === 0) ? (
         <div className="glass-card p-12 text-center">
           <p className="text-gray-400 mb-4">您还没有任何战舰</p>
-          <a href="/mint" className="btn-primary">
+          <Link to="/mint" className="btn-primary">
             铸造您的第一艘战舰
-          </a>
+          </Link>
         </div>
       ) : (
         <>
