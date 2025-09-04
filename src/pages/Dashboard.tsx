@@ -150,16 +150,26 @@ export function Dashboard() {
                 Staked Ships ({stakedShips.length})
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {stakedShips.map((tokenId) => {
-                  const shipDetail = allShipsDetails.find(ship => ship.tokenId === tokenId)
-                  return (
-                    <ShipCard 
-                      key={tokenId.toString()} 
-                      tokenId={tokenId} 
-                      imageId={shipDetail?.imageId}
-                    />
-                  )
-                })}
+                {stakedShips
+                  .sort((a, b) => {
+                    const shipA = allShipsDetails.find(ship => ship.tokenId === a)
+                    const shipB = allShipsDetails.find(ship => ship.tokenId === b)
+                    // Sort by level descending, then by tokenId ascending
+                    if (shipA?.level !== shipB?.level) {
+                      return (shipB?.level || 0) - (shipA?.level || 0)
+                    }
+                    return Number(a) - Number(b)
+                  })
+                  .map((tokenId) => {
+                    const shipDetail = allShipsDetails.find(ship => ship.tokenId === tokenId)
+                    return (
+                      <ShipCard 
+                        key={tokenId.toString()} 
+                        tokenId={tokenId} 
+                        imageId={shipDetail?.imageId}
+                      />
+                    )
+                  })}
               </div>
             </div>
           )}
@@ -181,16 +191,26 @@ export function Dashboard() {
                 )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {unstakedShips.map((tokenId) => {
-                  const shipDetail = allShipsDetails.find(ship => ship.tokenId === tokenId)
-                  return (
-                    <ShipCard 
-                      key={tokenId.toString()} 
-                      tokenId={tokenId} 
-                      imageId={shipDetail?.imageId}
-                    />
-                  )
-                })}
+                {unstakedShips
+                  .sort((a, b) => {
+                    const shipA = allShipsDetails.find(ship => ship.tokenId === a)
+                    const shipB = allShipsDetails.find(ship => ship.tokenId === b)
+                    // Sort by level descending, then by tokenId ascending
+                    if (shipA?.level !== shipB?.level) {
+                      return (shipB?.level || 0) - (shipA?.level || 0)
+                    }
+                    return Number(a) - Number(b)
+                  })
+                  .map((tokenId) => {
+                    const shipDetail = allShipsDetails.find(ship => ship.tokenId === tokenId)
+                    return (
+                      <ShipCard 
+                        key={tokenId.toString()} 
+                        tokenId={tokenId} 
+                        imageId={shipDetail?.imageId}
+                      />
+                    )
+                  })}
               </div>
             </div>
           )}
