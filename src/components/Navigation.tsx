@@ -29,7 +29,7 @@ export function Navigation() {
 
   useEffect(() => {
     if (isConnected && chainId !== CHAIN_ID) {
-      toast.error('Please switch to X-Layer mainnet', {
+      toast.error('Please switch to BNB Chain', {
         duration: 5000,
         position: 'top-center',
       })
@@ -90,7 +90,7 @@ export function Navigation() {
                 className="px-3 py-2 bg-orange-600 text-white text-sm rounded-lg transition-colors"
                 style={{backgroundColor: 'var(--orange-600)'}}
               >
-                Switch to X-Layer
+                Switch to BNB Chain
               </button>
             )}
 

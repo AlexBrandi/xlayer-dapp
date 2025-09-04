@@ -93,7 +93,7 @@ export function Mint() {
         quantity: BigInt(quantity),
         pricePerShip: formatEther(pricePerShip),
         totalCost: formatEther(totalCost),
-        contractAddress: '0x41aA73453681fa67D42F35162C20998C60e4459F',
+        contractAddress: '0xe80312d9F235ac2f816D5f63C4f06941F2c0d687',
         fuelBalance: fuelBalance ? formatEther(fuelBalance as bigint) : '0'
       })
       await mint(BigInt(quantity))
@@ -273,7 +273,7 @@ export function Mint() {
               <div className="space-y-4 text-center">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Mint Cost:</span>
-                  <span className="text-white font-bold text-lg">{formatEther(pricePerShip)} OKB</span>
+                  <span className="text-white font-bold text-lg">{formatEther(pricePerShip)} BNB</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Quantity:</span>
@@ -286,7 +286,7 @@ export function Mint() {
                 <hr className="border-gray-600 my-4" />
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Total:</span>
-                  <span className="font-bold text-xl" style={{color: '#ff6b35'}}>{formatEther(totalCost)} OKB</span>
+                  <span className="font-bold text-xl" style={{color: '#ff6b35'}}>{formatEther(totalCost)} BNB</span>
                 </div>
               </div>
             </div>

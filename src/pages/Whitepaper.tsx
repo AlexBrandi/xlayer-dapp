@@ -309,7 +309,7 @@ export function Whitepaper() {
                 <div className="glass-card p-6 bg-orange-500/10 border border-orange-500/30">
                   <h3 className="text-lg font-bold text-orange-400 mb-3">Blockchain Features</h3>
                   <ul className="space-y-2 text-gray-300 text-sm">
-                    <li>• Deployed on X-Layer mainnet</li>
+                    <li>• Deployed on BNB Chain</li>
                     <li>• ERC-721 ships with metadata</li>
                     <li>• ERC-1155 multi-token gems</li>
                     <li>• ERC-20 FUEL token standard</li>
@@ -417,7 +417,7 @@ export function Whitepaper() {
                         <span className="bg-cyan-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold flex-shrink-0 mt-0.5">1</span>
                         <div>
                           <p className="text-white font-medium">Connect Wallet</p>
-                          <p className="text-gray-400 text-sm">Connect your Web3 wallet to X-Layer network</p>
+                          <p className="text-gray-400 text-sm">Connect your Web3 wallet to BNB Chain</p>
                         </div>
                       </div>
                       
