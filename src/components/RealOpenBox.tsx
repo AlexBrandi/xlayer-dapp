@@ -7,38 +7,38 @@ interface RealOpenBoxProps {
   onComplete: () => void
 }
 
-// 飞船数据 - 基于imageId映射到真实战舰
+// Ship data - mapping imageId to real ships
 const SHIP_LIST = [
-  { id: 0, name: '亚伯号', rarity: '普通', rarityColor: 'text-gray-400' },
-  { id: 1, name: '冒险者号', rarity: '普通', rarityColor: 'text-gray-400' },
-  { id: 2, name: '切诺亚号', rarity: '普通', rarityColor: 'text-gray-400' },
-  { id: 3, name: '卡佩奇号', rarity: '普通', rarityColor: 'text-gray-400' },
-  { id: 4, name: '卡文迪号', rarity: '稀有', rarityColor: 'text-blue-400' },
-  { id: 5, name: '哈布斯号', rarity: '稀有', rarityColor: 'text-blue-400' },
-  { id: 6, name: '嘉百列号', rarity: '稀有', rarityColor: 'text-blue-400' },
-  { id: 7, name: '坎贝尔号', rarity: '稀有', rarityColor: 'text-blue-400' },
-  { id: 8, name: '惊恐号', rarity: '史诗', rarityColor: 'text-purple-400' },
-  { id: 9, name: '摩尔号', rarity: '史诗', rarityColor: 'text-purple-400' },
-  { id: 10, name: '敦刻尔克号', rarity: '史诗', rarityColor: 'text-purple-400' },
-  { id: 11, name: '玛丽亚号', rarity: '传奇', rarityColor: 'text-orange-400' },
-  { id: 12, name: '珍珠号', rarity: '传奇', rarityColor: 'text-orange-400' },
-  { id: 13, name: '莱特号', rarity: '传奇', rarityColor: 'text-orange-400' },
-  { id: 14, name: '雷德尔号', rarity: '传奇', rarityColor: 'text-orange-400' },
+  { id: 0, name: 'Abel', rarity: 'Common', rarityColor: 'text-gray-400' },
+  { id: 1, name: 'Adventurer', rarity: 'Common', rarityColor: 'text-gray-400' },
+  { id: 2, name: 'Chenoa', rarity: 'Common', rarityColor: 'text-gray-400' },
+  { id: 3, name: 'Capech', rarity: 'Common', rarityColor: 'text-gray-400' },
+  { id: 4, name: 'Cavendi', rarity: 'Rare', rarityColor: 'text-blue-400' },
+  { id: 5, name: 'Hobbs', rarity: 'Rare', rarityColor: 'text-blue-400' },
+  { id: 6, name: 'Gabriel', rarity: 'Rare', rarityColor: 'text-blue-400' },
+  { id: 7, name: 'Campbell', rarity: 'Rare', rarityColor: 'text-blue-400' },
+  { id: 8, name: 'Terror', rarity: 'Epic', rarityColor: 'text-purple-400' },
+  { id: 9, name: 'Moore', rarity: 'Epic', rarityColor: 'text-purple-400' },
+  { id: 10, name: 'Dunkirk', rarity: 'Epic', rarityColor: 'text-purple-400' },
+  { id: 11, name: 'Maria', rarity: 'Legendary', rarityColor: 'text-orange-400' },
+  { id: 12, name: 'Pearl', rarity: 'Legendary', rarityColor: 'text-orange-400' },
+  { id: 13, name: 'Wright', rarity: 'Legendary', rarityColor: 'text-orange-400' },
+  { id: 14, name: 'Redel', rarity: 'Legendary', rarityColor: 'text-orange-400' },
 ]
 
-// 稀有度对应的背景效果
+// Rarity background effects
 const RARITY_EFFECTS: Record<string, string> = {
-  '普通': 'from-gray-500/20 to-gray-600/20',
-  '稀有': 'from-blue-500/20 to-blue-600/20',
-  '史诗': 'from-purple-500/20 to-purple-600/20',
-  '传奇': 'from-orange-500/20 to-orange-600/20'
+  'Common': 'from-gray-500/20 to-gray-600/20',
+  'Rare': 'from-blue-500/20 to-blue-600/20',
+  'Epic': 'from-purple-500/20 to-purple-600/20',
+  'Legendary': 'from-orange-500/20 to-orange-600/20'
 }
 
 const RARITY_GLOW: Record<string, string> = {
-  '普通': 'shadow-gray-500/50',
-  '稀有': 'shadow-blue-500/50',
-  '史诗': 'shadow-purple-500/50',
-  '传奇': 'shadow-orange-500/50'
+  'Common': 'shadow-gray-500/50',
+  'Rare': 'shadow-blue-500/50',
+  'Epic': 'shadow-purple-500/50',
+  'Legendary': 'shadow-orange-500/50'
 }
 
 interface RevealedShip {
@@ -64,7 +64,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
     
     setIsOpening(true)
     
-    // 开盒动画延时
+    // Unboxing animation delay
     setTimeout(() => {
       const imageId = shipDetails.imageId
       const ship = SHIP_LIST[imageId] || SHIP_LIST[0] // fallback to first ship
@@ -91,13 +91,13 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
   }
 
   const handleViewFleet = () => {
-    // 关闭当前模态框
+    // Close current modal
     onComplete()
-    // 跳转到首页查看舰队
+    // Navigate to homepage to view fleet
     navigate('/')
   }
 
-  // 自动开始第一个盒子
+  // Auto-start first box
   useEffect(() => {
     if (shipDetails && currentBox < tokenIds.length) {
       handleOpenBox()
@@ -109,8 +109,8 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
       <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
         <div className="glass-card p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2">🎉 开盒完成！</h2>
-            <p className="text-gray-400 text-sm">您总共开启了 {tokenIds.length} 艘战舰</p>
+            <h2 className="text-2xl font-bold text-white mb-2">🎉 Unboxing Complete!</h2>
+            <p className="text-gray-400 text-sm">You opened {tokenIds.length} ships total</p>
           </div>
 
           <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mb-6 max-h-60 overflow-y-auto pr-2">
@@ -135,7 +135,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
               className="flex-1 h-12 rounded-xl text-white font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl bg-gray-600 hover:bg-gray-500"
             >
               <span className="text-lg">🔄</span>
-              <span>继续铸造</span>
+              <span>Continue Minting</span>
             </button>
             <button
               onClick={handleViewFleet}
@@ -146,7 +146,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
               }}
             >
               <span className="text-lg">🚀</span>
-              <span>查看舰队</span>
+              <span>View Fleet</span>
             </button>
           </div>
         </div>
@@ -160,7 +160,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
         <div className="glass-card p-8 max-w-lg w-full mx-4">
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-white">正在加载战舰数据...</p>
+            <p className="text-white">Loading ship data...</p>
           </div>
         </div>
       </div>
@@ -188,8 +188,8 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
 
       <div className="glass-card p-8 max-w-lg w-full mx-4 relative">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-white mb-2">战舰开盒</h2>
-          <p className="text-gray-400">战舰 {currentBox + 1} / {tokenIds.length}</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Ship Unboxing</h2>
+          <p className="text-gray-400">Ship {currentBox + 1} / {tokenIds.length}</p>
           <p className="text-sm text-cyan-400">Token ID: #{currentTokenId.toString()}</p>
         </div>
 
@@ -201,12 +201,12 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
                 {isOpening ? (
                   <div className="text-center">
                     <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <p className="text-orange-400 font-bold">开启中...</p>
+                    <p className="text-orange-400 font-bold">Opening...</p>
                   </div>
                 ) : (
                   <div className="text-center">
                     <div className="text-6xl mb-4">📦</div>
-                    <p className="text-gray-300 font-bold">正在开启...</p>
+                    <p className="text-gray-300 font-bold">Opening...</p>
                   </div>
                 )}
               </div>
@@ -222,7 +222,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
                 />
                 <h3 className="font-bold text-white text-base">{revealedShip.ship.name}</h3>
                 <p className={`text-xs font-medium ${revealedShip.ship.rarityColor}`}>{revealedShip.ship.rarity}</p>
-                <p className="text-xs text-cyan-400">等级 {revealedShip.level}</p>
+                <p className="text-xs text-cyan-400">Level {revealedShip.level}</p>
                 
                 {/* 稀有度光效 */}
                 <div className="absolute inset-0 rounded-xl opacity-20 bg-gradient-to-br from-transparent via-white to-transparent animate-ping"></div>
@@ -230,7 +230,7 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
               
               {/* 恭喜文字 */}
               <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                <p className="text-2xl font-bold text-yellow-400 animate-bounce">恭喜获得！</p>
+                <p className="text-2xl font-bold text-yellow-400 animate-bounce">Congratulations!</p>
               </div>
             </>
           )}
@@ -249,13 +249,13 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
               {currentBox < tokenIds.length - 1 ? (
                 <>
                   <span className="text-xl">📦</span>
-                  <span>继续开盒 ({tokenIds.length - currentBox - 1} 个剩余)</span>
+                  <span>Continue Unboxing ({tokenIds.length - currentBox - 1} remaining)</span>
                   <span className="text-xl">⚡</span>
                 </>
               ) : (
                 <>
                   <span className="text-xl">🎉</span>
-                  <span>查看所有战舰</span>
+                  <span>View All Ships</span>
                   <span className="text-xl">🚀</span>
                 </>
               )}

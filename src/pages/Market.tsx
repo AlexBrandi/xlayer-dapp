@@ -19,26 +19,26 @@ interface GemCard {
 const GEMS: GemCard[] = [
   {
     id: 'SAPPHIRE',
-    name: '蓝宝石',
-    symbol: '蓝宝石',
+    name: 'Sapphire',
+    symbol: 'SAP',
     color: 'border-blue-500 bg-blue-500/10',
-    description: '用于战舰升级的稀有蓝色宝石',
+    description: 'Rare blue gems used for ship upgrades',
     image: '/images/sapphire.png'
   },
   {
     id: 'SUNSTONE',
-    name: '太阳石',
-    symbol: '太阳石',
+    name: 'Sunstone',
+    symbol: 'SUN',
     color: 'border-orange-500 bg-orange-500/10',
-    description: '为战舰系统提供动力的光辉宝石',
+    description: 'Radiant gems that power ship systems',
     image: '/images/sunstone.png'
   },
   {
     id: 'LITHIUM',
-    name: '锂矿石',
-    symbol: '锂矿石',
+    name: 'Lithium',
+    symbol: 'LIT',
     color: 'border-purple-500 bg-purple-500/10',
-    description: '用于高级升级的必需矿物',
+    description: 'Essential minerals for advanced upgrades',
     image: '/images/lithium.png'
   }
 ]
@@ -71,7 +71,7 @@ export function Market() {
 
   const handleBuy = async () => {
     if (!canAfford[selectedGemLower]) {
-      toast.error('FUEL 余额不足')
+      toast.error('Insufficient FUEL balance')
       return
     }
 
@@ -87,8 +87,8 @@ export function Market() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4 text-white">连接钱包以访问市场</h2>
-          <p className="text-gray-400">您需要连接钱包才能购买宝石</p>
+          <h2 className="text-2xl font-bold mb-4 text-white">Connect Wallet to Access Market</h2>
+          <p className="text-gray-400">You need to connect your wallet to purchase gems</p>
         </div>
       </div>
     )
@@ -96,7 +96,7 @@ export function Market() {
 
   return (
     <>
-      {/* 科幻宇宙背景 */}
+      {/* Sci-fi universe background */}
       <div className="sci-fi-background"></div>
       <div className="spiral-depth"></div>
       <div className="sci-fi-particles">
@@ -114,36 +114,45 @@ export function Market() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h1 className="text-2xl font-bold mb-6 text-white">宝石市场</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center">
+          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 bg-clip-text text-transparent">
+            💎 Gem Market 💎
+          </span>
+        </h1>
 
         {/* Gem Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {GEMS.map((gem) => (
             <button
               key={gem.id}
               onClick={() => setSelectedGem(gem.id)}
-              className={`glass-card p-4 border-2 transition-all hover:scale-102 ${
+              className={`glass-card p-6 border-2 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
                 selectedGem === gem.id 
-                  ? gem.color 
+                  ? `${gem.color} shadow-lg transform scale-105` 
                   : 'border-gray-700/30 hover:border-gray-500/50'
               }`}
             >
-              <img 
-                src={gem.image} 
-                alt={gem.name}
-                className="w-12 h-12 mx-auto mb-3 object-contain"
-              />
+              <div className="relative mb-4">
+                <img 
+                  src={gem.image} 
+                  alt={gem.name}
+                  className="w-16 h-16 mx-auto object-contain drop-shadow-lg"
+                />
+                {selectedGem === gem.id && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse rounded-full"></div>
+                )}
+              </div>
               <h3 className="text-base font-bold mb-1 text-white">{gem.name}</h3>
               <p className="text-xs text-gray-400 mb-1">{gem.symbol}</p>
               <p className="text-xs text-gray-500 mb-3">{gem.description}</p>
               
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">价格:</span>
+                  <span className="text-gray-400">Price:</span>
                   <span className="text-white font-medium">{pricesFormatted[gem.id.toLowerCase() as keyof typeof pricesFormatted]} FUEL</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">您拥有:</span>
+                  <span className="text-gray-400">You own:</span>
                   <span className="font-bold text-green-400">{balances[gem.id.toLowerCase() as keyof typeof balances].toString()}</span>
                 </div>
               </div>
@@ -157,12 +166,14 @@ export function Market() {
           <div className="glass-card p-6">
             <div className="flex items-center gap-2 mb-6">
               <span className="text-xl">💎</span>
-              <h2 className="text-lg font-bold text-white">购买{selectedGem === 'SAPPHIRE' ? '蓝宝石' : selectedGem === 'SUNSTONE' ? '太阳石' : '锂矿石'}</h2>
+              <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                Purchase {selectedGem === 'SAPPHIRE' ? 'Sapphire' : selectedGem === 'SUNSTONE' ? 'Sunstone' : 'Lithium'}
+              </h2>
             </div>
             
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium mb-3 text-gray-300">数量</label>
+                <label className="block text-sm font-medium mb-3 text-gray-300">Quantity</label>
                 <div className="flex items-center justify-center gap-4">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -193,24 +204,24 @@ export function Market() {
               <div className="glass-card p-4 bg-gray-800/30">
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <span className="text-lg">💰</span>
-                  <span className="font-bold text-yellow-400">价格明细</span>
+                  <span className="font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">Price Details</span>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">单价:</span>
+                    <span className="text-gray-400 text-sm">Unit Price:</span>
                     <span className="text-white font-bold">{pricesFormatted[selectedGemLower]} FUEL</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">数量:</span>
-                    <span className="text-white font-bold">{quantity} 个</span>
+                    <span className="text-gray-400 text-sm">Quantity:</span>
+                    <span className="text-white font-bold">{quantity} gems</span>
                   </div>
                   <hr className="border-gray-600" />
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">总价:</span>
+                    <span className="text-gray-400 text-sm">Total:</span>
                     <span className="font-bold text-xl" style={{color: '#ff6b35'}}>{formatEther(totalCost)} FUEL</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">您的余额:</span>
+                    <span className="text-gray-400 text-sm">Your Balance:</span>
                     <span className={canAfford[selectedGemLower] ? 'text-green-400 font-bold' : 'text-red-400 font-bold'}>
                       {formatEther(fuelBalance || 0n)} FUEL
                     </span>
@@ -222,14 +233,14 @@ export function Market() {
               {!isApprovedForAll && (
                 <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
                   <p className="text-sm text-yellow-400 mb-2">
-                    ⚠️ 升级需要宝石授权
+                    ⚠️ Gem authorization required for upgrades
                   </p>
                   <button
                     onClick={approveGems}
                     disabled={isApprovePending}
                     className="w-full py-2 rounded-lg text-sm font-medium bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/30 transition-all"
                   >
-                    {isApprovePending ? '正在授权宝石...' : '授权宝石'}
+                    {isApprovePending ? 'Approving Gems...' : 'Approve Gems'}
                   </button>
                 </div>
               )}
@@ -237,31 +248,34 @@ export function Market() {
               <button
                 onClick={handleBuy}
                 disabled={isBuyPending || isFuelApprovePending || !canAfford[selectedGemLower]}
-                className="w-full h-16 rounded-xl text-white font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-2xl"
+                className="w-full h-16 rounded-xl text-white font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-2xl relative overflow-hidden group"
                 style={{
                   background: (isBuyPending || isFuelApprovePending || !canAfford[selectedGemLower]) 
                     ? '#4B5563' 
-                    : 'linear-gradient(to right, #ff6b35, #e55527)',
+                    : 'linear-gradient(135deg, #ff6b35, #e55527, #ff8a65)',
                   boxShadow: (isBuyPending || isFuelApprovePending || !canAfford[selectedGemLower]) 
                     ? 'none' 
-                    : '0 25px 50px -12px rgba(255, 107, 53, 0.25)',
+                    : '0 25px 50px -12px rgba(255, 107, 53, 0.4), 0 0 30px rgba(255, 107, 53, 0.2)',
                   cursor: (isBuyPending || isFuelApprovePending || !canAfford[selectedGemLower]) 
                     ? 'not-allowed' 
                     : 'pointer'
                 }}
               >
-                <span className="text-2xl">💎</span>
-                <span>
+                {!isBuyPending && !isFuelApprovePending && canAfford[selectedGemLower] && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                )}
+                <span className="text-2xl z-10">{isBuyPending || isFuelApprovePending ? '⏳' : '💎'}</span>
+                <span className="z-10">
                   {isFuelApprovePending 
-                    ? '正在授权 FUEL...' 
+                    ? 'Approving FUEL...' 
                     : isBuyPending 
-                    ? '正在购买...' 
+                    ? 'Purchasing...' 
                     : !canAfford[selectedGemLower]
-                    ? 'FUEL余额不足'
-                    : `购买 ${quantity} 个${selectedGem === 'SAPPHIRE' ? '蓝宝石' : selectedGem === 'SUNSTONE' ? '太阳石' : '锂矿石'}`
+                    ? 'Insufficient FUEL'
+                    : `Buy ${quantity} ${selectedGem === 'SAPPHIRE' ? 'Sapphire' : selectedGem === 'SUNSTONE' ? 'Sunstone' : 'Lithium'}`
                   }
                 </span>
-                <span className="text-2xl">⚡</span>
+                <span className="text-2xl z-10">⚡</span>
               </button>
             </div>
           </div>
@@ -270,51 +284,51 @@ export function Market() {
           <div className="glass-card p-6">
             <div className="flex items-center gap-2 mb-6">
               <span className="text-xl">📚</span>
-              <h2 className="text-lg font-bold text-white">宝石使用指南</h2>
+              <h2 className="text-xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">Gem Usage Guide</h2>
             </div>
             
             <div className="space-y-6">
               <div>
-                <h3 className="text-sm font-semibold mb-3 text-cyan-400">如何使用宝石</h3>
+                <h3 className="text-sm font-semibold mb-3 text-cyan-400">How to Use Gems</h3>
                 <div className="space-y-2 text-sm text-gray-300">
                   <div className="flex items-start gap-2">
                     <span className="text-cyan-400 font-bold min-w-[16px]">1.</span>
-                    <span>使用 FUEL 代币购买宝石</span>
+                    <span>Purchase gems with FUEL tokens</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-cyan-400 font-bold min-w-[16px]">2.</span>
-                    <span>在控制面板中找到您的战舰</span>
+                    <span>Find your ships on the dashboard</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-cyan-400 font-bold min-w-[16px]">3.</span>
-                    <span>在未质押的战舰上点击"升级"</span>
+                    <span>Click "Upgrade" on unstaked ships</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-cyan-400 font-bold min-w-[16px]">4.</span>
-                    <span>确认交易以完成升级</span>
+                    <span>Confirm transaction to complete upgrade</span>
                   </div>
                 </div>
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold mb-3 text-cyan-400">升级需求</h3>
+                <h3 className="text-sm font-semibold mb-3 text-cyan-400">Upgrade Requirements</h3>
                 <div className="glass-card p-4 bg-gray-800/30">
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-400">等级 1 → 2:</span>
-                      <span className="text-white">3蓝 + 2太阳 + 1锂</span>
+                      <span className="text-gray-400">Level 1 → 2:</span>
+                      <span className="text-white">3 Sapphire + 2 Sunstone + 1 Lithium</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">等级 2 → 3:</span>
-                      <span className="text-white">5蓝 + 3太阳 + 2锂</span>
+                      <span className="text-gray-400">Level 2 → 3:</span>
+                      <span className="text-white">5 Sapphire + 3 Sunstone + 2 Lithium</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">等级 3 → 4:</span>
-                      <span className="text-white">8蓝 + 5太阳 + 3锂</span>
+                      <span className="text-gray-400">Level 3 → 4:</span>
+                      <span className="text-white">8 Sapphire + 5 Sunstone + 3 Lithium</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">等级 4 → 5:</span>
-                      <span className="text-white">12蓝 + 8太阳 + 5锂</span>
+                      <span className="text-gray-400">Level 4 → 5:</span>
+                      <span className="text-white">12 Sapphire + 8 Sunstone + 5 Lithium</span>
                     </div>
                   </div>
                 </div>
@@ -323,17 +337,17 @@ export function Market() {
               <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-blue-400">💡</span>
-                  <span className="text-sm font-medium text-blue-400">提示</span>
+                  <span className="text-sm font-medium text-blue-400">Tip</span>
                 </div>
                 <p className="text-sm text-blue-300">
-                  等级越高的战舰可以赚取更多的 FUEL 奖励！建议优先升级常用的战舰。
+                  Higher level ships can earn more FUEL rewards! It's recommended to upgrade frequently used ships first.
                 </p>
               </div>
 
-              {/* 当前FUEL余额显示 */}
+              {/* Current FUEL balance display */}
               <div className="glass-card p-4 bg-green-500/10 border border-green-500/20">
                 <div className="text-center">
-                  <div className="text-gray-400 text-sm mb-1">当前 FUEL 余额</div>
+                  <div className="text-gray-400 text-sm mb-1">Current FUEL Balance</div>
                   <div className="text-green-400 font-bold text-xl">
                     {fuelBalance ? formatEther(fuelBalance as bigint) : '0.00'}
                   </div>

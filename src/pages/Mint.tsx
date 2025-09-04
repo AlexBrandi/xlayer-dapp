@@ -7,23 +7,23 @@ import toast from 'react-hot-toast'
 
 const MAX_MINT = 10
 
-// 战舰列表数据
+// Ship list data
 const SHIP_LIST = [
-  { id: 0, name: '亚伯号', rarity: '普通', probability: '15%', rarityColor: 'text-gray-400' },
-  { id: 1, name: '冒险者号', rarity: '普通', probability: '15%', rarityColor: 'text-gray-400' },
-  { id: 2, name: '切诺亚号', rarity: '普通', probability: '15%', rarityColor: 'text-gray-400' },
-  { id: 3, name: '卡佩奇号', rarity: '普通', probability: '15%', rarityColor: 'text-gray-400' },
-  { id: 4, name: '卡文迪号', rarity: '稀有', probability: '8%', rarityColor: 'text-blue-400' },
-  { id: 5, name: '哈布斯号', rarity: '稀有', probability: '8%', rarityColor: 'text-blue-400' },
-  { id: 6, name: '嘉百列号', rarity: '稀有', probability: '8%', rarityColor: 'text-blue-400' },
-  { id: 7, name: '坎贝尔号', rarity: '稀有', probability: '8%', rarityColor: 'text-blue-400' },
-  { id: 8, name: '惊恐号', rarity: '史诗', probability: '4%', rarityColor: 'text-purple-400' },
-  { id: 9, name: '摩尔号', rarity: '史诗', probability: '4%', rarityColor: 'text-purple-400' },
-  { id: 10, name: '敦刻尔克号', rarity: '史诗', probability: '4%', rarityColor: 'text-purple-400' },
-  { id: 11, name: '玛丽亚号', rarity: '传奇', probability: '1%', rarityColor: 'text-orange-400' },
-  { id: 12, name: '珍珠号', rarity: '传奇', probability: '1%', rarityColor: 'text-orange-400' },
-  { id: 13, name: '莱特号', rarity: '传奇', probability: '1%', rarityColor: 'text-orange-400' },
-  { id: 14, name: '雷德尔号', rarity: '传奇', probability: '1%', rarityColor: 'text-orange-400' },
+  { id: 0, name: 'Abel', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
+  { id: 1, name: 'Adventurer', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
+  { id: 2, name: 'Chenoa', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
+  { id: 3, name: 'Capech', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
+  { id: 4, name: 'Cavendi', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
+  { id: 5, name: 'Hobbs', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
+  { id: 6, name: 'Gabriel', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
+  { id: 7, name: 'Campbell', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
+  { id: 8, name: 'Terror', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
+  { id: 9, name: 'Moore', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
+  { id: 10, name: 'Dunkirk', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
+  { id: 11, name: 'Maria', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
+  { id: 12, name: 'Pearl', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
+  { id: 13, name: 'Wright', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
+  { id: 14, name: 'Redel', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
 ]
 
 export function Mint() {
@@ -67,8 +67,8 @@ export function Mint() {
       
       if (newTokens.length > 0) {
         console.log('New tokens minted:', newTokens)
-        toast.success(`成功铸造了 ${newTokens.length} 艘战舰！`)
-        // 直接跳转到首页查看新铸造的战舰
+        toast.success(`Successfully minted ${newTokens.length} ships!`)
+        // Navigate directly to homepage to view newly minted ships
         setTimeout(() => {
           navigate('/')
         }, 1500)
@@ -78,7 +78,7 @@ export function Mint() {
 
   const handleMint = async () => {
     try {
-      console.log('开始铸造:', {
+      console.log('Starting mint:', {
         quantity: BigInt(quantity),
         pricePerShip: formatEther(pricePerShip),
         totalCost: formatEther(totalCost),
@@ -88,7 +88,7 @@ export function Mint() {
       await mint(BigInt(quantity))
     } catch (error) {
       console.error('Mint failed:', error)
-      toast.error('铸造失败: ' + (error as any).message)
+      toast.error('Minting failed: ' + (error as any).message)
     }
   }
 
@@ -102,8 +102,8 @@ export function Mint() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">连接钱包以铸造</h2>
-          <p className="text-gray-400">您需要连接钱包才能铸造战舰</p>
+          <h2 className="text-2xl font-bold mb-4">Connect Wallet to Mint</h2>
+          <p className="text-gray-400">You need to connect your wallet to mint ships</p>
         </div>
       </div>
     )
@@ -111,7 +111,7 @@ export function Mint() {
 
   return (
     <>
-      {/* 科幻宇宙背景 */}
+      {/* Sci-fi universe background */}
       <div className="sci-fi-background"></div>
       <div className="spiral-depth"></div>
       <div className="sci-fi-particles">
@@ -130,17 +130,17 @@ export function Mint() {
 
       <div className="fixed inset-0 overflow-hidden pt-16 flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-6 w-full">
-        {/* 三列布局 */}
+        {/* Three-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" style={{height: '80vh'}}>
           
-          {/* 左栏：可能获得的飞船 */}
+          {/* Left column: Possible ships to obtain */}
           <div className="glass-card p-6 flex flex-col h-full overflow-hidden">
             <div className="flex items-center justify-center gap-2 mb-6 flex-shrink-0">
               <span className="text-2xl">🚀</span>
-              <h2 className="text-xl font-bold text-white">可能获得的飞船</h2>
+              <h2 className="text-xl font-bold text-white">Available Ships</h2>
             </div>
             
-            {/* 固定高度可滚动飞船列表 - 最多显示8个的高度 */}
+            {/* Fixed height scrollable ship list - height for max 8 ships */}
             <div className="overflow-y-auto space-y-1 pr-2 min-h-0" style={{
              
               scrollbarWidth: 'thin', 
@@ -174,11 +174,11 @@ export function Mint() {
             </div>
           </div>
 
-          {/* 中栏：造舰结果 */}
+          {/* Middle column: Ship building results */}
           <div className="glass-card p-6 h-full flex flex-col overflow-hidden">
             <div className="flex items-center gap-2 mb-6">
               <span className="text-2xl">⚡</span>
-              <h2 className="text-xl font-bold text-white">造舰结果</h2>
+              <h2 className="text-xl font-bold text-white">Minting Result</h2>
             </div>
             
             <div className="flex-1 flex flex-col justify-center">
@@ -186,41 +186,41 @@ export function Mint() {
                 <div className="w-24 h-24 mx-auto mb-6 bg-gray-800 rounded-full flex items-center justify-center">
                   <span className="text-4xl">❓</span>
                 </div>
-                <p className="text-gray-400 mb-8">点击造舰按钮开始制造</p>
+                <p className="text-gray-400 mb-8">Click the mint button to start crafting</p>
               </div>
               
-              {/* 稀有度分布 */}
+              {/* Rarity distribution */}
               <div className="glass-card p-4 bg-gray-800/30">
                 <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
                   <span>📊</span>
-                  稀有度分布
+                  Rarity Distribution
                 </h3>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                      <span className="text-sm text-gray-400">普通</span>
+                      <span className="text-sm text-gray-400">Common</span>
                     </div>
                     <span className="text-sm text-gray-300">60%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm text-blue-400">稀有</span>
+                      <span className="text-sm text-blue-400">Rare</span>
                     </div>
                     <span className="text-sm text-gray-300">25%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                      <span className="text-sm text-purple-400">史诗</span>
+                      <span className="text-sm text-purple-400">Epic</span>
                     </div>
                     <span className="text-sm text-gray-300">12%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                      <span className="text-sm text-orange-400">传奇</span>
+                      <span className="text-sm text-orange-400">Legendary</span>
                     </div>
                     <span className="text-sm text-gray-300">3%</span>
                   </div>
@@ -229,51 +229,51 @@ export function Mint() {
             </div>
           </div>
 
-          {/* 右栏：造舰控制 */}
+          {/* Right column: Ship building controls */}
           <div className="glass-card p-8 h-full flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto min-h-0">
               <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <span className="text-2xl">⚙️</span>
-                <h2 className="text-xl font-bold text-white">造舰控制</h2>
+                <h2 className="text-xl font-bold text-white">Mint Control</h2>
               </div>
               
               <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-2xl shadow-orange-500/30">
                 <span className="text-3xl">🏭</span>
               </div>
               
-              <h3 className="text-xl font-bold text-white mb-3">神秘造舰</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">每次造舰将随机获得一艘飞船<br/>稀有度完全看运气！</p>
+              <h3 className="text-xl font-bold text-white mb-3">Mystery Ship Forge</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">Each mint will randomly give you a ship<br/>Rarity depends entirely on luck!</p>
             </div>
 
-            {/* 造价明细 */}
+            {/* Cost details */}
             <div className="glass-card p-6 bg-gray-800/30 mb-8">
               <div className="flex items-center justify-center gap-2 mb-6">
                 <span className="text-xl">💰</span>
-                <span className="font-bold text-yellow-400 text-lg">造价明细</span>
+                <span className="font-bold text-yellow-400 text-lg">Mint Details</span>
               </div>
               <div className="space-y-4 text-center">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400 text-sm">造舰费用:</span>
+                  <span className="text-gray-400 text-sm">Mint Cost:</span>
                   <span className="text-white font-bold text-lg">{formatEther(pricePerShip)} OKB</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400 text-sm">数量:</span>
-                  <span className="text-white font-bold text-lg">{quantity} 艘</span>
+                  <span className="text-gray-400 text-sm">Quantity:</span>
+                  <span className="text-white font-bold text-lg">{quantity} ships</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400 text-sm">飞船类型:</span>
-                  <span className="text-white font-bold text-lg">随机</span>
+                  <span className="text-gray-400 text-sm">Ship Type:</span>
+                  <span className="text-white font-bold text-lg">Random</span>
                 </div>
                 <hr className="border-gray-600 my-4" />
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400 text-sm">总价:</span>
+                  <span className="text-gray-400 text-sm">Total:</span>
                   <span className="font-bold text-xl" style={{color: '#ff6b35'}}>{formatEther(totalCost)} OKB</span>
                 </div>
               </div>
             </div>
 
-            {/* 数量控制 */}
+            {/* Quantity control */}
             <div className="mb-8">
               <div className="flex items-center justify-center gap-4 mb-6">
                 <button
@@ -307,7 +307,7 @@ export function Mint() {
              
             </div>
 
-            {/* 神秘造舰按钮 */}
+            {/* Mysterious ship building button */}
             <button
               onClick={handleMint}
               disabled={isPending}
@@ -318,14 +318,14 @@ export function Mint() {
               }}
             >
               <span className="text-2xl">🚀</span>
-              <span>{isPending ? '神秘造舰中...' : '神秘造舰'}</span>
+              <span>{isPending ? 'Mystery Minting...' : 'Mystery Mint'}</span>
               <span className="text-2xl">⚡</span>
             </button>
 
-              {/* 当前FUEL余额 */}
+              {/* Current FUEL balance */}
               <div className="mt-auto text-center">
                 <div className="glass-card p-4 bg-green-500/10 border border-green-500/20">
-                  <div className="text-gray-400 text-sm mb-1">当前 FUEL 余额</div>
+                  <div className="text-gray-400 text-sm mb-1">Current FUEL Balance</div>
                   <div className="text-green-400 font-bold text-xl">
                     {fuelBalance ? formatEther(fuelBalance as bigint) : '0.00'}
                   </div>

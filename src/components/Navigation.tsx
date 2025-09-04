@@ -11,9 +11,10 @@ import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
 const navItems = [
-  { path: '/', label: '控制台' },
-  { path: '/mint', label: '铸造飞船' },
-  { path: '/market', label: '宝石市场' },
+  { path: '/', label: 'Dashboard' },
+  { path: '/mint', label: 'Mint Ships' },
+  { path: '/market', label: 'Gem Market' },
+  { path: '/whitepaper', label: 'Whitepaper' },
 ]
 
 export function Navigation() {
@@ -28,7 +29,7 @@ export function Navigation() {
 
   useEffect(() => {
     if (isConnected && chainId !== CHAIN_ID) {
-      toast.error('请切换到 X-Layer 主网', {
+      toast.error('Please switch to X-Layer mainnet', {
         duration: 5000,
         position: 'top-center',
       })
@@ -46,7 +47,7 @@ export function Navigation() {
     try {
       await switchChain({ chainId: CHAIN_ID })
     } catch (error) {
-      toast.error('切换链失败，请在钱包中手动切换。')
+      toast.error('Chain switch failed. Please switch manually in your wallet.')
     }
   }
 
@@ -55,7 +56,7 @@ export function Navigation() {
       <div className="container">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
-            <h1 className="text-xl font-bold text-blue-400">星际舰队</h1>
+            <h1 className="text-xl font-bold text-blue-400">Star Fleet</h1>
             
             <div className="flex items-center gap-6">
               {navItems.map((item) => (
@@ -67,6 +68,18 @@ export function Navigation() {
                   {item.label}
                 </Link>
               ))}
+              
+              <a
+                href="https://x.com/ShipWarBnb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nav-link flex items-center gap-2 hover:text-blue-400 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                Twitter
+              </a>
             </div>
           </div>
 
@@ -77,29 +90,29 @@ export function Navigation() {
                 className="px-3 py-2 bg-orange-600 text-white text-sm rounded-lg transition-colors"
                 style={{backgroundColor: 'var(--orange-600)'}}
               >
-                切换到 X-Layer
+                Switch to X-Layer
               </button>
             )}
 
             {isConnected && fuelBalance !== undefined && (
               <div className="text-right" style={{display: 'block'}}>
-                <p className="text-xs text-gray-400">FUEL 余额</p>
+                <p className="text-xs text-gray-400">FUEL Balance</p>
                 <p className="text-sm font-bold">{formatEther(fuelBalance as bigint)}</p>
               </div>
             )}
 
             {!isConnected ? (
               <button onClick={handleConnect} className="btn-primary">
-                连接钱包
+                Connect Wallet
               </button>
             ) : (
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <p className="text-xs text-gray-400">已连接</p>
+                  <p className="text-xs text-gray-400">Connected</p>
                   <p className="text-sm font-mono">{formatAddress(address!)}</p>
                 </div>
                 <button onClick={() => disconnect()} className="btn-secondary text-sm">
-                  断开连接
+                  Disconnect
                 </button>
               </div>
             )}

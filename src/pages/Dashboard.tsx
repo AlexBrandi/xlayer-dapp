@@ -21,7 +21,7 @@ export function Dashboard() {
   const { useFuelBalance } = useContracts()
   const { data: fuelBalance } = useFuelBalance()
 
-  // 调试信息已隐藏
+  // Debug info hidden
   // console.log('Dashboard Debug:', {
   //   allShips: allShips.map(id => id.toString()),
   //   allShipsDetails,
@@ -47,8 +47,8 @@ export function Dashboard() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">欢迎来到舰队 DApp</h2>
-          <p className="text-gray-400 mb-6">连接您的钱包以查看您的舰队</p>
+          <h2 className="text-2xl font-bold mb-4">Welcome to Fleet DApp</h2>
+          <p className="text-gray-400 mb-6">Connect your wallet to view your fleet</p>
         </div>
       </div>
     )
@@ -56,14 +56,14 @@ export function Dashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      {/* Debug Panel - 隐藏调试信息 */}
+      {/* Debug Panel - hidden debug info */}
       {/* <DebugPanel /> */}
       
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {/* FUEL Balance */}
         <div className="glass-card p-4">
-          <h3 className="text-xs text-gray-400 mb-1">FUEL 余额</h3>
+          <h3 className="text-xs text-gray-400 mb-1">FUEL Balance</h3>
           <p className="text-lg font-bold text-green-400">
             {fuelBalance ? formatEther(fuelBalance as bigint) : '0'} FUEL
           </p>
@@ -71,7 +71,7 @@ export function Dashboard() {
 
         {/* Pending Rewards */}
         <div className="glass-card p-4">
-          <h3 className="text-xs text-gray-400 mb-1">待领取奖励</h3>
+          <h3 className="text-xs text-gray-400 mb-1">Pending Rewards</h3>
           <p className="text-lg font-bold text-yellow-400">
             {totalPendingFormatted} FUEL
           </p>
@@ -79,18 +79,18 @@ export function Dashboard() {
 
         {/* Ships Status */}
         <div className="glass-card p-4">
-          <h3 className="text-xs text-gray-400 mb-1">战舰状态</h3>
+          <h3 className="text-xs text-gray-400 mb-1">Ship Status</h3>
           <div className="flex gap-3">
             <div>
-              <p className="text-xs text-gray-500">质押中</p>
+              <p className="text-xs text-gray-500">Staked</p>
               <p className="text-base font-bold text-blue-400">{stakedShips.length}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">闲置</p>
+              <p className="text-xs text-gray-500">Idle</p>
               <p className="text-base font-bold text-gray-400">{unstakedShips.length}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">总计</p>
+              <p className="text-xs text-gray-500">Total</p>
               <p className="text-base font-bold">{stakedShips.length + unstakedShips.length}</p>
             </div>
           </div>
@@ -98,18 +98,18 @@ export function Dashboard() {
 
         {/* Gem Balance */}
         <div className="glass-card p-4">
-          <h3 className="text-xs text-gray-400 mb-1">宝石余额</h3>
+          <h3 className="text-xs text-gray-400 mb-1">Gem Balance</h3>
           <div className="flex gap-2">
             <div className="text-center">
-              <p className="text-xs text-gray-500">蓝宝石</p>
+              <p className="text-xs text-gray-500">Sapphire</p>
               <p className="text-sm font-bold text-blue-400">{balances.sapphire.toString()}</p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-gray-500">太阳石</p>
+              <p className="text-xs text-gray-500">Sunstone</p>
               <p className="text-sm font-bold text-orange-400">{balances.sunstone.toString()}</p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-gray-500">锂矿石</p>
+              <p className="text-xs text-gray-500">Lithium</p>
               <p className="text-sm font-bold text-purple-400">{balances.lithium.toString()}</p>
             </div>
           </div>
@@ -118,17 +118,17 @@ export function Dashboard() {
 
       {/* Action Bar */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-white">我的舰队</h2>
+        <h2 className="text-lg font-bold text-white">My Fleet</h2>
         <div className="flex gap-2">
           <button
             onClick={handleClaimAll}
             disabled={!totalPending || totalPending === 0n || isClaimPending}
             className="btn-primary bg-green-600 hover:bg-green-700 disabled:bg-gray-700 text-sm"
           >
-            {isClaimPending ? '领取中...' : '领取所有奖励'}
+            {isClaimPending ? 'Claiming...' : 'Claim All Rewards'}
           </button>
           <button onClick={handleRefresh} className="btn-secondary text-sm">
-            刷新
+            Refresh
           </button>
         </div>
       </div>
@@ -136,9 +136,9 @@ export function Dashboard() {
       {/* Ships Display */}
       {(allShips.length === 0 && stakedShips.length === 0 && unstakedShips.length === 0) ? (
         <div className="glass-card p-12 text-center">
-          <p className="text-gray-400 mb-4">您还没有任何战舰</p>
+          <p className="text-gray-400 mb-4">You don't have any ships yet</p>
           <Link to="/mint" className="btn-primary">
-            铸造您的第一艘战舰
+            Mint Your First Ship
           </Link>
         </div>
       ) : (
@@ -147,7 +147,7 @@ export function Dashboard() {
           {stakedShips.length > 0 && (
             <div className="mb-8">
               <h3 className="text-base font-semibold mb-3 text-blue-400">
-                质押中的战舰 ({stakedShips.length})
+                Staked Ships ({stakedShips.length})
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {stakedShips.map((tokenId) => {
@@ -169,14 +169,14 @@ export function Dashboard() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-base font-semibold text-gray-400">
-                  闲置的战舰 ({unstakedShips.length})
+                  Idle Ships ({unstakedShips.length})
                 </h3>
                 {unstakedShips.length > 1 && (
                   <button
                     onClick={() => setShowBatchStakeModal(true)}
                     className="text-sm px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 transition-colors"
                   >
-                    批量质押
+                    Batch Stake
                   </button>
                 )}
               </div>
@@ -198,7 +198,7 @@ export function Dashboard() {
       )}
 
 
-      {/* 批量质押模态框 */}
+      {/* Batch stake modal */}
       {showBatchStakeModal && (
         <BatchStakeModal
           tokenIds={unstakedShips}

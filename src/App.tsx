@@ -7,6 +7,7 @@ import { Navigation } from './components/Navigation'
 import { Dashboard } from './pages/Dashboard'
 import { Mint } from './pages/Mint'
 import { Market } from './pages/Market'
+import { Whitepaper } from './pages/Whitepaper'
 import { UpgradeProvider, useUpgrade } from './contexts/UpgradeContext'
 import { UpgradeModal } from './components/UpgradeModal'
 import './index.css'
@@ -25,6 +26,7 @@ function AppContent() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/mint" element={<Mint />} />
             <Route path="/market" element={<Market />} />
+            <Route path="/whitepaper" element={<Whitepaper />} />
           </Routes>
         </main>
       </div>

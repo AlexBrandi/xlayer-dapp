@@ -68,19 +68,19 @@ export function useGems() {
   const gemMetadata = {
     [GemType.SAPPHIRE]: {
       name: 'Sapphire',
-      symbol: '蓝宝石',
+      symbol: 'SAP',
       color: '#0066ff',
       description: 'Rare blue gem used for ship upgrades'
     },
     [GemType.SUNSTONE]: {
       name: 'Sunstone',
-      symbol: '太阳石',
+      symbol: 'SUN',
       color: '#ff9900',
       description: 'Radiant gem that powers ship systems'
     },
     [GemType.LITHIUM]: {
       name: 'Lithium',
-      symbol: '锂矿石',
+      symbol: 'LIT',
       color: '#cc99ff',
       description: 'Essential mineral for advanced upgrades'
     }

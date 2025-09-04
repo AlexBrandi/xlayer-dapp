@@ -276,7 +276,7 @@ export function useContracts() {
       unstakedNFTs: (result.data as any)[2] || []
     } : undefined
 
-    // 调试信息已隐藏
+    // Debug info hidden
     // console.log('useUserShipStatus:', {
     //   address,
     //   rawData: result.data,

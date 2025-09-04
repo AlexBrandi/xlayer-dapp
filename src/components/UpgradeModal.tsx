@@ -42,7 +42,7 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
 
   const [tokenCost, gem1Cost, gem2Cost, gem3Cost] = upgradeCost
   
-  // 检查余额是否足够
+  // Check if balance is sufficient
   const hasSufficientFuel = fuelBalance && fuelBalance >= tokenCost
   const hasSufficientGems = 
     balances.sapphire >= gem1Cost &&
@@ -56,48 +56,48 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
     try {
       setIsUpgrading(true)
       
-      // 检查余额
+      // Check balance
       if (!hasSufficientFuel) {
-        toast.error('FUEL 余额不足')
+        toast.error('Insufficient FUEL balance')
         return
       }
       
       if (!hasSufficientGems) {
-        toast.error('宝石余额不足')
+        toast.error('Insufficient gem balance')
         return
       }
 
-      // 批准 FUEL
+      // Approve FUEL
       if (needsFuelApproval && tokenCost > 0n) {
         setStep('approving')
-        toast.loading('正在批准 FUEL...')
+        toast.loading('Approving FUEL...')
         await approveFuel(tokenCost)
         toast.dismiss()
-        toast.success('FUEL 批准成功')
+        toast.success('FUEL approved successfully')
       }
 
-      // 批准宝石
+      // Approve gems
       if (needsGemsApproval) {
         setStep('approving')
-        toast.loading('正在批准宝石...')
+        toast.loading('Approving gems...')
         await approveGems()
         toast.dismiss()
-        toast.success('宝石批准成功')
+        toast.success('Gems approved successfully')
       }
 
-      // 执行升级
+      // Execute upgrade
       setStep('upgrading')
-      toast.loading('正在升级战舰...')
+      toast.loading('Upgrading ship...')
       await upgrade(tokenId)
       toast.dismiss()
-      toast.success(`战舰升级到等级 ${currentLevel + 1}！`)
+      toast.success(`Ship upgraded to level ${currentLevel + 1}!`)
       
       onSuccess()
       onClose()
     } catch (error: any) {
       console.error('Upgrade error:', error)
       toast.dismiss()
-      toast.error(error.message || '升级失败')
+      toast.error(error.message || 'Upgrade failed')
     } finally {
       setIsUpgrading(false)
       setStep('confirm')
@@ -108,22 +108,22 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999] p-4">
       <div className="glass-card p-4 max-w-sm w-full">
         <h2 className="text-lg font-bold text-white mb-3 text-center">
-          升级战舰
+          Upgrade Ship
         </h2>
 
         <div className="mb-4">
           <div className="glass-card p-3 bg-gray-800/50 text-center mb-3">
             <h3 className="text-base font-bold text-white mb-1">
-              战舰 #{tokenId.toString()}
+              Ship #{tokenId.toString()}
             </h3>
             <p className="text-sm text-gray-400">
-              等级: <span className="text-cyan-400 font-bold">{currentLevel}</span> → 
+              Level: <span className="text-cyan-400 font-bold">{currentLevel}</span> → 
               <span className="text-green-400 font-bold">{currentLevel + 1}</span>
             </p>
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-xs text-gray-400 font-semibold">升级成本：</h4>
+            <h4 className="text-xs text-gray-400 font-semibold">Upgrade Cost:</h4>
             
             {tokenCost > 0n && (
               <div className="flex justify-between items-center glass-card p-2 bg-gray-800/30">
@@ -131,7 +131,7 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
                 <div className="text-right">
                   <p className="text-sm text-white font-bold">{formatEther(tokenCost)}</p>
                   <p className={`text-xs ${hasSufficientFuel ? 'text-green-400' : 'text-red-400'}`}>
-                    余额: {fuelBalance ? formatEther(fuelBalance) : '0'}
+                    Balance: {fuelBalance ? formatEther(fuelBalance) : '0'}
                   </p>
                 </div>
               </div>
@@ -139,11 +139,11 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
 
             {gem1Cost > 0n && (
               <div className="flex justify-between items-center glass-card p-2 bg-gray-800/30">
-                <span className="text-xs text-blue-400">蓝宝石</span>
+                <span className="text-xs text-blue-400">Sapphire</span>
                 <div className="text-right">
                   <p className="text-sm text-white font-bold">{gem1Cost.toString()}</p>
                   <p className={`text-xs ${balances.sapphire >= gem1Cost ? 'text-green-400' : 'text-red-400'}`}>
-                    余额: {balances.sapphire.toString()}
+                    Balance: {balances.sapphire.toString()}
                   </p>
                 </div>
               </div>
@@ -151,11 +151,11 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
 
             {gem2Cost > 0n && (
               <div className="flex justify-between items-center glass-card p-2 bg-gray-800/30">
-                <span className="text-xs text-orange-400">太阳石</span>
+                <span className="text-xs text-orange-400">Sunstone</span>
                 <div className="text-right">
                   <p className="text-sm text-white font-bold">{gem2Cost.toString()}</p>
                   <p className={`text-xs ${balances.sunstone >= gem2Cost ? 'text-green-400' : 'text-red-400'}`}>
-                    余额: {balances.sunstone.toString()}
+                    Balance: {balances.sunstone.toString()}
                   </p>
                 </div>
               </div>
@@ -163,11 +163,11 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
 
             {gem3Cost > 0n && (
               <div className="flex justify-between items-center glass-card p-2 bg-gray-800/30">
-                <span className="text-xs text-purple-400">锂矿石</span>
+                <span className="text-xs text-purple-400">Lithium</span>
                 <div className="text-right">
                   <p className="text-sm text-white font-bold">{gem3Cost.toString()}</p>
                   <p className={`text-xs ${balances.lithium >= gem3Cost ? 'text-green-400' : 'text-red-400'}`}>
-                    余额: {balances.lithium.toString()}
+                    Balance: {balances.lithium.toString()}
                   </p>
                 </div>
               </div>
@@ -177,7 +177,7 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
           {(needsFuelApproval || needsGemsApproval) && (
             <div className="mt-3 p-2 bg-yellow-500/20 rounded-lg">
               <p className="text-xs text-yellow-400">
-                ⚠️ 需要批准 {needsFuelApproval ? 'FUEL' : ''} {needsFuelApproval && needsGemsApproval ? '和' : ''} {needsGemsApproval ? '宝石' : ''} 使用权限
+                ⚠️ Need approval for {needsFuelApproval ? 'FUEL' : ''} {needsFuelApproval && needsGemsApproval ? 'and' : ''} {needsGemsApproval ? 'gems' : ''} usage permissions
               </p>
             </div>
           )}
@@ -189,7 +189,7 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
             disabled={isUpgrading}
             className="flex-1 btn-secondary text-sm py-2"
           >
-            取消
+            Cancel
           </button>
           <button
             onClick={handleUpgrade}
@@ -197,9 +197,9 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
             className="flex-1 btn-primary text-sm py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 disabled:from-gray-600 disabled:to-gray-700"
           >
             {isUpgrading ? (
-              step === 'approving' ? '批准中...' : '升级中...'
+              step === 'approving' ? 'Approving...' : 'Upgrading...'
             ) : (
-              '确认升级'
+              'Confirm Upgrade'
             )}
           </button>
         </div>

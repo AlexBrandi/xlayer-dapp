@@ -11,21 +11,21 @@ interface ShipCardProps {
 
 // Map image IDs to ship names (for display purposes)
 const SHIP_NAMES: Record<number, string> = {
-  0: '亚伯号',
-  1: '冒险者号',
-  2: '切诺亚号',
-  3: '卡佩奇号',
-  4: '卡文迪号',
-  5: '哈布斯号',
-  6: '嘉百列号',
-  7: '坎贝尔号',
-  8: '惊恐号',
-  9: '摩尔号',
-  10: '敦刻尔克号',
-  11: '玛丽亚号',
-  12: '珍珠号',
-  13: '莱特号',
-  14: '雷德尔号'
+  0: 'Abel',
+  1: 'Adventurer',
+  2: 'Chenoa',
+  3: 'Capech',
+  4: 'Cavendi',
+  5: 'Hobbs',
+  6: 'Gabriel',
+  7: 'Campbell',
+  8: 'Terror',
+  9: 'Moore',
+  10: 'Dunkirk',
+  11: 'Maria',
+  12: 'Pearl',
+  13: 'Wright',
+  14: 'Redel'
 }
 
 function getShipImage(imageId: number): string {
@@ -120,7 +120,7 @@ export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
         {shipInfo?.isStaked && (
           <span className="flex items-center gap-1 text-green-400 text-sm">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            质押中
+            Staking
           </span>
         )}
       </div>
@@ -143,7 +143,7 @@ export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
       {/* Rewards */}
       {hasRewards && (
         <div className="mb-3 p-2 bg-gray-800/50 rounded-lg">
-          <p className="text-xs text-gray-400 mb-1">待领取奖励</p>
+          <p className="text-xs text-gray-400 mb-1">Pending Rewards</p>
           <p className="text-sm text-green-400 font-bold">
             {pendingFormatted} FUEL
           </p>
@@ -160,13 +160,13 @@ export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
               disabled={isStaking || isApproving}
               className="btn-primary text-xs py-2"
             >
-              {isApproving ? '正在授权...' : isStaking ? '正在质押...' : '质押战舰'}
+              {isApproving ? 'Approving...' : isStaking ? 'Staking...' : 'Stake Ship'}
             </button>
             <button
               disabled
               className="btn-secondary text-xs py-2 opacity-50 cursor-not-allowed"
             >
-              未质押
+              Not Staked
             </button>
           </>
         ) : (
@@ -176,7 +176,7 @@ export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
               disabled={isUnstaking}
               className="btn-secondary text-xs py-2"
             >
-              {isUnstaking ? '正在取消质押...' : '取消质押'}
+              {isUnstaking ? 'Unstaking...' : 'Unstake'}
             </button>
             {hasRewards && (
               <button
@@ -184,7 +184,7 @@ export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
                 disabled={isClaiming}
                 className="btn-primary text-xs py-2 bg-green-600 hover:bg-green-700"
               >
-                {isClaiming ? '正在领取...' : '领取'}
+                {isClaiming ? 'Claiming...' : 'Claim'}
               </button>
             )}
           </>
@@ -195,7 +195,7 @@ export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
             onClick={handleUpgradeClick}
             className="btn-secondary text-xs py-2 col-span-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500"
           >
-            升级到等级 {(shipInfo?.level || 1) + 1}
+            Upgrade to Level {(shipInfo?.level || 1) + 1}
           </button>
         )}
       </div>

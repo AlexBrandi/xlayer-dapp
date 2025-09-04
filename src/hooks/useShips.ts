@@ -16,7 +16,7 @@ export function useShips() {
   const { data: userImageIds } = useTokensOfOwnerImageIds()
   const { data: userStatus } = useUserShipStatus()
 
-  // 调试信息已隐藏
+  // Debug info hidden
   // console.log('useShips Debug:', {
   //   userTokens,
   //   userImageIds,
