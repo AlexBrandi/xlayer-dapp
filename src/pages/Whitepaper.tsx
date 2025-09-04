@@ -329,19 +329,37 @@ export function Whitepaper() {
               <div className="glass-card p-6 bg-gray-800/30">
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="text-center p-4 border border-blue-500/30 rounded-lg bg-blue-500/10">
-                    <div className="text-2xl mb-2">💙</div>
+                    <div className="mb-4">
+                      <img 
+                        src="/images/sapphire.png" 
+                        alt="Sapphire"
+                        className="w-16 h-16 mx-auto object-contain drop-shadow-lg"
+                      />
+                    </div>
                     <h3 className="text-lg font-bold text-blue-400 mb-2">Sapphire</h3>
                     <p className="text-gray-300 text-sm">Rare blue gems essential for ship upgrades. The primary resource needed for most upgrade levels.</p>
                   </div>
 
                   <div className="text-center p-4 border border-orange-500/30 rounded-lg bg-orange-500/10">
-                    <div className="text-2xl mb-2">🧡</div>
+                    <div className="mb-4">
+                      <img 
+                        src="/images/sunstone.png" 
+                        alt="Sunstone"
+                        className="w-16 h-16 mx-auto object-contain drop-shadow-lg"
+                      />
+                    </div>
                     <h3 className="text-lg font-bold text-orange-400 mb-2">Sunstone</h3>
                     <p className="text-gray-300 text-sm">Radiant gems that power ship systems. Required in moderate quantities for upgrades.</p>
                   </div>
 
                   <div className="text-center p-4 border border-purple-500/30 rounded-lg bg-purple-500/10">
-                    <div className="text-2xl mb-2">💜</div>
+                    <div className="mb-4">
+                      <img 
+                        src="/images/lithium.png" 
+                        alt="Lithium"
+                        className="w-16 h-16 mx-auto object-contain drop-shadow-lg"
+                      />
+                    </div>
                     <h3 className="text-lg font-bold text-purple-400 mb-2">Lithium</h3>
                     <p className="text-gray-300 text-sm">Essential minerals for advanced upgrades. Rare resource needed for higher-level ships.</p>
                   </div>
