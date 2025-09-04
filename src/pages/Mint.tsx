@@ -73,7 +73,7 @@ export function Mint() {
 
   // Check for new tokens after successful mint
   useEffect(() => {
-    if (isSuccess && currentTokens && preMintTokenIds.length > 0) {
+    if (isSuccess && currentTokens) {
       const currentTokensArray = currentTokens as bigint[]
       const newTokens = currentTokensArray.filter(tokenId => !preMintTokenIds.includes(tokenId))
       
@@ -219,28 +219,28 @@ export function Mint() {
                       <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
                       <span className="text-sm text-gray-400">Common</span>
                     </div>
-                    <span className="text-sm text-gray-300">60%</span>
+                    <span className="text-sm text-gray-300">75%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                       <span className="text-sm text-blue-400">Rare</span>
                     </div>
-                    <span className="text-sm text-gray-300">25%</span>
+                    <span className="text-sm text-gray-300">24%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
                       <span className="text-sm text-purple-400">Epic</span>
                     </div>
-                    <span className="text-sm text-gray-300">12%</span>
+                    <span className="text-sm text-gray-300">20%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
                       <span className="text-sm text-orange-400">Legendary</span>
                     </div>
-                    <span className="text-sm text-gray-300">3%</span>
+                    <span className="text-sm text-gray-300">2%</span>
                   </div>
                 </div>
               </div>
