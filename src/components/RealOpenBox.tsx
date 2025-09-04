@@ -51,8 +51,6 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
   const [currentBox, setCurrentBox] = useState(0)
   const [isOpening, setIsOpening] = useState(false)
   const [revealedShip, setRevealedShip] = useState<RevealedShip | null>(null)
-  const [allRevealedShips, setAllRevealedShips] = useState<RevealedShip[]>([])
-  const [showResults, setShowResults] = useState(false)
   const navigate = useNavigate()
   
   const { useShipDetails } = useShips()
@@ -76,7 +74,6 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
       }
       
       setRevealedShip(revealed)
-      setAllRevealedShips(prev => [...prev, revealed])
       setIsOpening(false)
     }, 2000)
   }
@@ -92,12 +89,6 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
     }
   }
 
-  const handleViewFleet = () => {
-    // Close current modal
-    onComplete()
-    // Navigate to homepage to view fleet
-    navigate('/')
-  }
 
   // Auto-start first box
   useEffect(() => {
@@ -105,56 +96,6 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
       handleOpenBox()
     }
   }, [shipDetails, currentBox])
-
-  if (showResults) {
-    return (
-      <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-        <div className="glass-card p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2">🎉 Unboxing Complete!</h2>
-            <p className="text-gray-400 text-sm">You opened {tokenIds.length} ships total</p>
-          </div>
-
-          <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mb-6 max-h-60 overflow-y-auto pr-2">
-            {allRevealedShips.map((revealed, index) => (
-              <div key={index} className="glass-card p-3 text-center">
-                <img 
-                  src={`/images/${revealed.ship.id + 1}.png`}
-                  alt={revealed.ship.name}
-                  className="w-10 h-10 mx-auto mb-2 object-contain"
-                />
-                <h3 className="font-bold text-white text-xs">{revealed.ship.name}</h3>
-                <p className={`text-xs ${revealed.ship.rarityColor}`}>{revealed.ship.rarity}</p>
-                <p className="text-xs text-cyan-400">Lv.{revealed.level}</p>
-                <p className="text-xs text-gray-500">#{revealed.tokenId.toString().slice(-3)}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate('/mint')}
-              className="flex-1 h-12 rounded-xl text-white font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl bg-gray-600 hover:bg-gray-500"
-            >
-              <span className="text-lg">🔄</span>
-              <span>Continue Minting</span>
-            </button>
-            <button
-              onClick={handleViewFleet}
-              className="flex-1 h-12 rounded-xl text-white font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl"
-              style={{
-                background: 'linear-gradient(to right, #ff6b35, #e55527)',
-                boxShadow: '0 15px 30px -8px rgba(255, 107, 53, 0.25)'
-              }}
-            >
-              <span className="text-lg">🚀</span>
-              <span>View Fleet</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   if (!shipDetails) {
     return (

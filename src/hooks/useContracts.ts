@@ -458,16 +458,14 @@ export function useContracts() {
 
     const claim = async (tokenId: bigint) => {
       try {
-        const result = await writeContract({
+        await writeContract({
           address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
           abi: GAME_ABI,
           functionName: 'claim',
           args: [tokenId],
         })
-        // Wait for transaction to be confirmed before showing success
-        if (result) {
-          toast.success('Rewards claimed!')
-        }
+        // Show success message after transaction is submitted
+        toast.success('Rewards claimed!')
       } catch (error: any) {
         toast.error(error.message || 'Claim failed')
       }
@@ -475,16 +473,14 @@ export function useContracts() {
 
     const claimBatch = async (tokenIds: bigint[]) => {
       try {
-        const result = await writeContract({
+        await writeContract({
           address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
           abi: GAME_ABI,
           functionName: 'claimBatch',
           args: [tokenIds],
         })
-        // Wait for transaction to be confirmed before showing success
-        if (result) {
-          toast.success('All rewards claimed!')
-        }
+        // Show success message after transaction is submitted
+        toast.success('All rewards claimed!')
       } catch (error: any) {
         toast.error(error.message || 'Batch claim failed')
       }
@@ -492,15 +488,13 @@ export function useContracts() {
 
     const claimAll = async () => {
       try {
-        const result = await writeContract({
+        await writeContract({
           address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
           abi: GAME_ABI,
           functionName: 'claimAllStakedRewards',
         })
-        // Wait for transaction to be confirmed before showing success
-        if (result) {
-          toast.success('All staked rewards claimed!')
-        }
+        // Show success message after transaction is submitted
+        toast.success('All staked rewards claimed!')
       } catch (error: any) {
         toast.error(error.message || 'Claim all failed')
       }
