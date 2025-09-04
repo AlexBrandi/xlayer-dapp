@@ -183,7 +183,7 @@ export function Market() {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-3 text-gray-300">Quantity</label>
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center justify-center gap-4 py-4">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className="w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all flex items-center justify-center text-xl font-bold"
@@ -194,10 +194,11 @@ export function Market() {
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-48 h-12 bg-gray-800 border border-gray-600 rounded-xl text-center text-white font-bold text-xl focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                    className="h-12 bg-gray-800 border border-gray-600 rounded-xl text-center text-white font-bold text-xl focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
                     style={{
                       appearance: 'textfield',
-                      MozAppearance: 'textfield'
+                      MozAppearance: 'textfield',
+                      width: '280px'
                     }}
                     min={1}
                   />

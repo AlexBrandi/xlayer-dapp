@@ -34,14 +34,23 @@ export function Mint() {
   const [preMintTokenIds, setPreMintTokenIds] = useState<bigint[]>([])
   const [showOpenBox, setShowOpenBox] = useState(false)
   const [newlyMintedTokens, setNewlyMintedTokens] = useState<bigint[]>([])
-  const { useMintShip, useMintPrice, useFuelBalance, useTokensOfOwner } = useContracts()
+  const { useMintShip, useMintPrice, useTotalSupply, useFuelBalance, useTokensOfOwner } = useContracts()
   const { mint, isPending, isSuccess } = useMintShip()
   const { data: mintPrice } = useMintPrice()
+  const { data: totalSupply } = useTotalSupply()
   const { data: fuelBalance } = useFuelBalance()
   const { data: currentTokens, refetch: refetchTokens } = useTokensOfOwner()
 
   const pricePerShip = mintPrice || 0n
   const totalCost = pricePerShip * BigInt(quantity)
+
+  // Debug total supply
+  console.log('Total Supply Debug:', {
+    totalSupply,
+    totalSupplyType: typeof totalSupply,
+    totalSupplyString: totalSupply?.toString(),
+    totalMinted: totalSupply ? Number(totalSupply) : 0
+  })
 
   // Track tokens before minting
   useEffect(() => {
@@ -244,15 +253,15 @@ export function Mint() {
               <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <span className="text-2xl">⚙️</span>
-                <h2 className="text-xl font-bold text-white">Mint Control</h2>
+                <h2 className="text-xl font-bold text-white">Mystery Ship Forge</h2>
               </div>
               
               <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-2xl shadow-orange-500/30">
-                <span className="text-3xl">🏭</span>
+                {/* <span className="text-3xl">🏭</span> */}
               </div>
               
-              <h3 className="text-xl font-bold text-white mb-3">Mystery Ship Forge</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">Each mint will randomly give you a ship<br/>Rarity depends entirely on luck!</p>
+              {/* <h3 className="text-xl font-bold text-white mb-3">Mystery Ship Forge</h3> */}
+              {/* <p className="text-sm text-gray-400 leading-relaxed">Each mint will randomly give you a ship<br/>Rarity depends entirely on luck!</p> */}
             </div>
 
             {/* Cost details */}
@@ -296,10 +305,11 @@ export function Mint() {
                   type="number"
                   value={quantity}
                   onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
-                  className="w-32 h-12 bg-gray-800 border border-gray-600 rounded-xl text-center text-white font-bold text-xl focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+                  className="h-12 bg-gray-800 border border-gray-600 rounded-xl text-center text-white font-bold text-xl focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
                   style={{
                     appearance: 'textfield',
-                    MozAppearance: 'textfield'
+                    MozAppearance: 'textfield',
+                    width: '200px'
                   }}
                   min={1}
                   max={MAX_MINT}
@@ -313,7 +323,13 @@ export function Mint() {
                 </button>
               </div>
               
-             
+              {/* Supply progress */}
+              <div className="mt-4 text-center">
+                <div className="text-2xl font-bold text-cyan-400 mb-2">
+                  {totalSupply ? Number(totalSupply).toString() : '0'} / 10,000
+                </div>
+                <div className="text-sm text-gray-400">Ships Minted</div>
+              </div>
             </div>
 
             {/* Mysterious ship building button */}

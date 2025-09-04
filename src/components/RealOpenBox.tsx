@@ -86,7 +86,9 @@ export function RealOpenBox({ tokenIds, onComplete }: RealOpenBoxProps) {
       setCurrentBox(currentBox + 1)
       setRevealedShip(null)
     } else {
-      setShowResults(true)
+      // Directly navigate to homepage instead of showing results
+      onComplete()
+      navigate('/')
     }
   }
 

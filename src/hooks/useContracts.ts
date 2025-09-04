@@ -71,6 +71,14 @@ export function useContracts() {
     })
   }
 
+  const useTotalSupply = () => {
+    return useReadContract({
+      address: CONTRACT_ADDRESSES.SHIP_NFT,
+      abi: SHIP_ABI,
+      functionName: 'totalSupply',
+    })
+  }
+
   const useTokensOfOwner = () => {
     const result = useReadContract({
       address: CONTRACT_ADDRESSES.SHIP_NFT,
@@ -553,6 +561,7 @@ export function useContracts() {
     // Ship NFT
     useShipBalance,
     useMintPrice,
+    useTotalSupply,
     useTokensOfOwner,
     useTokensOfOwnerImageIds,
     useShipApproval,

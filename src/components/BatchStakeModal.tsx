@@ -74,7 +74,7 @@ export function BatchStakeModal({ tokenIds, onClose }: BatchStakeModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className="glass-card p-6 max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+      <div className="glass-card p-6 w-[50vw] max-w-2xl overflow-hidden relative" style={{ height: '500px' }}>
         <h2 className="text-xl font-bold text-white mb-4 text-center">
           Batch Stake Ships
         </h2>
@@ -99,7 +99,7 @@ export function BatchStakeModal({ tokenIds, onClose }: BatchStakeModalProps) {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto mb-4 pr-2">
+        <div className="overflow-y-auto mb-16 pr-2" style={{ maxHeight: '280px' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {tokenIds.map((tokenId) => {
               const isSelected = selectedTokens.includes(tokenId)
@@ -157,7 +157,7 @@ export function BatchStakeModal({ tokenIds, onClose }: BatchStakeModalProps) {
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="absolute bottom-6 left-6 right-6 flex gap-3">
           <button
             onClick={onClose}
             disabled={isStaking}
