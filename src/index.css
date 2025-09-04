@@ -685,21 +685,21 @@ body {
 .btn {
   font-family: var(--font-primary);
   font-weight: 600;
-  padding: 12px 24px;
+  padding: 16px 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-size: 14px;
+  font-size: 15px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 44px;
+  gap: 10px;
+  min-height: 48px;
 }
 
 .btn::before {
@@ -722,6 +722,7 @@ body {
   background: var(--gradient-primary);
   color: #ffffff;
   cursor: pointer;
+  padding:6px;
   box-shadow: 
     0 4px 15px rgba(0, 255, 255, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -736,6 +737,7 @@ body {
 
 .btn-secondary {
   background: var(--gradient-secondary);
+  padding: 6px;
   color: #ffffff;
   box-shadow: 
     0 4px 15px rgba(16, 185, 129, 0.3),
