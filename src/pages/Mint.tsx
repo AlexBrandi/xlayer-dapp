@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { useNavigate } from 'react-router-dom'
 import { useContracts } from '../hooks/useContracts'
+import { RealOpenBox } from '../components/RealOpenBox'
 import { formatEther } from 'viem'
 import toast from 'react-hot-toast'
 
@@ -31,6 +32,8 @@ export function Mint() {
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState(1)
   const [preMintTokenIds, setPreMintTokenIds] = useState<bigint[]>([])
+  const [showOpenBox, setShowOpenBox] = useState(false)
+  const [newlyMintedTokens, setNewlyMintedTokens] = useState<bigint[]>([])
   const { useMintShip, useMintPrice, useFuelBalance, useTokensOfOwner } = useContracts()
   const { mint, isPending, isSuccess } = useMintShip()
   const { data: mintPrice } = useMintPrice()
@@ -68,10 +71,9 @@ export function Mint() {
       if (newTokens.length > 0) {
         console.log('New tokens minted:', newTokens)
         toast.success(`Successfully minted ${newTokens.length} ships!`)
-        // Navigate directly to homepage to view newly minted ships
-        setTimeout(() => {
-          navigate('/')
-        }, 1500)
+        // Show open box animation
+        setNewlyMintedTokens(newTokens)
+        setShowOpenBox(true)
       }
     }
   }, [isSuccess, currentTokens, preMintTokenIds])
@@ -95,6 +97,13 @@ export function Mint() {
   const handleQuantityChange = (value: number) => {
     const newQuantity = Math.max(1, Math.min(MAX_MINT, value))
     setQuantity(newQuantity)
+  }
+
+  const handleOpenBoxComplete = () => {
+    setShowOpenBox(false)
+    setNewlyMintedTokens([])
+    // Navigate to homepage to view newly minted ships
+    navigate('/')
   }
 
 
@@ -338,6 +347,13 @@ export function Mint() {
       </div>
     </div>
 
+      {/* Open Box Animation */}
+      {showOpenBox && newlyMintedTokens.length > 0 && (
+        <RealOpenBox
+          tokenIds={newlyMintedTokens}
+          onComplete={handleOpenBoxComplete}
+        />
+      )}
     </>
   )
 }
