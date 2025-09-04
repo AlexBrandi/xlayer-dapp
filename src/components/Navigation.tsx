@@ -63,8 +63,8 @@ export function Navigation() {
         <div className="container">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4 md:gap-8">
-              {/* Mobile Navigation - Always show for testing */}
-              <MobileNav />
+              {/* Mobile Navigation - Only show on mobile */}
+              {!isDesktop && <MobileNav />}
               
               {/* Desktop Title - Only show on desktop */}
               {isDesktop && (
