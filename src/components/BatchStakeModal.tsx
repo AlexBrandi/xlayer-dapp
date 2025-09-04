@@ -52,16 +52,13 @@ export function BatchStakeModal({ tokenIds, onClose }: BatchStakeModalProps) {
       
       // Check and approve
       if (!isApproved) {
-        toast.loading('Approving ships...')
         await approveAll()
-        toast.dismiss()
-        toast.success('Ships approved successfully')
       }
 
       // Batch staking
-      toast.loading(`Staking ${selectedTokens.length} ships...`)
       await stakeBatch(selectedTokens)
-      toast.dismiss()
+      
+      // Show success message only after everything is complete
       toast.success(`Successfully staked ${selectedTokens.length} ships!`)
       
       onClose()

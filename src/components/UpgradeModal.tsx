@@ -70,26 +70,20 @@ export function UpgradeModal({ tokenId, currentLevel, onClose, onSuccess }: Upgr
       // Approve FUEL
       if (needsFuelApproval && tokenCost > 0n) {
         setStep('approving')
-        toast.loading('Approving FUEL...')
         await approveFuel(tokenCost)
-        toast.dismiss()
-        toast.success('FUEL approved successfully')
       }
 
       // Approve gems
       if (needsGemsApproval) {
         setStep('approving')
-        toast.loading('Approving gems...')
         await approveGems()
-        toast.dismiss()
-        toast.success('Gems approved successfully')
       }
 
       // Execute upgrade
       setStep('upgrading')
-      toast.loading('Upgrading ship...')
       await upgrade(tokenId)
-      toast.dismiss()
+      
+      // Show success message only after everything is complete
       toast.success(`Ship upgraded to level ${currentLevel + 1}!`)
       
       onSuccess()

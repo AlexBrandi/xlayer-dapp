@@ -450,13 +450,16 @@ export function useContracts() {
 
     const claim = async (tokenId: bigint) => {
       try {
-        await writeContract({
+        const result = await writeContract({
           address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
           abi: GAME_ABI,
           functionName: 'claim',
           args: [tokenId],
         })
-        toast.success('Rewards claimed!')
+        // Wait for transaction to be confirmed before showing success
+        if (result) {
+          toast.success('Rewards claimed!')
+        }
       } catch (error: any) {
         toast.error(error.message || 'Claim failed')
       }
@@ -464,13 +467,16 @@ export function useContracts() {
 
     const claimBatch = async (tokenIds: bigint[]) => {
       try {
-        await writeContract({
+        const result = await writeContract({
           address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
           abi: GAME_ABI,
           functionName: 'claimBatch',
           args: [tokenIds],
         })
-        toast.success('All rewards claimed!')
+        // Wait for transaction to be confirmed before showing success
+        if (result) {
+          toast.success('All rewards claimed!')
+        }
       } catch (error: any) {
         toast.error(error.message || 'Batch claim failed')
       }
@@ -478,12 +484,15 @@ export function useContracts() {
 
     const claimAll = async () => {
       try {
-        await writeContract({
+        const result = await writeContract({
           address: CONTRACT_ADDRESSES.GAME_CONTROLLER,
           abi: GAME_ABI,
           functionName: 'claimAllStakedRewards',
         })
-        toast.success('All staked rewards claimed!')
+        // Wait for transaction to be confirmed before showing success
+        if (result) {
+          toast.success('All staked rewards claimed!')
+        }
       } catch (error: any) {
         toast.error(error.message || 'Claim all failed')
       }

@@ -70,17 +70,26 @@ export function Market() {
   const needsFuelApproval = fuelAllowance ? fuelAllowance < totalCost : true
 
   const handleBuy = async () => {
-    if (!canAfford[selectedGemLower]) {
-      toast.error('Insufficient FUEL balance')
-      return
-    }
+    try {
+      if (!canAfford[selectedGemLower]) {
+        toast.error('Insufficient FUEL balance')
+        return
+      }
 
-    if (needsFuelApproval) {
-      await approveFuel(totalCost * 2n) // Approve 2x for future purchases
-    }
+      if (needsFuelApproval) {
+        await approveFuel(totalCost * 2n) // Approve 2x for future purchases
+      }
 
-    await purchaseGems(selectedGem, quantity)
-    setQuantity(1)
+      await purchaseGems(selectedGem, quantity)
+      
+      // Show success message only after purchase is complete
+      const gemName = selectedGem === 'SAPPHIRE' ? 'Sapphire' : selectedGem === 'SUNSTONE' ? 'Sunstone' : 'Lithium'
+      toast.success(`Successfully purchased ${quantity} ${gemName}!`)
+      
+      setQuantity(1)
+    } catch (error: any) {
+      toast.error(error.message || 'Purchase failed')
+    }
   }
 
   if (!isConnected) {
