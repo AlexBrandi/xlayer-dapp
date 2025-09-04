@@ -1,3 +1,5 @@
+import { UpgradeRequirementsTable } from '../components/UpgradeRequirementsTable'
+
 export function Whitepaper() {
   return (
     <>
@@ -159,49 +161,7 @@ export function Whitepaper() {
               </h2>
               
               <div className="glass-card p-6 bg-gray-800/30">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-600">
-                        <th className="text-left py-3 text-gray-400">Level</th>
-                        <th className="text-left py-3 text-blue-400">Sapphire</th>
-                        <th className="text-left py-3 text-orange-400">Sunstone</th>
-                        <th className="text-left py-3 text-purple-400">Lithium</th>
-                        <th className="text-left py-3 text-green-400">FUEL Cost</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-sm">
-                      <tr className="border-b border-gray-700/50">
-                        <td className="py-3 text-cyan-400 font-bold">1 → 2</td>
-                        <td className="py-3 text-white">3</td>
-                        <td className="py-3 text-white">2</td>
-                        <td className="py-3 text-white">1</td>
-                        <td className="py-3 text-white">100 FUEL</td>
-                      </tr>
-                      <tr className="border-b border-gray-700/50">
-                        <td className="py-3 text-cyan-400 font-bold">2 → 3</td>
-                        <td className="py-3 text-white">5</td>
-                        <td className="py-3 text-white">3</td>
-                        <td className="py-3 text-white">2</td>
-                        <td className="py-3 text-white">250 FUEL</td>
-                      </tr>
-                      <tr className="border-b border-gray-700/50">
-                        <td className="py-3 text-cyan-400 font-bold">3 → 4</td>
-                        <td className="py-3 text-white">8</td>
-                        <td className="py-3 text-white">5</td>
-                        <td className="py-3 text-white">3</td>
-                        <td className="py-3 text-white">500 FUEL</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3 text-cyan-400 font-bold">4 → 5</td>
-                        <td className="py-3 text-white">12</td>
-                        <td className="py-3 text-white">8</td>
-                        <td className="py-3 text-white">5</td>
-                        <td className="py-3 text-white">1000 FUEL</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                <UpgradeRequirementsTable />
               </div>
             </section>
 

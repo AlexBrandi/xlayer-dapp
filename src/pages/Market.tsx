@@ -6,6 +6,7 @@ import { formatEther } from 'viem'
 import toast from 'react-hot-toast'
 import { GemType } from '../types'
 import { CONTRACT_ADDRESSES } from '../lib/config'
+import { UpgradeRequirementsTable } from '../components/UpgradeRequirementsTable'
 
 interface GemCard {
   id: keyof typeof GemType
@@ -323,24 +324,7 @@ export function Market() {
               <div>
                 <h3 className="text-sm font-semibold mb-3 text-cyan-400">Upgrade Requirements</h3>
                 <div className="glass-card p-4 bg-gray-800/30">
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Level 1 → 2:</span>
-                      <span className="text-white">3 Sapphire + 2 Sunstone + 1 Lithium</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Level 2 → 3:</span>
-                      <span className="text-white">5 Sapphire + 3 Sunstone + 2 Lithium</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Level 3 → 4:</span>
-                      <span className="text-white">8 Sapphire + 5 Sunstone + 3 Lithium</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Level 4 → 5:</span>
-                      <span className="text-white">12 Sapphire + 8 Sunstone + 5 Lithium</span>
-                    </div>
-                  </div>
+                  <UpgradeRequirementsTable compact />
                 </div>
               </div>
 
