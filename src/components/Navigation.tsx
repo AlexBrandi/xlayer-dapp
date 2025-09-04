@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { useContracts } from '../hooks/useContracts'
 import { CHAIN_ID } from '../lib/config'
 import { useMediaQuery } from '../hooks/useMediaQuery'
+import { MobileNav } from './MobileNav'
 
 const formatAddress = (address: string) => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`
@@ -19,12 +20,10 @@ const navItems = [
 ]
 
 export function Navigation() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
   const isDesktop = useMediaQuery('(min-width: 768px)')
   
-  // Debug
-  console.log('Navigation Debug:', { isDesktop, isMobileMenuOpen })
+  console.log('Navigation Debug - isDesktop:', isDesktop, 'window width:', typeof window !== 'undefined' ? window.innerWidth : 'SSR')
   const { address, isConnected } = useAccount()
   const { connect, connectors } = useConnect()
   const { disconnect } = useDisconnect()
@@ -42,12 +41,6 @@ export function Navigation() {
     }
   }, [isConnected, chainId])
 
-  // Close mobile menu when switching to desktop
-  useEffect(() => {
-    if (isDesktop) {
-      setIsMobileMenuOpen(false)
-    }
-  }, [isDesktop])
 
   const handleConnect = async () => {
     const connector = connectors[0]
@@ -65,193 +58,96 @@ export function Navigation() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b">
-      <div className="container">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-4 md:gap-8">
-            {/* Mobile Dropdown Button - Only show on mobile */}
-            {!isDesktop && (
-              <button
-                onClick={() => {
-                  console.log('Dropdown clicked, current state:', isMobileMenuOpen)
-                  setIsMobileMenuOpen(!isMobileMenuOpen)
-                }}
-                className="flex items-center gap-2 text-lg font-medium text-gray-300"
-              >
-                <span>{navItems.find(item => item.path === location.pathname)?.label || 'Menu'}</span>
-                <svg 
-                  className={`w-4 h-4 transition-transform ${isMobileMenuOpen ? 'rotate-180' : ''}`} 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            )}
-            
-            {/* Desktop Title - Only show on desktop */}
-            {isDesktop && (
-              <h1 className="text-xl font-bold text-blue-400">Star Fleet</h1>
-            )}
-            
-            {/* Desktop Navigation - Only show on desktop */}
-            {isDesktop && (
-              <div className="flex items-center gap-6">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
-                >
-                  {item.label}
-                </Link>
-              ))}
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b">
+        <div className="container">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-4 md:gap-8">
+              {/* Mobile Navigation - Always show for testing */}
+              <MobileNav />
               
-              <a
-                href="https://x.com/ShipWarBnb"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="nav-link flex items-center gap-2 hover:text-blue-400 transition-colors"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                Twitter
-              </a>
-            </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2 md:gap-4">
-            {/* Chain Switch Button - Hidden on mobile */}
-            {isConnected && chainId !== CHAIN_ID && (
-              <button
-                onClick={handleSwitchChain}
-                className="hidden md:block px-3 py-2 bg-orange-600 text-white text-sm rounded-lg transition-colors"
-                style={{backgroundColor: 'var(--orange-600)'}}
-              >
-                Switch to BNB Chain
-              </button>
-            )}
-
-            {/* FUEL Balance - Hidden on mobile */}
-            {isDesktop && isConnected && fuelBalance !== undefined && (
-              <div className="text-right">
-                <p className="text-xs text-gray-400">FUEL Balance</p>
-                <p className="text-sm font-bold">{formatEther(fuelBalance as bigint)}</p>
-              </div>
-            )}
-
-            {/* Wallet Connection */}
-            {!isConnected ? (
-              <button onClick={handleConnect} className="btn-primary text-sm md:text-base px-3 md:px-6">
-                <span className="hidden sm:inline">Connect Wallet</span>
-                <span className="sm:hidden">Connect</span>
-              </button>
-            ) : (
-              <div className="flex items-center gap-2 md:gap-3">
-                {isDesktop && (
-                  <div className="text-right">
-                    <p className="text-xs text-gray-400">Connected</p>
-                    <p className="text-sm font-mono">{formatAddress(address!)}</p>
-                  </div>
-                )}
-                {!isDesktop && (
-                  <div className="text-right">
-                    <p className="text-xs font-mono">{formatAddress(address!)}</p>
-                  </div>
-                )}
-                <button onClick={() => disconnect()} className="btn-secondary text-xs md:text-sm px-2 md:px-4">
-                  <span className="hidden sm:inline">Disconnect</span>
-                  <span className="sm:hidden">Exit</span>
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      
-      {/* Mobile Dropdown Menu - Outside container for full width */}
-      <div style={{
-        display: (!isDesktop && isMobileMenuOpen) ? 'block' : 'none',
-        position: 'absolute',
-        top: '64px',
-        left: 0,
-        right: 0,
-        zIndex: 999,
-        backgroundColor: 'rgba(17, 24, 39, 0.98)',
-        borderBottom: '1px solid rgba(156, 163, 175, 0.2)',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
-      }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
-          <div style={{ padding: '1rem 0' }}>
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                style={{
-                  display: 'block',
-                  padding: '12px 16px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  color: location.pathname === item.path ? '#60a5fa' : '#d1d5db',
-                  backgroundColor: location.pathname === item.path ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
-                  borderLeft: location.pathname === item.path ? '4px solid #60a5fa' : '4px solid transparent',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s'
-                }}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-                
-            {/* Twitter Link */}
-            <a
-              href="https://x.com/ShipWarBnb"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 16px',
-                fontSize: '14px',
-                fontWeight: '500',
-                color: '#d1d5db',
-                backgroundColor: 'transparent',
-                borderLeft: '4px solid transparent',
-                textDecoration: 'none',
-                transition: 'all 0.2s'
-              }}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <svg style={{ width: '16px', height: '16px' }} fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-              Twitter
-            </a>
-                
-                {/* Mobile-only info */}
-                {isConnected && chainId !== CHAIN_ID && (
-                  <div className="border-t border-gray-600/30 pt-3 mt-3 px-4">
-                    {/* Chain Switch for Mobile */}
-                    <button
-                      onClick={() => {
-                        handleSwitchChain()
-                        setIsMobileMenuOpen(false)
-                      }}
-                      className="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition-colors"
-                      style={{backgroundColor: 'var(--orange-600)'}}
+              {/* Desktop Title - Only show on desktop */}
+              {isDesktop && (
+                <h1 className="text-xl font-bold text-blue-400">Star Fleet</h1>
+              )}
+              
+              {/* Desktop Navigation - Only show on desktop */}
+              {isDesktop && (
+                <div className="flex items-center gap-6">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
                     >
-                      Switch to BNB Chain
-                    </button>
-                  </div>
-                )}
+                      {item.label}
+                    </Link>
+                  ))}
+                  
+                  <a
+                    href="https://x.com/ShipWarBnb"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="nav-link flex items-center gap-2 hover:text-blue-400 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    Twitter
+                  </a>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 md:gap-4">
+              {/* Chain Switch Button - Hidden on mobile */}
+              {isConnected && chainId !== CHAIN_ID && (
+                <button
+                  onClick={handleSwitchChain}
+                  className="hidden md:block px-3 py-2 bg-orange-600 text-white text-sm rounded-lg transition-colors"
+                  style={{backgroundColor: 'var(--orange-600)'}}
+                >
+                  Switch to BNB Chain
+                </button>
+              )}
+
+              {/* FUEL Balance - Hidden on mobile */}
+              {isDesktop && isConnected && fuelBalance !== undefined && (
+                <div className="text-right">
+                  <p className="text-xs text-gray-400">FUEL Balance</p>
+                  <p className="text-sm font-bold">{formatEther(fuelBalance as bigint)}</p>
+                </div>
+              )}
+
+              {/* Wallet Connection */}
+              {!isConnected ? (
+                <button onClick={handleConnect} className="btn-primary text-sm md:text-base px-3 md:px-6">
+                  <span className="hidden sm:inline">Connect Wallet</span>
+                  <span className="sm:hidden">Connect</span>
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 md:gap-3">
+                  {isDesktop && (
+                    <div className="text-right">
+                      <p className="text-xs text-gray-400">Connected</p>
+                      <p className="text-sm font-mono">{formatAddress(address!)}</p>
+                    </div>
+                  )}
+                  {!isDesktop && (
+                    <div className="text-right">
+                      <p className="text-xs font-mono">{formatAddress(address!)}</p>
+                    </div>
+                  )}
+                  <button onClick={() => disconnect()} className="btn-secondary text-xs md:text-sm px-2 md:px-4">
+                    <span className="hidden sm:inline">Disconnect</span>
+                    <span className="sm:hidden">Exit</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   )
 }
