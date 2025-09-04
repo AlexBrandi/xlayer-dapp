@@ -6,7 +6,7 @@ import { RealOpenBox } from '../components/RealOpenBox'
 import { formatEther } from 'viem'
 import toast from 'react-hot-toast'
 
-const MAX_MINT = 10
+const MAX_MINT = 100
 
 // Ship list data
 const SHIP_LIST = [
