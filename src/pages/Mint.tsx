@@ -331,15 +331,6 @@ export function Mint() {
               <span className="text-2xl">⚡</span>
             </button>
 
-              {/* Current FUEL balance */}
-              <div className="mt-auto text-center">
-                <div className="glass-card p-4 bg-green-500/10 border border-green-500/20">
-                  <div className="text-gray-400 text-sm mb-1">Current FUEL Balance</div>
-                  <div className="text-green-400 font-bold text-xl">
-                    {fuelBalance ? formatEther(fuelBalance as bigint) : '0.00'}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
