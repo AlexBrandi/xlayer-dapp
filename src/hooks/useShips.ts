@@ -81,11 +81,14 @@ export function useShips() {
       
       return tokens.map((tokenId, index) => {
         const isStaked = stakedShips.includes(tokenId)
+        // For now, default level to 1. We can improve this later.
+        const level = 1
         // console.log(`Ship ${tokenId.toString()}: isStaked=${isStaked}`)
         return {
           tokenId,
           imageId: imageIds[index] || 0,
           isStaked,
+          level,
         }
       })
     }, [userTokens, userImageIds, stakedShips])

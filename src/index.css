@@ -1229,21 +1229,36 @@ body {
 
 /* Responsive Breakpoints */
 @media (max-width: 767px) {
-  .md\:hidden { display: none; }
   .container { padding: 0 var(--space-md); }
   .ship-image { height: 100px; }
   .gem-image { width: 32px; height: 32px; }
+  /* Force hide elements on mobile */
+  .hidden { display: none !important; }
+  .md\:block { display: none !important; }
+  .md\:flex { display: none !important; }
 }
 
 @media (min-width: 640px) {
   .sm\:px-6 { padding-left: var(--space-lg); padding-right: var(--space-lg); }
   .sm\:flex-row { flex-direction: row; }
+  .sm\:inline { display: inline; }
+  .sm\:hidden { display: none; }
 }
 
 @media (min-width: 768px) {
+  .md\:hidden { display: none !important; }
+  .md\:block { display: block !important; }
+  .md\:flex { display: flex !important; }
   .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
   .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-  .md\:flex { display: flex; }
+  .md\:gap-4 { gap: 1rem; }
+  .md\:gap-8 { gap: 2rem; }
+  .md\:text-xl { font-size: 1.25rem; }
+  .md\:text-base { font-size: 1rem; }
+  .md\:text-sm { font-size: 0.875rem; }
+  .md\:px-4 { padding-left: 1rem; padding-right: 1rem; }
+  .md\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .md\:gap-3 { gap: 0.75rem; }
 }
 
 @media (min-width: 1024px) {
