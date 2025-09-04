@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi'
 import { formatEther } from 'viem'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useContracts } from '../hooks/useContracts'
 import { CHAIN_ID } from '../lib/config'
