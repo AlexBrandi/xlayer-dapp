@@ -13,7 +13,7 @@ const DEFAULT_REQUIREMENTS = {
 }
 
 export function UpgradeRequirementsTable({ compact = false }: Props) {
-  const { level1to2, level2to3, level3to4, level4to5, isLoading } = useUpgradeRequirements()
+  const { level1to2, level2to3, level3to4, level4to5 } = useUpgradeRequirements()
 
   // Use contract data if available, otherwise use defaults
   const requirements = {
