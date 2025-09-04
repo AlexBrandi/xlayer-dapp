@@ -18,7 +18,7 @@ const SHIP_LIST = [
   { id: 5, name: 'Hobbs', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
   { id: 6, name: 'Gabriel', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
   { id: 7, name: 'Campbell', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
-  { id: 8, name: 'Terror', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
+  { id: 8, name: 'Terror', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
   { id: 9, name: 'Moore', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
   { id: 10, name: 'Dunkirk', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
   { id: 11, name: 'Maria', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
@@ -226,14 +226,14 @@ export function Mint() {
                       <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                       <span className="text-sm text-blue-400">Rare</span>
                     </div>
-                    <span className="text-sm text-gray-300">24%</span>
+                    <span className="text-sm text-gray-300">32%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
                       <span className="text-sm text-purple-400">Epic</span>
                     </div>
-                    <span className="text-sm text-gray-300">20%</span>
+                    <span className="text-sm text-gray-300">12%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

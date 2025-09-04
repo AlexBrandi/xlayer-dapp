@@ -249,19 +249,19 @@ export function Whitepaper() {
                   <div className="space-y-3 text-sm">
                     <div>
                       <p className="text-gray-400">Ship NFT Contract:</p>
-                      <p className="text-white font-mono text-xs break-all">0x41aA73453681fa67D42F35162C20998C60e4459F</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400">FUEL Token Contract:</p>
                       <p className="text-white font-mono text-xs break-all">0xe80312d9F235ac2f816D5f63C4f06941F2c0d687</p>
                     </div>
                     <div>
+                      <p className="text-gray-400">FUEL Token Contract:</p>
+                      <p className="text-white font-mono text-xs break-all">0x41aA73453681fa67D42F35162C20998C60e4459F</p>
+                    </div>
+                    <div>
                       <p className="text-gray-400">Gem NFT Contract:</p>
-                      <p className="text-white font-mono text-xs break-all">0xB2971910A111412043318D1C31C66c5610eFf441</p>
+                      <p className="text-white font-mono text-xs break-all">0x152De2380eBb164173E855D2feFe09d98dC965dc</p>
                     </div>
                     <div>
                       <p className="text-gray-400">Game Controller:</p>
-                      <p className="text-white font-mono text-xs break-all">0x958253CbAc08F33Fcb672eA8400f384a10fd737C</p>
+                      <p className="text-white font-mono text-xs break-all">0xC7616b62aFb1E9Edbd1aA4F932342db829E4e1Fc</p>
                     </div>
                   </div>
                 </div>

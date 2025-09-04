@@ -17,7 +17,7 @@ const SHIP_LIST = [
   { id: 5, name: 'Hobbs', rarity: 'Rare', rarityColor: 'text-blue-400' },
   { id: 6, name: 'Gabriel', rarity: 'Rare', rarityColor: 'text-blue-400' },
   { id: 7, name: 'Campbell', rarity: 'Rare', rarityColor: 'text-blue-400' },
-  { id: 8, name: 'Terror', rarity: 'Epic', rarityColor: 'text-purple-400' },
+  { id: 8, name: 'Terror', rarity: 'Rare', rarityColor: 'text-blue-400' },
   { id: 9, name: 'Moore', rarity: 'Epic', rarityColor: 'text-purple-400' },
   { id: 10, name: 'Dunkirk', rarity: 'Epic', rarityColor: 'text-purple-400' },
   { id: 11, name: 'Maria', rarity: 'Epic', rarityColor: 'text-purple-400' },

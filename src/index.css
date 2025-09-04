@@ -685,7 +685,7 @@ body {
 .btn {
   font-family: var(--font-primary);
   font-weight: 600;
-  padding: 8px 16px;
+  padding: 12px 24px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -694,12 +694,12 @@ body {
   overflow: hidden;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-size: 12px;
+  font-size: 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 36px;
+  gap: 8px;
+  min-height: 44px;
 }
 
 .btn::before {
@@ -721,6 +721,7 @@ body {
 .btn-primary {
   background: var(--gradient-primary);
   color: #ffffff;
+  cursor: pointer;
   box-shadow: 
     0 4px 15px rgba(0, 255, 255, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
