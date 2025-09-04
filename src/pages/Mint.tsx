@@ -14,15 +14,15 @@ const SHIP_LIST = [
   { id: 1, name: 'Adventurer', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
   { id: 2, name: 'Chenoa', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
   { id: 3, name: 'Capech', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
-  { id: 4, name: 'Cavendi', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
+  { id: 4, name: 'Cavendi', rarity: 'Common', probability: '15%', rarityColor: 'text-gray-400' },
   { id: 5, name: 'Hobbs', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
   { id: 6, name: 'Gabriel', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
   { id: 7, name: 'Campbell', rarity: 'Rare', probability: '8%', rarityColor: 'text-blue-400' },
   { id: 8, name: 'Terror', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
   { id: 9, name: 'Moore', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
   { id: 10, name: 'Dunkirk', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
-  { id: 11, name: 'Maria', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
-  { id: 12, name: 'Pearl', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
+  { id: 11, name: 'Maria', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
+  { id: 12, name: 'Pearl', rarity: 'Epic', probability: '4%', rarityColor: 'text-purple-400' },
   { id: 13, name: 'Wright', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
   { id: 14, name: 'Redel', rarity: 'Legendary', probability: '1%', rarityColor: 'text-orange-400' },
 ]
@@ -177,8 +177,8 @@ export function Mint() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-medium text-white text-sm">{ship.name}</span>
-                        <span className="text-xs font-mono bg-gray-700/50 px-1.5 py-0.5 rounded text-gray-300">{ship.probability}</span>
+                        <span className="font-medium text-white text-sm mr-3">{ship.name}</span>
+                        <span className="text-xs font-mono bg-gray-700/50 px-1.5 py-0.5 rounded text-gray-300 ml-auto">{ship.probability}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${ship.rarityColor} bg-gray-800/50`}>
