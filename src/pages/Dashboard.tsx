@@ -3,6 +3,7 @@ import { useAccount } from 'wagmi'
 import { Link } from 'react-router-dom'
 import { ShipCard } from '../components/ShipCard'
 import { BatchStakeModal } from '../components/BatchStakeModal'
+import { BattlePowerCard } from '../components/BattlePowerCard'
 // import { DebugPanel } from '../components/DebugPanel'
 import { formatEther } from 'viem'
 import { useShips } from '../hooks/useShips'
@@ -59,8 +60,16 @@ export function Dashboard() {
       {/* Debug Panel - hidden debug info */}
       {/* <DebugPanel /> */}
       
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      {/* Battle Power and Stats Overview */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6 mb-6">
+        {/* Battle Power Card - Takes 1 column on xl screens, full width on smaller */}
+        <div className="xl:col-span-1">
+          <BattlePowerCard />
+        </div>
+        
+        {/* Stats Overview - Takes 2 columns on xl screens, full width on smaller */}
+        <div className="xl:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
         {/* FUEL Balance */}
         <div className="glass-card p-4">
           <h3 className="text-xs text-gray-400 mb-1">FUEL Balance</h3>
@@ -112,6 +121,8 @@ export function Dashboard() {
               <p className="text-xs text-gray-500">Lithium</p>
               <p className="text-sm font-bold text-purple-400">{balances.lithium.toString()}</p>
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>

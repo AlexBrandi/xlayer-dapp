@@ -6,6 +6,7 @@ const navItems = [
   { path: '/', label: 'Dashboard' },
   { path: '/mint', label: 'Mint Ships' },
   { path: '/market', label: 'Gem Market' },
+  { path: '/battle-power', label: 'Battle Power' },
   { path: '/whitepaper', label: 'Whitepaper' },
 ]
 
@@ -119,38 +120,6 @@ export function MobileNav() {
                 </Link>
               ))}
               
-              <a
-                href="https://x.com/ShipWarBnb"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setIsOpen(false)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 16px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  color: '#d1d5db',
-                  backgroundColor: 'transparent',
-                  borderLeft: '4px solid transparent',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(55, 65, 81, 0.5)'
-                  e.currentTarget.style.color = '#fff'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent'
-                  e.currentTarget.style.color = '#d1d5db'
-                }}
-              >
-                <svg style={{ width: '16px', height: '16px' }} fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                Twitter
-              </a>
             </div>
           </div>
         </div>,
