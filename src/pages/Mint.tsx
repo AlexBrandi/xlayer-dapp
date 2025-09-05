@@ -326,7 +326,7 @@ export function Mint() {
               {/* Supply progress */}
               <div className="mt-4 text-center">
                 <div className="text-2xl font-bold text-cyan-400 mb-2">
-                  {totalSupply ? Number(totalSupply).toString() : '0'} / 10,000
+                  {totalSupply ? Number(totalSupply).toString() : '0'} / 5,000
                 </div>
                 <div className="text-sm text-gray-400">Ships Minted</div>
               </div>
