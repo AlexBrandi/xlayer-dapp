@@ -1,4 +1,5 @@
 import { useBattlePower } from '../hooks/useBattlePower'
+import { useLeaderboard } from '../hooks/useLeaderboard'
 import { useAccount } from 'wagmi'
 
 interface RankingEntry {
@@ -12,19 +13,11 @@ interface RankingEntry {
 export function BattlePowerRankings() {
   const { address } = useAccount()
   const currentStats = useBattlePower()
-
-  // Mock leaderboard data (in real app, this would come from backend API or on-chain queries)
-  const mockRankings: RankingEntry[] = [
-    { address: '0x1234...5678', battlePower: 45230, powerRating: 'Star Overlord', fleetCount: 25, averageLevel: 4.2 },
-    { address: '0x8765...4321', battlePower: 32100, powerRating: 'Fleet Commander', fleetCount: 18, averageLevel: 3.8 },
-    { address: '0x9999...1111', battlePower: 28500, powerRating: 'Fleet Commander', fleetCount: 20, averageLevel: 3.5 },
-    { address: '0x2222...3333', battlePower: 22100, powerRating: 'Space Admiral', fleetCount: 15, averageLevel: 3.7 },
-    { address: '0x4444...6666', battlePower: 18900, powerRating: 'Space Admiral', fleetCount: 12, averageLevel: 4.1 },
-  ]
+  const { leaderboard, isLoading } = useLeaderboard()
 
   // 将当前用户添加到排行榜中
   const rankingsWithUser: RankingEntry[] = address ? [
-    ...mockRankings,
+    ...leaderboard,
     {
       address,
       battlePower: currentStats.totalPower,
@@ -32,7 +25,7 @@ export function BattlePowerRankings() {
       fleetCount: currentStats.fleetCount,
       averageLevel: currentStats.averageLevel
     }
-  ].sort((a, b) => b.battlePower - a.battlePower) : mockRankings
+  ].sort((a, b) => b.battlePower - a.battlePower) : leaderboard
 
   const formatAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`
@@ -112,7 +105,26 @@ export function BattlePowerRankings() {
 
       {/* Rankings List */}
       <div className="space-y-3">
-        {rankingsWithUser.slice(0, 10).map((entry, index) => {
+        {isLoading ? (
+          // Loading skeleton
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="bg-gray-800/30 rounded-lg p-4 animate-pulse">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 bg-gray-700 rounded"></div>
+                    <div className="space-y-1">
+                      <div className="w-24 h-4 bg-gray-700 rounded"></div>
+                      <div className="w-32 h-3 bg-gray-700 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="w-16 h-4 bg-gray-700 rounded"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          rankingsWithUser.slice(0, 10).map((entry, index) => {
           const rank = index + 1
           const isCurrentUser = entry.address === address
           
@@ -168,7 +180,8 @@ export function BattlePowerRankings() {
               </div>
             </div>
           )
-        })}
+        })
+        )}
       </div>
 
       {/* Info Section */}
@@ -177,8 +190,11 @@ export function BattlePowerRankings() {
         <ul className="text-xs text-gray-300 space-y-1">
           <li>• Power calculated from ships, levels, rarity and gems</li>
           <li>• Staked ships receive 20% power bonus</li>
-          <li>• Rankings update every hour</li>
+          <li>• {isLoading ? 'Loading real-time data...' : 'Rankings update every hour'}</li>
           <li>• Level up and collect rare ships to climb ranks</li>
+          {!isLoading && (
+            <li className="text-yellow-400">• Currently showing sample data - full blockchain integration in progress</li>
+          )}
         </ul>
       </div>
     </div>
