@@ -103,7 +103,7 @@ function getPowerRating(totalPower: number): string {
 }
 
 export function useBattlePower(): BattlePowerStats {
-  const { useAllShipsDetails, stakedShips, totalFleetCount } = useShips()
+  const { useAllShipsDetails, stakedShips } = useShips()
   const shipsDetails = useAllShipsDetails()
   const { balances } = useGems()
 
@@ -162,7 +162,7 @@ export function useBattlePower(): BattlePowerStats {
     const totalGemPower = gemBreakdown.sapphire.power + gemBreakdown.sunstone.power + gemBreakdown.lithium.power
 
     // 3. 计算加成
-    const fleetCount = totalFleetCount // This includes both staked and unstaked ships
+    const fleetCount = shipsDetails.length
     const stakedCount = stakedShips.length
 
     // 舰队规模加成
@@ -203,5 +203,5 @@ export function useBattlePower(): BattlePowerStats {
         }
       }
     }
-  }, [shipsDetails, stakedShips, balances, totalFleetCount])
+  }, [shipsDetails, stakedShips, balances])
 }

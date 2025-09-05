@@ -68,9 +68,10 @@ export function useShips() {
   // Get all ships with their details
   const useAllShipsDetails = () => {
     const shipsDetails = useMemo(() => {
-      if (!userTokens || !userImageIds) return []
+      // Use userStatus.allNFTs which includes both staked and unstaked ships
+      if (!userStatus?.allNFTs || !userImageIds) return []
       
-      const tokens = userTokens as bigint[]
+      const tokens = userStatus.allNFTs as bigint[]
       const imageIds = userImageIds as number[]
       
       // console.log('Computing ship details:', {
@@ -91,22 +92,15 @@ export function useShips() {
           level,
         }
       })
-    }, [userTokens, userImageIds, stakedShips])
+    }, [userStatus?.allNFTs, userImageIds, stakedShips])
 
     return shipsDetails
   }
-
-  // Total fleet count including staked ships
-  const totalFleetCount = useMemo(() => {
-    if (!userStatus?.allNFTs) return 0
-    return userStatus.allNFTs.length
-  }, [userStatus])
 
   return {
     allShips,
     stakedShips,
     unstakedShips,
-    totalFleetCount,
     userImageIds: userImageIds as number[] | undefined,
     useShipDetails,
     useAllShipsDetails,
