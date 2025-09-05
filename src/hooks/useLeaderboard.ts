@@ -1,8 +1,7 @@
 import { useReadContract } from 'wagmi'
 import { CONTRACT_ADDRESSES } from '../lib/config'
-import { SHIP_ABI, GAME_ABI } from '../lib/contractAbis'
-import { useBattlePower } from './useBattlePower'
-import { useMemo, useState, useEffect } from 'react'
+import { SHIP_ABI } from '../lib/contractAbis'
+import { useState, useEffect } from 'react'
 
 interface LeaderboardEntry {
   address: string
@@ -12,19 +11,6 @@ interface LeaderboardEntry {
   averageLevel: number
 }
 
-// 获取战力等级描述
-function getPowerRating(totalPower: number): string {
-  if (totalPower >= 50000) return 'Galactic Ruler'
-  if (totalPower >= 25000) return 'Star Overlord'
-  if (totalPower >= 15000) return 'Fleet Commander'
-  if (totalPower >= 8000) return 'Space Admiral'
-  if (totalPower >= 5000) return 'Star Captain'
-  if (totalPower >= 3000) return 'Cruiser Captain'
-  if (totalPower >= 1500) return 'Frigate Captain'
-  if (totalPower >= 800) return 'Recruit Commander'
-  if (totalPower >= 300) return 'Cadet Captain'
-  return 'Space Recruit'
-}
 
 export function useLeaderboard() {
   const [isLoading, setIsLoading] = useState(true)
@@ -42,14 +28,6 @@ export function useLeaderboard() {
   // 2. 需要遍历所有tokenId来找到持有者（成本高）
   // 3. 需要为每个持有者计算战力（需要多次调用）
   
-  // 临时解决方案：使用已知的活跃用户地址样本
-  const knownActiveUsers = useMemo(() => [
-    '0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b', // 示例地址 - 实际应用中这些应该来自事件日志
-    '0x2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1',
-    '0x3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2',
-    '0x4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3',
-    '0x5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4',
-  ], [])
 
   // TODO: 在实际应用中，这里应该：
   // 1. 监听Transfer事件来维护持有者列表
@@ -96,7 +74,7 @@ export function useLeaderboard() {
 }
 
 // 用于获取特定用户战力数据的hook（如果需要）
-export function useUserBattlePower(userAddress: string) {
+export function useUserBattlePower(_userAddress: string) {
   // TODO: 实现获取特定用户战力的逻辑
   // 这需要：
   // 1. 获取用户的所有NFT
