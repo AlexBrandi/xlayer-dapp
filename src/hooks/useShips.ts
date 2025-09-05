@@ -96,10 +96,17 @@ export function useShips() {
     return shipsDetails
   }
 
+  // Total fleet count including staked ships
+  const totalFleetCount = useMemo(() => {
+    if (!userStatus?.allNFTs) return 0
+    return userStatus.allNFTs.length
+  }, [userStatus])
+
   return {
     allShips,
     stakedShips,
     unstakedShips,
+    totalFleetCount,
     userImageIds: userImageIds as number[] | undefined,
     useShipDetails,
     useAllShipsDetails,
