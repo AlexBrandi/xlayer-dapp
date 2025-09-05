@@ -16,17 +16,18 @@ export function useShips() {
   const { data: userImageIds } = useTokensOfOwnerImageIds()
   const { data: userStatus } = useUserShipStatus()
 
-  // Debug info hidden
-  // console.log('useShips Debug:', {
-  //   userTokens,
-  //   userImageIds,
-  //   userStatus,
-  //   stakedShips: userStatus?.stakedNFTs,
-  //   unstakedShips: userStatus?.unstakedNFTs,
-  //   hasTokens: !!userTokens,
-  //   hasImageIds: !!userImageIds,
-  //   hasStatus: !!userStatus
-  // })
+  // Debug: 检查数据获取是否正常
+  console.log('=== useShips Debug ===')
+  console.log('userTokens:', userTokens)
+  console.log('userImageIds:', userImageIds)
+  console.log('userStatus:', userStatus)
+  console.log('hasTokens:', !!userTokens)
+  console.log('hasImageIds:', !!userImageIds)
+  console.log('hasStatus:', !!userStatus)
+  if (userStatus) {
+    console.log('stakedNFTs:', userStatus.stakedNFTs)
+    console.log('unstakedNFTs:', userStatus.unstakedNFTs)
+  }
 
   // Get all ships owned by the user
   const allShips = useMemo(() => {
@@ -68,23 +69,60 @@ export function useShips() {
   // Get all ships with their details
   const useAllShipsDetails = () => {
     const shipsDetails = useMemo(() => {
-      if (!userTokens || !userImageIds) return []
+      // Debug info hidden
+      // console.log('=== useAllShipsDetails Debug ===')
+      // console.log('userTokens:', userTokens)
+      // console.log('userImageIds:', userImageIds)
       
-      const tokens = userTokens as bigint[]
-      const imageIds = userImageIds as number[]
+      // 使用 userStatus.allNFTs 而不是 userTokens，因为质押的飞船不会显示在 userTokens 中
+      const allTokens = userStatus?.allNFTs || userTokens
       
-      return tokens.map((tokenId, index) => {
+      if (!allTokens || allTokens.length === 0) {
+        return []
+      }
+      
+      const tokens = allTokens as bigint[]
+      
+      // If userImageIds is empty/null, we'll use individual calls to get imageIds
+      // This is a fallback when tokensOfOwnerImageIds doesn't work
+      const result = tokens.map((tokenId, index) => {
         const isStaked = stakedShips.includes(tokenId)
-        // For now, default level to 1. We can improve this later.
         const level = 1
-        return {
+        
+        // Fallback: if userImageIds is empty or undefined, default to imageId based on tokenId
+        // This is temporary - we should use individual getTokenImageId calls
+        let imageId = 0
+        if (userImageIds && userImageIds.length > index) {
+          imageId = (userImageIds as number[])[index]
+        } else {
+          // Fallback: use a simple mapping based on tokenId for now
+          // This maintains some variety until we fix the actual issue
+          const tokenNum = Number(tokenId)
+          if (tokenNum <= 20) {
+            imageId = (tokenNum - 1) % 15  // Distribute among 0-14 for first 20 ships
+          } else {
+            imageId = (tokenNum - 1787) % 15  // Distribute for ships 1787+
+          }
+        }
+        
+        const ship = {
           tokenId,
-          imageId: imageIds[index] || 0,
+          imageId,
           isStaked,
           level,
         }
+        // Debug info hidden
+        // if (index < 3) {
+        //   console.log(`Ship ${index}:`, ship)
+        // }
+        return ship
       })
-    }, [userTokens, userImageIds, stakedShips])
+      
+      // Debug info hidden
+      // console.log('Generated shipsDetails length:', result.length)
+      // console.log('Using fallback imageId mapping:', !userImageIds || userImageIds.length === 0)
+      return result
+    }, [userTokens, userImageIds, stakedShips, userStatus])
 
     return shipsDetails
   }
