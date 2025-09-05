@@ -28,6 +28,32 @@ const SHIP_NAMES: Record<number, string> = {
   14: 'Redel'
 }
 
+// Map image IDs to ship rarity (based on existing system)
+const SHIP_RARITY: Record<number, { name: string; color: string }> = {
+  // Common (0-4)
+  0: { name: 'Common', color: 'text-gray-400' },      // Abel
+  1: { name: 'Common', color: 'text-gray-400' },      // Adventurer
+  2: { name: 'Common', color: 'text-gray-400' },      // Chenoa
+  3: { name: 'Common', color: 'text-gray-400' },      // Capech
+  4: { name: 'Common', color: 'text-gray-400' },      // Cavendi
+  
+  // Rare (5-8)
+  5: { name: 'Rare', color: 'text-blue-400' },        // Hobbs
+  6: { name: 'Rare', color: 'text-blue-400' },        // Gabriel
+  7: { name: 'Rare', color: 'text-blue-400' },        // Campbell
+  8: { name: 'Rare', color: 'text-blue-400' },        // Terror
+  
+  // Epic (9-12)
+  9: { name: 'Epic', color: 'text-purple-400' },      // Moore
+  10: { name: 'Epic', color: 'text-purple-400' },     // Dunkirk
+  11: { name: 'Epic', color: 'text-purple-400' },     // Maria
+  12: { name: 'Epic', color: 'text-purple-400' },     // Pearl
+  
+  // Legendary (13-14)
+  13: { name: 'Legendary', color: 'text-orange-400' }, // Wright
+  14: { name: 'Legendary', color: 'text-orange-400' }  // Redel
+}
+
 function getShipImage(imageId: number): string {
   // Use images from public/images directory (1.png to 15.png)
   const imageNumber = (imageId % 15) + 1 // Map 0-14 to 1-15
@@ -135,9 +161,12 @@ export function ShipCard({ tokenId, imageId: providedImageId }: ShipCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
 
-      {/* Ship Name */}
+      {/* Ship Name & Rarity */}
       <div className="mb-3 text-center">
-        <p className="text-xs text-gray-400">{SHIP_NAMES[displayImageId || 0] || 'Unknown Ship'}</p>
+        <p className="text-sm font-medium text-white">{SHIP_NAMES[displayImageId || 0] || 'Unknown Ship'}</p>
+        <p className={`text-xs font-semibold ${SHIP_RARITY[displayImageId || 0]?.color || 'text-gray-400'}`}>
+          {SHIP_RARITY[displayImageId || 0]?.name || 'Common'}
+        </p>
       </div>
 
       {/* Rewards */}

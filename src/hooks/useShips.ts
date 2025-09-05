@@ -68,23 +68,15 @@ export function useShips() {
   // Get all ships with their details
   const useAllShipsDetails = () => {
     const shipsDetails = useMemo(() => {
-      // Use userStatus.allNFTs which includes both staked and unstaked ships
-      if (!userStatus?.allNFTs || !userImageIds) return []
+      if (!userTokens || !userImageIds) return []
       
-      const tokens = userStatus.allNFTs as bigint[]
+      const tokens = userTokens as bigint[]
       const imageIds = userImageIds as number[]
-      
-      // console.log('Computing ship details:', {
-      //   tokens: tokens.map(t => t.toString()),
-      //   stakedShips: stakedShips.map(t => t.toString()),
-      //   imageIds
-      // })
       
       return tokens.map((tokenId, index) => {
         const isStaked = stakedShips.includes(tokenId)
         // For now, default level to 1. We can improve this later.
         const level = 1
-        // console.log(`Ship ${tokenId.toString()}: isStaked=${isStaked}`)
         return {
           tokenId,
           imageId: imageIds[index] || 0,
@@ -92,7 +84,7 @@ export function useShips() {
           level,
         }
       })
-    }, [userStatus?.allNFTs, userImageIds, stakedShips])
+    }, [userTokens, userImageIds, stakedShips])
 
     return shipsDetails
   }

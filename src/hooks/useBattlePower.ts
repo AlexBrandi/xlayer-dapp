@@ -81,11 +81,12 @@ const BATTLE_POWER_CONFIG = {
 
 // 获取舰船稀有度 (基于imageId)
 function getShipRarity(imageId: number): number {
-  // 根据白皮书中的舰船分类
-  if (imageId === 0) return Rarity.Common      // Cavendi - 普通
-  if (imageId === 1) return Rarity.Rare        // Terror - 稀有  
-  if (imageId === 2 || imageId === 3) return Rarity.Epic // Maria, Pearl - 史诗
-  return Rarity.Legendary // 其他为传说
+  // 根据现有的稀有度系统映射
+  if (imageId >= 0 && imageId <= 4) return Rarity.Common      // Abel, Adventurer, Chenoa, Capech, Cavendi
+  if (imageId >= 5 && imageId <= 8) return Rarity.Rare        // Hobbs, Gabriel, Campbell, Terror
+  if (imageId >= 9 && imageId <= 12) return Rarity.Epic       // Moore, Dunkirk, Maria, Pearl
+  if (imageId >= 13 && imageId <= 14) return Rarity.Legendary // Wright, Redel
+  return Rarity.Common // 默认为普通
 }
 
 // 获取战力等级描述
