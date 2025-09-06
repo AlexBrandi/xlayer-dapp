@@ -13,11 +13,9 @@ const formatAddress = (address: string) => {
 }
 
 const navItems = [
-  { path: '/', label: 'Dashboard' },
-  { path: '/mint', label: 'Mint Ships' },
-  { path: '/market', label: 'Gem Market' },
-  { path: '/battle-power', label: 'Battle Power' },
-  { path: '/whitepaper', label: 'Whitepaper' },
+  { path: '/', label: 'Home' },
+  { path: '/mint', label: 'Mint BabyDog' },
+  { path: '/staking', label: 'Staking' },
 ]
 
 export function Navigation() {
@@ -60,7 +58,7 @@ export function Navigation() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b">
+      <nav className="fixed top-0 left-0 right-0 z-50 nav-card border-b">
         <div className="container">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4 md:gap-8">
@@ -69,21 +67,34 @@ export function Navigation() {
               
               {/* Desktop Title - Only show on desktop */}
               {isDesktop && (
-                <h1 className="text-xl font-bold text-blue-400">Star Fleet</h1>
+                <h1 className="text-xl font-bold text-blue-400">BabyDog</h1>
               )}
               
               {/* Desktop Navigation - Only show on desktop */}
               {isDesktop && (
                 <div className="flex items-center gap-6">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
+                  {navItems.map((item) => {
+                    if (item.disabled) {
+                      return (
+                        <span
+                          key={item.path}
+                          className="nav-link opacity-50 cursor-not-allowed text-gray-500"
+                          title="Currently disabled"
+                        >
+                          {item.label} 🚫
+                        </span>
+                      )
+                    }
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                      >
+                        {item.label}
+                      </Link>
+                    )
+                  })}
                   
                 </div>
               )}
@@ -101,10 +112,10 @@ export function Navigation() {
                 </button>
               )}
 
-              {/* FUEL Balance - Hidden on mobile */}
+              {/* BabyDog Balance - Hidden on mobile */}
               {isDesktop && isConnected && fuelBalance !== undefined && (
                 <div className="text-right">
-                  <p className="text-xs text-gray-400">FUEL Balance</p>
+                  <p className="text-xs text-gray-400">BabyDog Balance</p>
                   <p className="text-sm font-bold">{formatEther(fuelBalance as bigint)}</p>
                 </div>
               )}

@@ -1,0 +1,35 @@
+{
+  "name": "BabyDog #1",
+  "description": "BabyDog is a collection of 10,000 unique cute baby dogs living on the OKX Chain. Each BabyDog has its own personality, combining adorable puppy features with playful charm. Join the cutest community in crypto!",
+  "image": "https://your-domain.com/babydog/images/1.png",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Toilet Paper Sky"
+    },
+    {
+      "trait_type": "Body",
+      "value": "Chocolate Swirl"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Puppy Eyes"
+    },
+    {
+      "trait_type": "Mouth",
+      "value": "Happy Tongue"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Golden Collar"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Sparkles"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

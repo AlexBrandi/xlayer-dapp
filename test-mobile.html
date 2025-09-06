@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Navigation Test</title>
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 50;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        /* Mobile Dropdown Button */
+        .mobile-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3b82f6;
+            font-weight: bold;
+            font-size: 18px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        /* Desktop Title - Hidden on mobile */
+        .desktop-title {
+            display: none;
+            color: #3b82f6;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(17, 24, 39, 0.98);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .mobile-menu.open {
+            display: block;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 12px 16px;
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: rgba(55, 65, 81, 0.5);
+            color: white;
+            border-left-color: #6b7280;
+        }
+
+        .menu-item.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border-left-color: #3b82f6;
+        }
+
+        /* Wallet Button */
+        .wallet-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 768px) {
+            .mobile-dropdown {
+                display: none;
+            }
+
+            .desktop-title {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: none !important;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 24px;
+                align-items: center;
+            }
+
+            .nav-link {
+                color: #d1d5db;
+                text-decoration: none;
+                font-size: 14px;
+                transition: color 0.3s;
+            }
+
+            .nav-link:hover {
+                color: #3b82f6;
+            }
+
+            .nav-link.active {
+                color: #3b82f6;
+            }
+        }
+
+        /* Content */
+        .content {
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        /* Hide desktop nav on mobile */
+        .nav-links {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <div style="display: flex; align-items: center; gap: 32px;">
+                    <!-- Mobile Dropdown -->
+                    <button class="mobile-dropdown" onclick="toggleMenu()">
+                        <span id="page-title">Dashboard</span>
+                        <svg class="dropdown-arrow" id="dropdown-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Desktop Title -->
+                    <h1 class="desktop-title">Star Fleet</h1>
+
+                    <!-- Desktop Navigation -->
+                    <div class="nav-links">
+                        <a href="#" class="nav-link active">Dashboard</a>
+                        <a href="#" class="nav-link">Mint Ships</a>
+                        <a href="#" class="nav-link">Gem Market</a>
+                        <a href="#" class="nav-link">Whitepaper</a>
+                        <a href="#" class="nav-link">Twitter</a>
+                    </div>
+                </div>
+
+                <button class="wallet-btn">Connect</button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobile-menu">
+                <div style="padding: 16px 0;">
+                    <a href="#" class="menu-item active" onclick="selectPage('Dashboard')">Dashboard</a>
+                    <a href="#" class="menu-item" onclick="selectPage('Mint Ships')">Mint Ships</a>
+                    <a href="#" class="menu-item" onclick="selectPage('Gem Market')">Gem Market</a>
+                    <a href="#" class="menu-item" onclick="selectPage('Whitepaper')">Whitepaper</a>
+                    <a href="#" class="menu-item" onclick="selectPage('Twitter')">Twitter</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            <h2>Mobile Navigation Test</h2>
+            <p>Resize your browser window to see the mobile navigation in action.</p>
+            <br>
+            <p>On mobile (< 768px):</p>
+            <ul>
+                <li>Logo becomes a dropdown showing current page</li>
+                <li>Click the dropdown to see menu items</li>
+                <li>FUEL balance is hidden</li>
+                <li>Wallet button shows "Connect" instead of "Connect Wallet"</li>
+            </ul>
+            <br>
+            <p>On desktop (≥ 768px):</p>
+            <ul>
+                <li>Shows "Star Fleet" logo</li>
+                <li>Horizontal navigation menu</li>
+                <li>Full wallet information visible</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let menuOpen = false;
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            const menu = document.getElementById('mobile-menu');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (menuOpen) {
+                menu.classList.add('open');
+                arrow.classList.add('open');
+            } else {
+                menu.classList.remove('open');
+                arrow.classList.remove('open');
+            }
+        }
+
+        function selectPage(page) {
+            document.getElementById('page-title').textContent = page;
+            toggleMenu();
+            
+            // Update active states
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                if (item.textContent === page) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

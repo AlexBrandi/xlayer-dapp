@@ -4,14 +4,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { wagmiConfig } from './lib/config'
 import { Navigation } from './components/Navigation'
-import { Dashboard } from './pages/Dashboard'
-import { Mint } from './pages/Mint'
-import { Market } from './pages/Market'
-import { BattlePower } from './pages/BattlePower'
-import { Whitepaper } from './pages/Whitepaper'
+import { HomePage } from './pages/HomePage'
+import { SimpleMint } from './pages/SimpleMint'
+import { Staking } from './pages/Staking'
 import { UpgradeProvider, useUpgrade } from './contexts/UpgradeContext'
 import { UpgradeModal } from './components/UpgradeModal'
+import { FloatingPoops } from './components/FloatingPoops'
 import './index.css'
+import './babydog-theme.css'
 
 const queryClient = new QueryClient()
 
@@ -20,15 +20,14 @@ function AppContent() {
   
   return (
     <>
+      <FloatingPoops />
       <div className="min-h-screen bg-gray-900">
         <Navigation />
         <main className="pt-20">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/mint" element={<Mint />} />
-            <Route path="/market" element={<Market />} />
-            <Route path="/battle-power" element={<BattlePower />} />
-            <Route path="/whitepaper" element={<Whitepaper />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/mint" element={<SimpleMint />} />
+            <Route path="/staking" element={<Staking />} />
           </Routes>
         </main>
       </div>

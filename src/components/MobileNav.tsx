@@ -3,11 +3,9 @@ import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 const navItems = [
-  { path: '/', label: 'Dashboard' },
-  { path: '/mint', label: 'Mint Ships' },
-  { path: '/market', label: 'Gem Market' },
-  { path: '/battle-power', label: 'Battle Power' },
-  { path: '/whitepaper', label: 'Whitepaper' },
+  { path: '/', label: 'Home' },
+  { path: '/mint', label: 'Mint BabyDog' },
+  { path: '/staking', label: 'Staking' },
 ]
 
 export function MobileNav() {
@@ -87,38 +85,61 @@ export function MobileNav() {
         >
           <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
             <div style={{ padding: '16px 0' }}>
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  style={{
-                    display: 'block',
-                    padding: '12px 16px',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    color: location.pathname === item.path ? '#60a5fa' : '#d1d5db',
-                    backgroundColor: location.pathname === item.path ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
-                    borderLeft: location.pathname === item.path ? '4px solid #60a5fa' : '4px solid transparent',
-                    textDecoration: 'none',
-                    transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (location.pathname !== item.path) {
-                      e.currentTarget.style.backgroundColor = 'rgba(55, 65, 81, 0.5)'
-                      e.currentTarget.style.color = '#fff'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (location.pathname !== item.path) {
-                      e.currentTarget.style.backgroundColor = 'transparent'
-                      e.currentTarget.style.color = '#d1d5db'
-                    }
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                if (item.disabled) {
+                  return (
+                    <span
+                      key={item.path}
+                      style={{
+                        display: 'block',
+                        padding: '12px 16px',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        color: '#6b7280',
+                        backgroundColor: 'transparent',
+                        borderLeft: '4px solid transparent',
+                        textDecoration: 'none',
+                        cursor: 'not-allowed',
+                        opacity: 0.5
+                      }}
+                    >
+                      {item.label} 🚫
+                    </span>
+                  )
+                }
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    style={{
+                      display: 'block',
+                      padding: '12px 16px',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      color: location.pathname === item.path ? '#60a5fa' : '#d1d5db',
+                      backgroundColor: location.pathname === item.path ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
+                      borderLeft: location.pathname === item.path ? '4px solid #60a5fa' : '4px solid transparent',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (location.pathname !== item.path) {
+                        e.currentTarget.style.backgroundColor = 'rgba(55, 65, 81, 0.5)'
+                        e.currentTarget.style.color = '#fff'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (location.pathname !== item.path) {
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                        e.currentTarget.style.color = '#d1d5db'
+                      }
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
               
             </div>
           </div>

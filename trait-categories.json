@@ -1,0 +1,90 @@
+{
+  "traits": {
+    "Background": [
+      "Toilet Paper Sky",
+      "Bathroom Tiles Blue",
+      "Grass Field",
+      "Rainbow Clouds",
+      "Sunset Orange",
+      "Night Stars",
+      "Bubble Bath",
+      "Pure White"
+    ],
+    "Body": [
+      "Chocolate Swirl",
+      "Caramel Pile",
+      "Golden Nugget",
+      "Rainbow Swirl",
+      "Vanilla Twist",
+      "Dark Chocolate",
+      "Strawberry Scoop",
+      "Crystal Clear"
+    ],
+    "Eyes": [
+      "Puppy Eyes",
+      "Heart Eyes",
+      "Sleepy Eyes",
+      "Sparkle Eyes",
+      "Winking",
+      "Derpy Eyes",
+      "Laser Eyes",
+      "Happy Closed"
+    ],
+    "Ears": [
+      "Floppy Beagle",
+      "Pointy Shiba",
+      "Long Dachshund",
+      "Fluffy Poodle",
+      "German Shepherd",
+      "Corgi Ears",
+      "Bunny Ears",
+      "None"
+    ],
+    "Mouth": [
+      "Happy Tongue",
+      "Big Smile",
+      "Little Grin",
+      "Surprised O",
+      "Kissy Face",
+      "Drooling",
+      "Barking",
+      "Neutral"
+    ],
+    "Accessory": [
+      "Golden Collar",
+      "Bow Tie",
+      "Bandana Red",
+      "Chain Necklace",
+      "Crown",
+      "Wizard Hat",
+      "Sunglasses",
+      "None"
+    ],
+    "Special": [
+      "Sparkles",
+      "Stink Lines",
+      "Heart Bubbles",
+      "Flies",
+      "Rainbow Aura",
+      "Golden Glow",
+      "Steam Rising",
+      "None"
+    ],
+    "Holding": [
+      "Toilet Paper",
+      "Plunger",
+      "Air Freshener",
+      "Bone",
+      "Bitcoin",
+      "OKX Logo",
+      "Nothing"
+    ]
+  },
+  "rarities": {
+    "Common": 40,
+    "Uncommon": 30,
+    "Rare": 20,
+    "Epic": 8,
+    "Legendary": 2
+  }
+}

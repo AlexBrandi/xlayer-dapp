@@ -845,7 +845,6 @@ body {
   font-weight: 500;
   padding: 12px 20px;
   border-radius: 10px;
-  transition: all 0.3s ease;
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   position: relative;
@@ -865,16 +864,18 @@ body {
   z-index: -1;
 }
 
-.nav-link:hover::before,
 .nav-link.active::before {
   opacity: 0.15;
 }
 
-.nav-link:hover,
 .nav-link.active {
   color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+}
+
+.nav-link:hover {
+  color: inherit;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* ============================================

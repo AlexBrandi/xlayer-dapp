@@ -332,19 +332,19 @@ export function Mint() {
               </div>
             </div>
 
-            {/* Mysterious ship building button */}
+            {/* Mysterious ship building button - DISABLED */}
             <button
-              onClick={handleMint}
-              disabled={isPending}
-              className="w-full h-16 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold text-lg transition-all duration-300 disabled:bg-gray-600 disabled:text-gray-400 flex items-center justify-center gap-3 shadow-2xl shadow-orange-500/25 hover:shadow-orange-500/40"
+              onClick={() => toast.error('Minting is currently disabled')}
+              disabled={true}
+              className="w-full h-16 rounded-xl bg-gray-600 text-gray-400 font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 cursor-not-allowed"
               style={{
-                background: isPending ? '#4B5563' : 'linear-gradient(to right, #ff6b35, #e55527)',
-                boxShadow: isPending ? 'none' : '0 25px 50px -12px rgba(255, 107, 53, 0.25)'
+                background: '#4B5563',
+                boxShadow: 'none'
               }}
             >
-              <span className="text-2xl">🚀</span>
-              <span>{isPending ? 'Mystery Minting...' : 'Mystery Mint'}</span>
-              <span className="text-2xl">⚡</span>
+              <span className="text-2xl">🚫</span>
+              <span>Minting Disabled</span>
+              <span className="text-2xl">🚫</span>
             </button>
 
             </div>

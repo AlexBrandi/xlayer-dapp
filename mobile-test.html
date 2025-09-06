@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Test - Star Fleet</title>
+    <style>
+        /* Base styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #111; 
+            color: #fff; 
+        }
+        
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+        .glass-card { background: rgba(31, 41, 55, 0.8); backdrop-filter: blur(10px); }
+        .border-b { border-bottom: 1px solid rgba(156, 163, 175, 0.2); }
+        
+        /* Mobile-first approach */
+        .hidden { display: none !important; }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        
+        /* Button styles */
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .text-blue-400 { color: #60a5fa; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-xs { font-size: 12px; }
+        .text-sm { font-size: 14px; }
+        .text-lg { font-size: 18px; }
+        .text-xl { font-size: 20px; }
+        .font-bold { font-weight: bold; }
+        .font-medium { font-weight: 500; }
+        
+        /* Mobile styles (default) */
+        .md\:hidden { display: flex; }
+        .md\:block { display: none !important; }
+        .md\:flex { display: none !important; }
+        .sm\:inline { display: none; }
+        .sm\:hidden { display: inline; }
+        
+        /* Desktop styles */
+        @media (min-width: 768px) {
+            .md\:hidden { display: none !important; }
+            .md\:block { display: block !important; }
+            .md\:flex { display: flex !important; }
+            .md\:gap-8 { gap: 2rem; }
+            .md\:text-xl { font-size: 20px; }
+            .gap-4 { gap: 1rem; }
+        }
+        
+        @media (min-width: 640px) {
+            .sm\:inline { display: inline; }
+            .sm\:hidden { display: none; }
+        }
+        
+        /* Mobile dropdown menu */
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(17, 24, 39, 0.98);
+            border-bottom: 1px solid rgba(156, 163, 175, 0.2);
+            display: none;
+        }
+        
+        .mobile-menu.open { display: block; }
+    </style>
+</head>
+<body>
+    <nav class="nav glass-card border-b">
+        <div class="container">
+            <div class="nav-content">
+                <div class="flex items-center gap-4 md:gap-8">
+                    <!-- Mobile Dropdown Button -->
+                    <button class="md:hidden flex items-center gap-2 text-lg font-medium text-gray-300" onclick="toggleMenu()">
+                        <span>Dashboard</span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    
+                    <!-- Desktop Title -->
+                    <h1 class="hidden md:block text-xl font-bold text-blue-400">Star Fleet</h1>
+                    
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center gap-6">
+                        <a href="#" class="text-gray-300">Dashboard</a>
+                        <a href="#" class="text-gray-300">Mint Ships</a>
+                        <a href="#" class="text-gray-300">Gem Market</a>
+                        <a href="#" class="text-gray-300">Whitepaper</a>
+                        <a href="#" class="text-gray-300">Twitter</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <!-- FUEL Balance - Hidden on mobile -->
+                    <div class="hidden md:block text-right">
+                        <p class="text-xs text-gray-400">FUEL Balance</p>
+                        <p class="text-sm font-bold">1,234.56</p>
+                    </div>
+                    
+                    <!-- Wallet Button -->
+                    <button class="btn-primary">
+                        <span class="hidden sm:inline">Connect Wallet</span>
+                        <span class="sm:hidden">Connect</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div style="margin-top: 100px; padding: 20px;">
+        <div class="container">
+            <h2 style="margin-bottom: 20px;">Mobile Navigation Test</h2>
+            <p>Resize your browser window to test responsive behavior:</p>
+            <br>
+            <div style="background: #222; padding: 20px; border-radius: 8px;">
+                <h3>Expected behavior:</h3>
+                <br>
+                <p><strong>Mobile (< 768px):</strong></p>
+                <ul style="list-style: disc; margin-left: 30px;">
+                    <li>NO "Star Fleet" logo</li>
+                    <li>Only dropdown button showing current page</li>
+                    <li>NO FUEL Balance</li>
+                    <li>Wallet button shows "Connect"</li>
+                </ul>
+                <br>
+                <p><strong>Desktop (≥ 768px):</strong></p>
+                <ul style="list-style: disc; margin-left: 30px;">
+                    <li>Shows "Star Fleet" logo</li>
+                    <li>Shows horizontal navigation</li>
+                    <li>Shows FUEL Balance</li>
+                    <li>Wallet button shows "Connect Wallet"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            console.log('Toggle menu clicked');
+        }
+    </script>
+</body>
+</html>
